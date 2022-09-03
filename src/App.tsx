@@ -1,12 +1,13 @@
-import React from 'react'
-import logo from './logo.svg'
-import Counter from './features/counter/Counter'
-import './App.css'
+import TopNav from './features/navigation/TopNav'
 
 function App() {
+  const topNavLinks = [
+    { link: 'about', label: 'About' },
+    { link: 'github', label: 'Github' },
+  ]
   return (
-    <div className="App">
-      <header className="App-header">Hello</header>
+    <div>
+      <TopNav links={topNavLinks} />
     </div>
   )
 }

@@ -11,5 +11,5 @@ test('renders learn react link', () => {
     </Provider>
   )
 
-  expect(getByText('Hello')).toBeInTheDocument()
+  expect(getByText('Scrum Bus')).toBeInTheDocument()
 })
