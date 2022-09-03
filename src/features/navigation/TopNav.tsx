@@ -6,12 +6,14 @@ import {
   Burger,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconSearch, IconBus } from '@tabler/icons'
+import { IconSearch } from '@tabler/icons'
+import Logo from '../common/Logo'
 
 const useStyles = createStyles((theme) => ({
   header: {
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
+    // boxShadow,
   },
 
   inner: {
@@ -27,9 +29,7 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
-  icon: {
-    color: theme.colors.brand[5],
-  },
+  icon: {},
 
   search: {
     [theme.fn.smallerThan('xs')]: {
@@ -59,11 +59,11 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-interface HeaderSearchProps {
+interface TopNavProps {
   links: { link: string; label: string }[]
 }
 
-function TopNav({ links }: HeaderSearchProps): JSX.Element {
+function TopNav({ links }: TopNavProps): JSX.Element {
   const [opened, { toggle }] = useDisclosure(false)
   const { classes } = useStyles()
 
@@ -79,12 +79,11 @@ function TopNav({ links }: HeaderSearchProps): JSX.Element {
   ))
 
   return (
-    <Header height={56} className={classes.header} mb={120}>
+    <Header height={56} className={classes.header}>
       <div className={classes.inner}>
         <Group>
-          <Burger opened={opened} onClick={toggle} size="sm" />
-          <IconBus size={28} className={classes.icon} />
-          Scrum Bus
+          <Burger opened={opened} onClick={toggle} size="sm" color="white" />
+          <Logo />
         </Group>
 
         <Group>

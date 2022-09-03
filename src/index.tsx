@@ -13,8 +13,8 @@ if (container) {
     <React.StrictMode>
       <Provider store={store}>
         <MantineProvider
-          withGlobalStyles
           withNormalizeCSS
+          withGlobalStyles
           theme={{
             // headings: { fontFamily: 'Greycliff CF, sans-serif' },
             // fontFamily: 'Open Sans, sans serif',
@@ -34,7 +34,7 @@ if (container) {
               ],
             },
             primaryColor: 'brand',
-            primaryShade: { light: 5, dark: 7 },
+            primaryShade: { light: 4, dark: 6 },
           }}
         >
           <App />
