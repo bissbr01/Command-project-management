@@ -1,6 +1,7 @@
 import React from 'react'
 import { MantineProvider } from '@mantine/core'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { store } from './app/store'
 import App from './App'
@@ -12,33 +13,35 @@ if (container) {
   root.render(
     <React.StrictMode>
       <Provider store={store}>
-        <MantineProvider
-          withNormalizeCSS
-          withGlobalStyles
-          theme={{
-            // headings: { fontFamily: 'Greycliff CF, sans-serif' },
-            // fontFamily: 'Open Sans, sans serif',
-            colorScheme: 'light',
-            colors: {
-              brand: [
-                '#ECF8F2',
-                '#CAECDA',
-                '#A8E0C3',
-                '#86D4AB',
-                '#64C894',
-                '#43BC7C',
-                '#359763',
-                '#28714B',
-                '#1B4B32',
-                '#0D2619',
-              ],
-            },
-            primaryColor: 'brand',
-            primaryShade: { light: 4, dark: 6 },
-          }}
-        >
-          <App />
-        </MantineProvider>
+        <Router>
+          <MantineProvider
+            withNormalizeCSS
+            withGlobalStyles
+            theme={{
+              // headings: { fontFamily: 'Greycliff CF, sans-serif' },
+              // fontFamily: 'Open Sans, sans serif',
+              colorScheme: 'light',
+              colors: {
+                brand: [
+                  '#ECF8F2',
+                  '#CAECDA',
+                  '#A8E0C3',
+                  '#86D4AB',
+                  '#64C894',
+                  '#43BC7C',
+                  '#359763',
+                  '#28714B',
+                  '#1B4B32',
+                  '#0D2619',
+                ],
+              },
+              primaryColor: 'brand',
+              primaryShade: { light: 4, dark: 6 },
+            }}
+          >
+            <App />
+          </MantineProvider>
+        </Router>
       </Provider>
     </React.StrictMode>
   )
