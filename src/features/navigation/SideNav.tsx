@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from 'react'
-import { createStyles, Navbar } from '@mantine/core'
+import { createStyles, Navbar, Menu } from '@mantine/core'
 import {
   IconBellRinging,
   IconSettings,
-  IconSwitchHorizontal,
+  IconUserCircle,
   IconLogout,
   IconStack2,
   IconChalkboard,
@@ -126,11 +126,19 @@ function SideNav() {
       <Navbar.Section grow>{links}</Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <UserButton
-          image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-          name="Ann Nullpointer"
-          email="anullpointer@yahoo.com"
-        />
+        <Menu position="top" withArrow width={200}>
+          <Menu.Target>
+            <UserButton
+              image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
+              name="Ann Nullpointer"
+              email="anullpointer@yahoo.com"
+            />
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>
+            <Menu.Item icon={<IconLogout size={14} />}>Logout</Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </Navbar.Section>
     </Navbar>
   )

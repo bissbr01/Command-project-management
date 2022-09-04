@@ -1,12 +1,13 @@
-import { useState } from 'react'
 import {
   Drawer,
-  Group,
-  Button,
   createStyles,
   useMantineTheme,
+  ActionIcon,
+  Affix,
+  Transition,
 } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { useDisclosure, useMediaQuery } from '@mantine/hooks'
+import { IconChevronsRight } from '@tabler/icons'
 import SideNav from './SideNav'
 
 const useStyles = createStyles((theme) => ({
@@ -16,9 +17,9 @@ const useStyles = createStyles((theme) => ({
 }))
 
 function SideNavContainer() {
-  const minScreenLarge = useMediaQuery('(min-width: 1200px)')
-  const [opened, setOpened] = useState(false)
+  const [opened, { open, close }] = useDisclosure(false)
   const theme = useMantineTheme()
+  const minScreenLarge = useMediaQuery(`(min-width: ${theme.breakpoints.lg}px)`)
   const { classes } = useStyles()
 
   if (minScreenLarge) return <SideNav />
@@ -28,7 +29,7 @@ function SideNavContainer() {
       <Drawer
         closeButtonLabel="Close drawer"
         opened={opened}
-        onClose={() => setOpened(false)}
+        onClose={() => close()}
         overlayColor={
           theme.colorScheme === 'dark'
             ? theme.colors.dark[9]
@@ -43,9 +44,20 @@ function SideNavContainer() {
       >
         <SideNav />
       </Drawer>
-      <Group position="center">
-        <Button onClick={() => setOpened(true)}>Open Drawer</Button>
-      </Group>
+      <Affix position={{ left: 0, top: 400 }}>
+        <Transition transition="slide-left" mounted={!opened}>
+          {(transitionStyles) => (
+            <ActionIcon
+              color="teal"
+              size="lg"
+              variant="filled"
+              style={transitionStyles}
+            >
+              <IconChevronsRight size={26} onClick={() => open()} />
+            </ActionIcon>
+          )}
+        </Transition>
+      </Affix>
     </>
   )
 }

@@ -1,13 +1,16 @@
 import {
   createStyles,
   Header,
-  Autocomplete,
+  useMantineTheme,
   Group,
   Burger,
+  Modal,
+  Box,
+  NavLink,
 } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { IconSearch } from '@tabler/icons'
+import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import Logo from '../common/Logo'
+import NavSearch from './NavSearch'
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -24,15 +27,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   links: {
-    [theme.fn.smallerThan('md')]: {
-      display: 'none',
-    },
-  },
-
-  icon: {},
-
-  search: {
-    [theme.fn.smallerThan('xs')]: {
+    [theme.fn.smallerThan('sm')]: {
       display: 'none',
     },
   },
@@ -64,8 +59,13 @@ interface TopNavProps {
 }
 
 function TopNav({ links }: TopNavProps): JSX.Element {
-  const [opened, { toggle }] = useDisclosure(false)
+  const [opened, { toggle, close }] = useDisclosure(false)
   const { classes } = useStyles()
+  const theme = useMantineTheme()
+
+  const minMediumScreen = useMediaQuery(
+    `(min-width: ${theme.breakpoints.sm}px)`
+  )
 
   const items = links.map((link) => (
     <a
@@ -82,7 +82,25 @@ function TopNav({ links }: TopNavProps): JSX.Element {
     <Header height={56} className={classes.header}>
       <div className={classes.inner}>
         <Group>
-          <Burger opened={opened} onClick={toggle} size="sm" color="white" />
+          {!minMediumScreen && (
+            <>
+              <Burger
+                opened={opened}
+                onClick={toggle}
+                size="sm"
+                aria-label="Open Top Navigation"
+              />
+              <Modal opened={opened} onClose={close} title="Navigation">
+                <Box>
+                  {links.map((link) => (
+                    <NavLink key={link.link} label={link.label} />
+                  ))}
+                  <NavSearch />
+                </Box>
+              </Modal>
+            </>
+          )}
+
           <Logo />
         </Group>
 
@@ -90,20 +108,7 @@ function TopNav({ links }: TopNavProps): JSX.Element {
           <Group ml={50} spacing={5} className={classes.links}>
             {items}
           </Group>
-          <Autocomplete
-            className={classes.search}
-            placeholder="Search"
-            icon={<IconSearch size={16} stroke={1.5} />}
-            data={[
-              'React',
-              'Angular',
-              'Vue',
-              'Next.js',
-              'Riot.js',
-              'Svelte',
-              'Blitz.js',
-            ]}
-          />
+          <NavSearch />
         </Group>
       </div>
     </Header>

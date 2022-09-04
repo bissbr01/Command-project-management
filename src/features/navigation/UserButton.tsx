@@ -1,30 +1,8 @@
-import {
-  UnstyledButton,
-  UnstyledButtonProps,
-  Group,
-  Avatar,
-  Text,
-  createStyles,
-} from '@mantine/core'
+import { forwardRef } from 'react'
 import { IconChevronRight } from '@tabler/icons'
+import { Group, Avatar, Text, UnstyledButton } from '@mantine/core'
 
-const useStyles = createStyles((theme) => ({
-  user: {
-    display: 'block',
-    width: '100%',
-    padding: theme.spacing.md,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
-
-    '&:hover': {
-      backgroundColor:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[8]
-          : theme.colors.gray[0],
-    },
-  },
-}))
-
-interface UserButtonProps extends UnstyledButtonProps {
+interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   image: string
   name: string
   email: string
@@ -32,11 +10,26 @@ interface UserButtonProps extends UnstyledButtonProps {
   icon?: React.ReactNode
 }
 
-function UserButton({ image, name, email, icon, ...others }: UserButtonProps) {
-  const { classes } = useStyles()
+const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
+  ({ image, name, email, icon, ...others }: UserButtonProps, ref) => (
+    <UnstyledButton
+      ref={ref}
+      sx={(theme) => ({
+        display: 'block',
+        width: '100%',
+        padding: theme.spacing.md,
+        color:
+          theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
 
-  return (
-    <UnstyledButton className={classes.user} {...others}>
+        '&:hover': {
+          backgroundColor:
+            theme.colorScheme === 'dark'
+              ? theme.colors.dark[8]
+              : theme.colors.gray[0],
+        },
+      })}
+      {...others}
+    >
       <Group>
         <Avatar src={image} radius="xl" />
 
@@ -50,10 +43,10 @@ function UserButton({ image, name, email, icon, ...others }: UserButtonProps) {
           </Text>
         </div>
 
-        {icon || <IconChevronRight size={14} stroke={1.5} />}
+        {icon || <IconChevronRight size={16} />}
       </Group>
     </UnstyledButton>
   )
-}
+)
 
 export default UserButton
