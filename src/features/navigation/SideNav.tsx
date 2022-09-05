@@ -16,6 +16,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
   return {
     container: {
       backgroundColor: theme.colors.gray[0],
+      marginRight: 0,
     },
 
     header: {

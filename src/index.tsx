@@ -1,11 +1,12 @@
 import React from 'react'
 import { MantineProvider } from '@mantine/core'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { store } from './app/store'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+import BoardLayout from './features/boards/BoardLayout'
 
 const container = document.getElementById('root')
 if (container) {
@@ -39,7 +40,11 @@ if (container) {
               primaryShade: { light: 4, dark: 6 },
             }}
           >
-            <App />
+            <Routes>
+              <Route path="/" element={<App />}>
+                <Route index element={<BoardLayout />} />
+              </Route>
+            </Routes>
           </MantineProvider>
         </Router>
       </Provider>

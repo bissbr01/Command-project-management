@@ -31,9 +31,7 @@ function SideNavContainer() {
         opened={opened}
         onClose={() => close()}
         overlayColor={
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[9]
-            : theme.colors.gray[2]
+          theme.colorScheme === 'dark' ? theme.colors.dark[9] : 'white'
         }
         overlayOpacity={0.3}
         overlayBlur={1}

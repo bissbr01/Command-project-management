@@ -1,3 +1,5 @@
+import { Group } from '@mantine/core'
+import { Outlet } from 'react-router-dom'
 import SideNavContainer from './features/navigation/SideNavContainer'
 import TopNav from './features/navigation/TopNav'
 
@@ -10,7 +12,10 @@ function App() {
   return (
     <div>
       <TopNav links={topNavLinks} />
-      <SideNavContainer />
+      <Group>
+        <SideNavContainer />
+        <Outlet />
+      </Group>
     </div>
   )
 }
