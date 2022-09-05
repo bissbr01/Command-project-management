@@ -47,7 +47,7 @@ function SideNavContainer() {
           {(transitionStyles) => (
             <ActionIcon
               color="teal"
-              size="lg"
+              size="sm"
               variant="filled"
               style={transitionStyles}
             >

@@ -123,7 +123,7 @@ function SideNav() {
   ))
 
   return (
-    <Navbar width={{ sm: 300 }} p="md" className={classes.container}>
+    <Navbar width={{ sm: 250 }} p="md" className={classes.container}>
       <Navbar.Section grow>{links}</Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
