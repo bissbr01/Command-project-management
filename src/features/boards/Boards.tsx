@@ -1,0 +1,182 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+import { createStyles, Paper, Title, useMantineTheme } from '@mantine/core'
+import React, { SetStateAction, useState } from 'react'
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from 'react-beautiful-dnd'
+import { v4 as uuid } from 'uuid'
+
+const itemsFromBackend = [
+  { id: uuid(), content: 'First task' },
+  { id: uuid(), content: 'Second task' },
+  { id: uuid(), content: 'Third task' },
+  { id: uuid(), content: 'Fourth task' },
+  { id: uuid(), content: 'Fifth task' },
+]
+
+const columnsFromBackend = {
+  [uuid()]: {
+    name: 'To do',
+    items: itemsFromBackend,
+  },
+  [uuid()]: {
+    name: 'In Progress',
+    items: [],
+  },
+  [uuid()]: {
+    name: 'Done',
+    items: [],
+  },
+}
+
+const useStyles = createStyles((theme) => ({
+  boards: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+      flexDirection: 'row',
+    },
+  },
+  board: {
+    flex: '1',
+    background: theme.colors.gray[0],
+    // padding: '1em',
+  },
+  paper: {
+    height: '100%',
+  },
+
+  droppable: {
+    padding: 4,
+    width: 250,
+    minHeight: 300,
+  },
+
+  draggable: {
+    userSelect: 'none',
+    padding: '1em',
+    margin: '0 0 8px 0',
+    minHeight: '50px',
+    // color: 'white',
+  },
+}))
+
+interface BoardColumn {
+  [x: string]: {
+    name: string
+    items: {
+      id: string
+      content: string
+    }[]
+  }
+}
+
+function Boards() {
+  const [columns, setColumns] = useState(columnsFromBackend)
+  const { classes } = useStyles()
+  const theme = useMantineTheme()
+
+  const handleDragEnd = (
+    result: DropResult,
+    columns: BoardColumn,
+    setColumns: React.Dispatch<SetStateAction<BoardColumn>>
+  ) => {
+    if (!result.destination) return
+    const { source, destination } = result
+
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColumn = columns[source.droppableId]
+      const destColumn = columns[destination.droppableId]
+      const sourceItems = [...sourceColumn.items]
+      const destItems = [...destColumn.items]
+      const [removed] = sourceItems.splice(source.index, 1)
+      destItems.splice(destination.index, 0, removed)
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...sourceColumn,
+          items: sourceItems,
+        },
+        [destination.droppableId]: {
+          ...destColumn,
+          items: destItems,
+        },
+      })
+    } else {
+      const column = columns[source.droppableId]
+      const copiedItems = [...column.items]
+      const [removed] = copiedItems.splice(source.index, 1)
+      copiedItems.splice(destination.index, 0, removed)
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...column,
+          items: copiedItems,
+        },
+      })
+    }
+  }
+
+  return (
+    <div className={classes.boards}>
+      <DragDropContext
+        onDragEnd={(result) => handleDragEnd(result, columns, setColumns)}
+      >
+        {Object.entries(columns).map(([columnId, column]) => (
+          <Paper className={classes.paper} key={columnId}>
+            <Title order={3}>{column.name}</Title>
+            <div>
+              <Droppable droppableId={columnId} key={columnId}>
+                {(provided, snapshot) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className={classes.droppable}
+                    style={{
+                      background: snapshot.isDraggingOver
+                        ? theme.colors.blue[0]
+                        : theme.colors.gray[0],
+                    }}
+                  >
+                    {column.items.map((item, index) => (
+                      <Draggable
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className={classes.draggable}
+                            style={{
+                              backgroundColor: snapshot.isDragging
+                                ? theme.colors.brand[0]
+                                : 'white',
+                              ...provided.draggableProps.style,
+                            }}
+                          >
+                            {item.content}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+          </Paper>
+        ))}
+      </DragDropContext>
+    </div>
+  )
+}
+
+export default Boards
