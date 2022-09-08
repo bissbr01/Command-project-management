@@ -1,9 +1,9 @@
 import { createStyles, Group } from '@mantine/core'
 import { Outlet } from 'react-router-dom'
-import SideNavContainer from './features/navigation/SideNavContainer'
-import TopNav from './features/navigation/TopNav'
+import SideNavContainer from './components/navigation/SideNavContainer'
+import TopNav from './components/navigation/TopNav'
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
   group: {
     alignItems: 'flex-start',
   },

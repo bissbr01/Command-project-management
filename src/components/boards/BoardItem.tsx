@@ -1,7 +1,7 @@
 import { createStyles, Text, useMantineTheme } from '@mantine/core'
 import { Draggable } from 'react-beautiful-dnd'
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
   draggable: {
     userSelect: 'none',
     padding: '1em',
