@@ -101,7 +101,7 @@ const data = [
   { link: '', label: 'Settings', icon: IconSettings },
 ]
 
-function SideNav() {
+function SideNav({ width }: { width: number }) {
   const { classes, cx } = useStyles()
   const [active, setActive] = useState('Billing')
 
@@ -123,7 +123,7 @@ function SideNav() {
   ))
 
   return (
-    <Navbar width={{ sm: 250 }} p="md" className={classes.container}>
+    <Navbar width={{ sm: width }} p="md" className={classes.container}>
       <Navbar.Section grow>{links}</Navbar.Section>
 
       <Navbar.Section className={classes.footer}>

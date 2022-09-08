@@ -10,12 +10,16 @@ const useStyles = createStyles((theme) => ({
   title: {
     margin: '.5em 0',
     color: theme.colors.gray[8],
+    textAlign: 'center',
+    [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+      textAlign: 'left',
+    },
   },
   sprintItems: {
     margin: '.5em 0',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
       justifyContent: 'flex-end',
       flexDirection: 'row',

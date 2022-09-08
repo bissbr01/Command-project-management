@@ -1,13 +1,8 @@
-/* eslint-disable @typescript-eslint/no-shadow */
 import { createStyles, Paper, Title, useMantineTheme } from '@mantine/core'
 import React, { SetStateAction, useState } from 'react'
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from 'react-beautiful-dnd'
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import { v4 as uuid } from 'uuid'
+import BoardItem, { DraggableItem } from './BoardItem'
 
 const itemsFromBackend = [
   { id: uuid(), content: 'First task' },
@@ -15,6 +10,9 @@ const itemsFromBackend = [
   { id: uuid(), content: 'Third task' },
   { id: uuid(), content: 'Fourth task' },
   { id: uuid(), content: 'Fifth task' },
+  { id: uuid(), content: 'Sixth task' },
+  { id: uuid(), content: 'Seventh task' },
+  { id: uuid(), content: 'Eight task' },
 ]
 
 const columnsFromBackend = {
@@ -40,6 +38,7 @@ const useStyles = createStyles((theme) => ({
     justifyContent: 'space-between',
     [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
       flexDirection: 'row',
+      alignItems: 'flex-start',
     },
   },
   board: {
@@ -56,23 +55,12 @@ const useStyles = createStyles((theme) => ({
     width: 250,
     minHeight: 300,
   },
-
-  draggable: {
-    userSelect: 'none',
-    padding: '1em',
-    margin: '0 0 8px 0',
-    minHeight: '50px',
-    // color: 'white',
-  },
 }))
 
-interface BoardColumn {
+export interface BoardColumn {
   [x: string]: {
     name: string
-    items: {
-      id: string
-      content: string
-    }[]
+    items: DraggableItem[]
   }
 }
 
@@ -83,7 +71,9 @@ function Boards() {
 
   const handleDragEnd = (
     result: DropResult,
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     columns: BoardColumn,
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     setColumns: React.Dispatch<SetStateAction<BoardColumn>>
   ) => {
     if (!result.destination) return
@@ -144,28 +134,7 @@ function Boards() {
                     }}
                   >
                     {column.items.map((item, index) => (
-                      <Draggable
-                        key={item.id}
-                        draggableId={item.id}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={classes.draggable}
-                            style={{
-                              backgroundColor: snapshot.isDragging
-                                ? theme.colors.brand[0]
-                                : 'white',
-                              ...provided.draggableProps.style,
-                            }}
-                          >
-                            {item.content}
-                          </div>
-                        )}
-                      </Draggable>
+                      <BoardItem key={item.id} item={item} index={index} />
                     ))}
                     {provided.placeholder}
                   </div>
