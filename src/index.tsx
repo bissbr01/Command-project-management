@@ -2,10 +2,10 @@ import { MantineProvider } from '@mantine/core'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import { store } from './app/store'
+import { store } from './store'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import BoardLayout from './features/boards/BoardLayout'
+import BoardLayout from './components/boards/BoardLayout'
 
 const container = document.getElementById('root')
 if (container) {
