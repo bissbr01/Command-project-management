@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
-import { scrumApi } from './services/issues'
+import { scrumApi } from './services/scrumApi'
 
 export const store = configureStore({
   reducer: {

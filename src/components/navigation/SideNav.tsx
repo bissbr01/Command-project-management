@@ -10,6 +10,7 @@ import {
   IconChalkboard,
 } from '@tabler/icons'
 import UserButton from './UserButton'
+import LoginButton from './LoginButton'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -127,6 +128,7 @@ function SideNav({ width }: { width: number }) {
       <Navbar.Section grow>{links}</Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
+        <LoginButton />
         <Menu position="top" withArrow width={200}>
           <Menu.Target>
             <UserButton
