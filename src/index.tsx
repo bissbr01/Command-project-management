@@ -13,12 +13,14 @@ if (container) {
   const root = createRoot(container)
   root.render(
     // <React.StrictMode>
-    <Auth0Provider
-      domain="dev-w8p6njku.us.auth0.com"
-      clientId="n0IFYEEMmgxhyAmitLokeYGVyHKcrRSZ"
-      redirectUri={window.location.origin}
-    >
-      <Provider store={store}>
+    <Provider store={store}>
+      <Auth0Provider
+        domain="dev-w8p6njku.us.auth0.com"
+        clientId="n0IFYEEMmgxhyAmitLokeYGVyHKcrRSZ"
+        redirectUri={window.location.origin}
+        audience="https://scrum-management-backend.onrender.com"
+        scope="admin user"
+      >
         <Router>
           <MantineProvider
             withNormalizeCSS
@@ -52,8 +54,8 @@ if (container) {
             </Routes>
           </MantineProvider>
         </Router>
-      </Provider>
-    </Auth0Provider>
+      </Auth0Provider>
+    </Provider>
     // </React.StrictMode>
   )
 }

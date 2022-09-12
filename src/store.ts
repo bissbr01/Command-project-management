@@ -1,10 +1,12 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { scrumApi } from './services/scrumApi'
+import authReducer from './reducers/authentication'
 
 export const store = configureStore({
   reducer: {
     [scrumApi.reducerPath]: scrumApi.reducer,
+    auth: authReducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.

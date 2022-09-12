@@ -9,8 +9,10 @@ import {
   IconStack2,
   IconChalkboard,
 } from '@tabler/icons'
+import { useAuth0 } from '@auth0/auth0-react'
 import UserButton from './UserButton'
 import LoginButton from './LoginButton'
+import LogoutButton from './LogoutButton'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -105,6 +107,8 @@ const data = [
 function SideNav({ width }: { width: number }) {
   const { classes, cx } = useStyles()
   const [active, setActive] = useState('Billing')
+  const { user, isAuthenticated, isLoading, loginWithRedirect, logout } =
+    useAuth0()
 
   const links = data.map((item) => (
     <a
@@ -123,25 +127,47 @@ function SideNav({ width }: { width: number }) {
     </a>
   ))
 
+  if (isLoading) {
+    return <div>Loading ...</div>
+  }
+
+  if (!isAuthenticated || !user) {
+    return (
+      <Navbar width={{ sm: width }} p="md" className={classes.container}>
+        <Navbar.Section grow>{links}</Navbar.Section>
+
+        <Navbar.Section className={classes.footer}>
+          <LoginButton />
+        </Navbar.Section>
+      </Navbar>
+    )
+  }
+
   return (
     <Navbar width={{ sm: width }} p="md" className={classes.container}>
       <Navbar.Section grow>{links}</Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <LoginButton />
-        <Menu position="top" withArrow width={200}>
-          <Menu.Target>
-            <UserButton
-              image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-              name="Ann Nullpointer"
-              email="anullpointer@yahoo.com"
-            />
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>
-            <Menu.Item icon={<IconLogout size={14} />}>Logout</Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
+        {user && (
+          <Menu position="top" withArrow width={200}>
+            <Menu.Target>
+              <UserButton
+                image={user.picture ?? 'default picture'}
+                name={user.name ?? 'no name'}
+                email={user.email ?? 'no email'}
+              />
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>
+              <Menu.Item
+                icon={<IconLogout size={14} />}
+                onClick={() => logout({ returnTo: window.location.origin })}
+              >
+                Logout
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        )}
       </Navbar.Section>
     </Navbar>
   )

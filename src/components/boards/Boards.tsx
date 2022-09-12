@@ -1,7 +1,16 @@
-import { createStyles, Paper, Title, useMantineTheme } from '@mantine/core'
+import {
+  createStyles,
+  Paper,
+  Skeleton,
+  Title,
+  useMantineTheme,
+} from '@mantine/core'
 import React, { SetStateAction, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
+import { useSelector } from 'react-redux'
 import { v4 as uuid } from 'uuid'
+import api from '../../services/scrumApi'
+import { RootState } from '../../store'
 import BoardItem, { DraggableItem } from './BoardItem'
 
 const itemsFromBackend = [
@@ -68,6 +77,12 @@ function Boards() {
   const [columns, setColumns] = useState(columnsFromBackend)
   const { classes } = useStyles()
   const theme = useMantineTheme()
+  const selectAuth = (state: RootState) => state.auth
+  const { token } = useSelector(selectAuth)
+  const { isLoading, isFetching, isError, data } =
+    api.endpoints.getIssues.useQuery(undefined, {
+      skip: !token,
+    })
 
   const handleDragEnd = (
     result: DropResult,
@@ -112,8 +127,28 @@ function Boards() {
     }
   }
 
+  if (isError) return <div>An error has occurred!</div>
+
+  if (isLoading || !data) {
+    return (
+      <>
+        <Skeleton height={50} circle mb="xl" />
+        <Skeleton height={8} radius="xl" />
+        <Skeleton height={8} mt={6} radius="xl" />
+        <Skeleton height={8} mt={6} width="70%" radius="xl" />
+      </>
+    )
+  }
+
+  console.log(data)
+
   return (
     <div className={classes.boards}>
+      <div className={isFetching ? 'posts--disabled' : ''}>
+        {data.map((issue) => (
+          <div key={issue.id}>{issue.title}</div>
+        ))}
+      </div>
       <DragDropContext
         onDragEnd={(result) => handleDragEnd(result, columns, setColumns)}
       >
