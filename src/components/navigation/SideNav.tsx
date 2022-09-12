@@ -9,10 +9,7 @@ import {
   IconStack2,
   IconChalkboard,
 } from '@tabler/icons'
-import { useAuth0 } from '@auth0/auth0-react'
 import UserButton from './UserButton'
-import LoginButton from './LoginButton'
-import LogoutButton from './LogoutButton'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -107,8 +104,6 @@ const data = [
 function SideNav({ width }: { width: number }) {
   const { classes, cx } = useStyles()
   const [active, setActive] = useState('Billing')
-  const { user, isAuthenticated, isLoading, loginWithRedirect, logout } =
-    useAuth0()
 
   const links = data.map((item) => (
     <a
@@ -127,20 +122,26 @@ function SideNav({ width }: { width: number }) {
     </a>
   ))
 
-  if (isLoading) {
-    return <div>Loading ...</div>
-  }
+  // if (isLoading) {
+  //   return <div>Loading ...</div>
+  // }
 
-  if (!isAuthenticated || !user) {
-    return (
-      <Navbar width={{ sm: width }} p="md" className={classes.container}>
-        <Navbar.Section grow>{links}</Navbar.Section>
+  // if (!isAuthenticated || !user) {
+  //   return (
+  //     <Navbar width={{ sm: width }} p="md" className={classes.container}>
+  //       <Navbar.Section grow>{links}</Navbar.Section>
 
-        <Navbar.Section className={classes.footer}>
-          <LoginButton />
-        </Navbar.Section>
-      </Navbar>
-    )
+  //       <Navbar.Section className={classes.footer}>
+  //         <LoginButton />
+  //       </Navbar.Section>
+  //     </Navbar>
+  //   )
+  // }
+
+  const user = {
+    picture: null,
+    name: 'Brad Bissell',
+    email: 'bb@gmail.com',
   }
 
   return (
@@ -159,12 +160,7 @@ function SideNav({ width }: { width: number }) {
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>
-              <Menu.Item
-                icon={<IconLogout size={14} />}
-                onClick={() => logout({ returnTo: window.location.origin })}
-              >
-                Logout
-              </Menu.Item>
+              <Menu.Item icon={<IconLogout size={14} />}>Logout</Menu.Item>
             </Menu.Dropdown>
           </Menu>
         )}
