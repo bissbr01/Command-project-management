@@ -1,13 +1,10 @@
 import { MantineProvider } from '@mantine/core'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { store } from './store'
-import App from './App'
 import reportWebVitals from './reportWebVitals'
-import BoardLayout from './components/boards/BoardLayout'
-import Login from './login/Login'
-import NotFound from './components/common/NotFound'
+import AppRoutes from './components/navigation/AppRoutes'
 
 const container = document.getElementById('root')
 if (container) {
@@ -41,14 +38,7 @@ if (container) {
             primaryShade: { light: 4, dark: 6 },
           }}
         >
-          <Routes>
-            <Route path="/" element={<App />}>
-              <Route index element={<BoardLayout />} />
-              <Route path="boards" element={<BoardLayout />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
+          <AppRoutes />
         </MantineProvider>
       </Router>
     </Provider>

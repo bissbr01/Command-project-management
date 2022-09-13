@@ -71,47 +71,49 @@ export default function Login() {
           }, 400)
         }}
       >
-        <Form>
-          <Paper className={classes.form} radius={0} p={30}>
-            <Title
-              order={2}
-              className={classes.title}
-              align="center"
-              mt="md"
-              mb={50}
-            >
-              Welcome back to Mantine!
-            </Title>
-            <Field
-              id="email"
-              name="email"
-              label="Email address"
-              placeholder="hello@gmail.com"
-              component={TextInput}
-            />
-            <PasswordInput
-              label="Password"
-              placeholder="Your password"
-              mt="md"
-              size="md"
-            />
-            <Checkbox label="Keep me logged in" mt="xl" size="md" />
-            <Button fullWidth mt="xl" size="md">
-              Login
-            </Button>
-
-            <Text align="center" mt="md">
-              Don&apos;t have an account?{' '}
-              <Anchor<'a'>
-                href="#"
-                weight={700}
-                onClick={(event) => event.preventDefault()}
+        {({ isSubmitting }) => (
+          <Form>
+            <Paper className={classes.form} radius={0} p={30}>
+              <Title
+                order={2}
+                className={classes.title}
+                align="center"
+                mt="md"
+                mb={50}
               >
-                Register
-              </Anchor>
-            </Text>
-          </Paper>
-        </Form>
+                Welcome back to Mantine!
+              </Title>
+              <Field
+                id="email"
+                name="email"
+                label="Email address"
+                placeholder="hello@gmail.com"
+                component={TextInput}
+              />
+              <PasswordInput
+                label="Password"
+                placeholder="Your password"
+                mt="md"
+                size="md"
+              />
+              <Checkbox label="Keep me logged in" mt="xl" size="md" />
+              <Button fullWidth mt="xl" size="md" disabled={isSubmitting}>
+                Login
+              </Button>
+
+              <Text align="center" mt="md">
+                Don&apos;t have an account?{' '}
+                <Anchor<'a'>
+                  href="#"
+                  weight={700}
+                  onClick={(event) => event.preventDefault()}
+                >
+                  Register
+                </Anchor>
+              </Text>
+            </Paper>
+          </Form>
+        )}
       </Formik>
     </div>
   )
