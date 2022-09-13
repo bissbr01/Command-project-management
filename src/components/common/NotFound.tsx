@@ -7,6 +7,7 @@ import {
   Button,
   SimpleGrid,
 } from '@mantine/core'
+import { Link } from 'react-router-dom'
 import image from './404.svg'
 
 const useStyles = createStyles((theme) => ({
@@ -64,6 +65,8 @@ export default function NotFound() {
             this is an error contact support.
           </Text>
           <Button
+            component={Link}
+            to="/"
             variant="outline"
             size="md"
             mt="xl"

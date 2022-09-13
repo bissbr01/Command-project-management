@@ -1,17 +1,13 @@
-import {
-  Paper,
-  createStyles,
-  TextInput,
-  PasswordInput,
-  Checkbox,
-  Button,
-  Title,
-  Text,
-  Anchor,
-} from '@mantine/core'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Paper, createStyles, Button, Title, Text, Anchor } from '@mantine/core'
+import { Formik, Form, Field } from 'formik'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import YupPassword from 'yup-password'
+import { setToken } from '../../reducers/authentication'
+import { useLoginMutation } from '../../services/loginEndpoints'
+import PasswordField from '../common/forms/PasswordField'
+import TextField from '../common/forms/TextField'
 
 YupPassword(Yup) // extend yup
 
@@ -59,16 +55,21 @@ const LoginSchema = Yup.object().shape({
 
 export default function Login() {
   const { classes } = useStyles()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const [login, { data, isSuccess, isError, error }] = useLoginMutation()
   return (
     <div className={classes.wrapper}>
       <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={LoginSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2))
-            setSubmitting(false)
-          }, 400)
+        onSubmit={async (values) => {
+          await login(values)
+          if (isSuccess && data) {
+            dispatch(setToken(data))
+          }
+          if (isError) console.log(error)
+          navigate('/')
         }}
       >
         {({ isSubmitting }) => (
@@ -81,23 +82,31 @@ export default function Login() {
                 mt="md"
                 mb={50}
               >
-                Welcome back to Mantine!
+                Welcome to Scrum Bus
               </Title>
               <Field
                 id="email"
                 name="email"
                 label="Email address"
                 placeholder="hello@gmail.com"
-                component={TextInput}
+                component={TextField}
               />
-              <PasswordInput
+              <Field
+                id="password"
+                name="password"
                 label="Password"
                 placeholder="Your password"
                 mt="md"
                 size="md"
+                component={PasswordField}
               />
-              <Checkbox label="Keep me logged in" mt="xl" size="md" />
-              <Button fullWidth mt="xl" size="md" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                fullWidth
+                mt="xl"
+                size="md"
+                disabled={isSubmitting}
+              >
                 Login
               </Button>
 

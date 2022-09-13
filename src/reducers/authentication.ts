@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { LoginResponse } from '../services/types'
 
 interface AuthState {
   token: string
@@ -13,8 +14,8 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setToken(state, { payload: { token } }: PayloadAction<{ token: string }>) {
-      state.token = token
+    setToken(state, { payload }: PayloadAction<LoginResponse>) {
+      return payload
     },
     removeToken() {
       return initialState

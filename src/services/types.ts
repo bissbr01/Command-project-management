@@ -41,3 +41,14 @@ export interface User {
   admin?: boolean
   disabled?: boolean
 }
+
+export interface LoginResponse {
+  token: string
+  name: string
+  email: string
+}
+
+export interface Login {
+  email: string
+  password: string
+}
