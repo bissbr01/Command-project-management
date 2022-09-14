@@ -9,7 +9,7 @@ import React, { SetStateAction, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import { useSelector } from 'react-redux'
 import { v4 as uuid } from 'uuid'
-import api from '../../services/scrumApi'
+import { useGetIssuesQuery } from '../../services/issuesEndpoints'
 import { RootState } from '../../store'
 import BoardItem, { DraggableItem } from './BoardItem'
 
@@ -79,10 +79,7 @@ function Boards() {
   const theme = useMantineTheme()
   const selectAuth = (state: RootState) => state.auth
   const { token } = useSelector(selectAuth)
-  const { isLoading, isFetching, isError, data } =
-    api.endpoints.getIssues.useQuery(undefined, {
-      skip: !token,
-    })
+  const { isLoading, isFetching, isError, data } = useGetIssuesQuery()
 
   const handleDragEnd = (
     result: DropResult,

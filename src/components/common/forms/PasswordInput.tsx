@@ -1,26 +1,24 @@
-import { TextInput } from '@mantine/core'
+import { PasswordInput } from '@mantine/core'
 import { FieldProps } from 'formik'
 
-export interface TextProps extends FieldProps {
+export interface PasswordProps extends FieldProps {
   label: string
   placeholder: string
-  required?: boolean
 }
 
-export default function TextField({
+export default function PasswordField({
   field,
   label,
   placeholder,
   form,
-  required = false,
-}: TextProps) {
+}: PasswordProps) {
   // workaround to get meta.  Might be fixed in future of formik
   const meta = form.getFieldMeta(field.name)
   return (
-    <TextInput
+    <PasswordInput
       label={label}
       placeholder={placeholder}
-      withAsterisk={required}
+      withAsterisk
       error={meta.touched && meta.error}
       {...field}
     />

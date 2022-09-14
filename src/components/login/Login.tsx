@@ -1,15 +1,13 @@
 import { Paper, createStyles, Button, Title, Text, Anchor } from '@mantine/core'
 import { Formik, Form, Field } from 'formik'
+import { FormEvent } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
-import YupPassword from 'yup-password'
 import { setToken } from '../../reducers/authentication'
 import { useLoginMutation } from '../../services/loginEndpoints'
-import PasswordField from '../common/forms/PasswordField'
+import PasswordField from '../common/forms/PasswordInput'
 import TextField from '../common/forms/TextField'
-
-YupPassword(Yup) // extend yup
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -47,10 +45,8 @@ const useStyles = createStyles((theme) => ({
 }))
 
 const LoginSchema = Yup.object().shape({
-  firstName: Yup.string().required('Required'),
-  lastName: Yup.string().required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string().password().required('Required'),
+  password: Yup.string().required('Required'),
 })
 
 export default function Login() {
@@ -64,7 +60,9 @@ export default function Login() {
         initialValues={{ email: '', password: '' }}
         validationSchema={LoginSchema}
         onSubmit={async (values) => {
-          await login(values)
+          console.log('test')
+          const res = await login(values)
+          console.log(res)
           if (isSuccess && data) {
             dispatch(setToken(data))
           }

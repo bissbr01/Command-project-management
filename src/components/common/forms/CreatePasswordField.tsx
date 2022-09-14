@@ -42,20 +42,22 @@ function getStrength(password: string) {
   return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10)
 }
 
-export interface PasswordProps extends FieldProps {
+export interface CreatePasswordProps extends FieldProps {
   label: string
   placeholder: string
   description?: string
   required?: boolean
 }
 
-export default function PasswordField({
+export default function CreatePasswordField({
   field,
   label,
   placeholder,
-  meta,
-}: PasswordProps) {
+  form,
+}: CreatePasswordProps) {
   const [popoverOpened, setPopoverOpened] = useState(false)
+  // workaround to get meta.  Might be fixed in future of formik
+  const meta = form.getFieldMeta(field.name)
   const checks = requirements.map((requirement, index) => (
     <PasswordRequirement
       // eslint-disable-next-line react/no-array-index-key
