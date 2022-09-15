@@ -5,13 +5,26 @@ export interface Comment {
   issue: Issue
 }
 
+export enum IssueStatus {
+  Backlog = 'backlog',
+  Todo = 'todo',
+  InProgress = 'inProgress',
+  Done = 'done',
+}
+
+export enum IssueType {
+  UserStory = 'userStory',
+  Bug = 'bug',
+  Task = 'task',
+}
+
 export interface Issue {
   id: number
-  status: 'backlog' | 'todo' | 'inProgress' | 'done'
+  status: IssueStatus
   attachmentUri?: string
   description?: string
   title?: string
-  type: 'userStory' | 'bug' | 'task'
+  type: IssueType
   assignee?: User
   author: User
   sprint: Sprint
@@ -36,6 +49,7 @@ export interface User {
   id: number
   firstName: string
   lastName: string
+  fullName: string
   email: string
   password?: string
   admin?: boolean

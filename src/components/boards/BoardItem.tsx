@@ -1,5 +1,6 @@
 import { createStyles, Text, useMantineTheme } from '@mantine/core'
 import { Draggable } from 'react-beautiful-dnd'
+import { Issue } from '../../services/types'
 
 const useStyles = createStyles(() => ({
   draggable: {
@@ -10,22 +11,17 @@ const useStyles = createStyles(() => ({
   },
 }))
 
-export interface DraggableItem {
-  id: string
-  content: string
-}
-
 interface BoardItemProps {
-  item: DraggableItem
+  item: Issue
   index: number
 }
 
-function BoardItem({ item, index }: BoardItemProps): JSX.Element {
+function BoardItem({ item: issue, index }: BoardItemProps): JSX.Element {
   const { classes } = useStyles()
   const theme = useMantineTheme()
 
   return (
-    <Draggable draggableId={item.id} index={index}>
+    <Draggable draggableId={String(issue.id)} index={index}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
@@ -39,8 +35,11 @@ function BoardItem({ item, index }: BoardItemProps): JSX.Element {
             ...provided.draggableProps.style,
           }}
         >
-          <Text weight="bold">{item.content}</Text>
-          <Text>{item.id}</Text>
+          <Text>{issue.id}</Text>
+          <Text weight="bold">{issue.title}</Text>
+          <Text>{issue.author.fullName}</Text>
+          <Text>{issue.status}</Text>
+          <Text>{issue.description}</Text>
         </div>
       )}
     </Draggable>

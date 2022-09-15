@@ -1,4 +1,5 @@
 import { MantineProvider } from '@mantine/core'
+import { NotificationsProvider } from '@mantine/notifications'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
@@ -10,7 +11,6 @@ const container = document.getElementById('root')
 if (container) {
   const root = createRoot(container)
   root.render(
-    // <React.StrictMode>
     <Provider store={store}>
       <Router>
         <MantineProvider
@@ -38,11 +38,12 @@ if (container) {
             primaryShade: { light: 4, dark: 6 },
           }}
         >
-          <AppRoutes />
+          <NotificationsProvider position="top-center">
+            <AppRoutes />
+          </NotificationsProvider>
         </MantineProvider>
       </Router>
     </Provider>
-    // </React.StrictMode>
   )
 }
 

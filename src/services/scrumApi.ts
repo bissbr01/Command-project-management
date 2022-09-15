@@ -5,7 +5,7 @@ import type { RootState } from '../store'
 const baseUrl =
   process.env.NODE_ENV === 'production'
     ? 'https://scrum-management-backend.herokuapp.com/api'
-    : 'http://localhost/3001/api'
+    : 'http://localhost:3001/api'
 // Define a service using a base URL and expected endpoints
 export const scrumApi = createApi({
   reducerPath: 'scrumApi',

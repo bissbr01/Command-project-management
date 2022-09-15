@@ -1,6 +1,7 @@
 import { Paper, createStyles, Button, Title, Text, Anchor } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
+import { IconX } from '@tabler/icons'
 import { Formik, Form, Field } from 'formik'
-import { FormEvent } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
@@ -60,14 +61,22 @@ export default function Login() {
         initialValues={{ email: '', password: '' }}
         validationSchema={LoginSchema}
         onSubmit={async (values) => {
-          console.log('test')
-          const res = await login(values)
-          console.log(res)
-          if (isSuccess && data) {
-            dispatch(setToken(data))
+          try {
+            const res = await login(values).unwrap()
+            dispatch(setToken(res))
+            navigate('/')
+          } catch (e: unknown) {
+            showNotification({
+              title: 'Error',
+              message: 'Incorrect username or password.',
+              autoClose: 4000,
+              color: 'red',
+              icon: <IconX />,
+            })
+            if (e instanceof Error) {
+              console.log(e.message)
+            }
           }
-          if (isError) console.log(error)
-          navigate('/')
         }}
       >
         {({ isSubmitting }) => (

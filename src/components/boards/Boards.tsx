@@ -7,37 +7,20 @@ import {
 } from '@mantine/core'
 import React, { SetStateAction, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
-import { useSelector } from 'react-redux'
-import { v4 as uuid } from 'uuid'
 import { useGetIssuesQuery } from '../../services/issuesEndpoints'
-import { RootState } from '../../store'
-import BoardItem, { DraggableItem } from './BoardItem'
+import BoardItem from './BoardItem'
+import { Issue, IssueStatus } from '../../services/types'
 
-const itemsFromBackend = [
-  { id: uuid(), content: 'First task' },
-  { id: uuid(), content: 'Second task' },
-  { id: uuid(), content: 'Third task' },
-  { id: uuid(), content: 'Fourth task' },
-  { id: uuid(), content: 'Fifth task' },
-  { id: uuid(), content: 'Sixth task' },
-  { id: uuid(), content: 'Seventh task' },
-  { id: uuid(), content: 'Eight task' },
-]
-
-const columnsFromBackend = {
-  [uuid()]: {
-    name: 'To do',
-    items: itemsFromBackend,
-  },
-  [uuid()]: {
-    name: 'In Progress',
-    items: [],
-  },
-  [uuid()]: {
-    name: 'Done',
-    items: [],
-  },
-}
+// const itemsFromBackend = [
+//   { id: uuid(), content: 'First task' },
+//   { id: uuid(), content: 'Second task' },
+//   { id: uuid(), content: 'Third task' },
+//   { id: uuid(), content: 'Fourth task' },
+//   { id: uuid(), content: 'Fifth task' },
+//   { id: uuid(), content: 'Sixth task' },
+//   { id: uuid(), content: 'Seventh task' },
+//   { id: uuid(), content: 'Eight task' },
+// ]
 
 const useStyles = createStyles((theme) => ({
   boards: {
@@ -66,27 +49,25 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export interface BoardColumn {
+export interface BoardColumns {
   [x: string]: {
+    status: IssueStatus
     name: string
-    items: DraggableItem[]
+    items: Issue[]
   }
 }
 
-function Boards() {
-  const [columns, setColumns] = useState(columnsFromBackend)
+function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
   const { classes } = useStyles()
   const theme = useMantineTheme()
-  const selectAuth = (state: RootState) => state.auth
-  const { token } = useSelector(selectAuth)
-  const { isLoading, isFetching, isError, data } = useGetIssuesQuery()
+  const [columns, setColumns] = useState(boardColumns)
 
   const handleDragEnd = (
     result: DropResult,
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    columns: BoardColumn,
+    columns: BoardColumns,
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    setColumns: React.Dispatch<SetStateAction<BoardColumn>>
+    setColumns: React.Dispatch<SetStateAction<BoardColumns>>
   ) => {
     if (!result.destination) return
     const { source, destination } = result
@@ -124,28 +105,31 @@ function Boards() {
     }
   }
 
-  if (isError) return <div>An error has occurred!</div>
+  // if (isError) return <div>An error has occurred!</div>
+  // if (!data) return <div>Failed to fetch issues</div>
+  // if (isLoading) {
+  //   return (
+  //     <>
+  //       <Skeleton height={50} circle mb="xl" />
+  //       <Skeleton height={8} radius="xl" />
+  //       <Skeleton height={8} mt={6} radius="xl" />
+  //       <Skeleton height={8} mt={6} width="70%" radius="xl" />
+  //     </>
+  //   )
+  // }
 
-  if (isLoading || !data) {
-    return (
-      <>
-        <Skeleton height={50} circle mb="xl" />
-        <Skeleton height={8} radius="xl" />
-        <Skeleton height={8} mt={6} radius="xl" />
-        <Skeleton height={8} mt={6} width="70%" radius="xl" />
-      </>
-    )
-  }
-
-  console.log(data)
+  // if (!columns) {
+  //   setColumns((state) => ({
+  //     ...state,
+  //     [IssueStatus.Todo]: {
+  //       ...state[IssueStatus.Todo],
+  //       items: data,
+  //     },
+  //   }))
+  // }
 
   return (
     <div className={classes.boards}>
-      <div className={isFetching ? 'posts--disabled' : ''}>
-        {data.map((issue) => (
-          <div key={issue.id}>{issue.title}</div>
-        ))}
-      </div>
       <DragDropContext
         onDragEnd={(result) => handleDragEnd(result, columns, setColumns)}
       >
