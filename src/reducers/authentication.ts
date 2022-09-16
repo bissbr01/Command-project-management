@@ -15,15 +15,27 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setToken(state, { payload }: PayloadAction<LoginResponse>) {
+      window.localStorage.setItem('user', JSON.stringify(payload))
       return payload
     },
+    checkStorageForToken(state) {
+      const cachedUserJSON = window.localStorage.getItem('user')
+      console.log('JSON: ', cachedUserJSON)
+      if (cachedUserJSON) {
+        const cachedUser = JSON.parse(cachedUserJSON)
+        console.log(cachedUser)
+        return cachedUser
+      }
+      return state
+    },
     removeToken() {
+      window.localStorage.removeItem('user')
       return initialState
     },
   },
 })
 
 // Extract and export each action creator by name
-export const { setToken, removeToken } = authSlice.actions
+export const { setToken, checkStorageForToken, removeToken } = authSlice.actions
 // Export the reducer, either as a default or named export
 export default authSlice.reducer

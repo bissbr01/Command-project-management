@@ -1,13 +1,6 @@
-import {
-  createStyles,
-  Paper,
-  Skeleton,
-  Title,
-  useMantineTheme,
-} from '@mantine/core'
+import { createStyles, Paper, Title, useMantineTheme } from '@mantine/core'
 import React, { SetStateAction, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
-import { useGetIssuesQuery } from '../../services/issuesEndpoints'
 import BoardItem from './BoardItem'
 import { Issue, IssueStatus } from '../../services/types'
 
