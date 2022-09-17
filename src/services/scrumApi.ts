@@ -1,6 +1,7 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import type { RootState } from '../store'
+import { Auth } from './types'
 
 const baseUrl =
   process.env.NODE_ENV === 'production'
@@ -13,7 +14,6 @@ export const scrumApi = createApi({
     baseUrl,
     prepareHeaders: (headers, { getState }) => {
       const { token } = (getState() as RootState).auth
-
       if (token) {
         headers.set('authorization', `Bearer ${token}`)
       }

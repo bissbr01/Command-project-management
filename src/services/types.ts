@@ -56,13 +56,12 @@ export interface User {
   disabled?: boolean
 }
 
-export interface LoginResponse {
+export interface Auth {
+  user: Pick<User, 'email' | 'fullName' | 'admin'>
   token: string
-  name: string
-  email: string
 }
 
-export interface Login {
+export interface Credentials {
   email: string
   password: string
 }

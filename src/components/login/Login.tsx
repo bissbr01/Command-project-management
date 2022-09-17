@@ -5,8 +5,8 @@ import { Formik, Form, Field } from 'formik'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
-import { setToken } from '../../reducers/authentication'
-import { useLoginMutation } from '../../services/loginEndpoints'
+import { setAuth } from '../../reducers/authentication'
+import { useAuthenticateMutation } from '../../services/loginEndpoints'
 import PasswordField from '../common/forms/PasswordInput'
 import TextField from '../common/forms/TextField'
 
@@ -54,7 +54,7 @@ export default function Login() {
   const { classes } = useStyles()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [login, { data, isSuccess, isError, error }] = useLoginMutation()
+  const [login, { data, isSuccess, isError, error }] = useAuthenticateMutation()
   return (
     <div className={classes.wrapper}>
       <Formik
@@ -63,7 +63,7 @@ export default function Login() {
         onSubmit={async (values) => {
           try {
             const res = await login(values).unwrap()
-            dispatch(setToken(res))
+            dispatch(setAuth(res))
             navigate('/')
           } catch (e: unknown) {
             showNotification({

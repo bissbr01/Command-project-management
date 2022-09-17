@@ -1,40 +1,36 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import App from '../../App'
-import { checkStorageForToken, setToken } from '../../reducers/authentication'
+import { setAuth } from '../../reducers/authentication'
 import { RootState } from '../../store'
 import BoardLayout from '../boards/BoardLayout'
 import NotFound from '../common/NotFound'
 import Login from '../login/Login'
 
 export default function AppRoutes() {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const authSelector = (state: RootState) => state.auth
-  const { token } = useSelector(authSelector)
+  const tokenSelector = (state: RootState) => state.auth.token
+  const token = useSelector(tokenSelector)
 
+  // check if login token saved in local storage
   useEffect(() => {
-    const cachedUserJSON = window.localStorage.getItem('user')
-    console.log('JSON: ', cachedUserJSON)
-    if (cachedUserJSON) {
-      const cachedUser = JSON.parse(cachedUserJSON)
-      console.log(cachedUser)
-      dispatch(setToken(cachedUser))
+    if (!token) {
+      console.log('no token, setting')
+      const cachedUserJSON = window.localStorage.getItem('user')
+      if (cachedUserJSON) {
+        const cachedUser = JSON.parse(cachedUserJSON)
+        dispatch(setAuth(cachedUser))
+        navigate('/')
+      }
     }
-  }, [dispatch])
+  }, [dispatch, navigate, token])
 
+  console.log('in routes app: ', token)
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          token || window.localStorage.getItem('user') ? (
-            <App />
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      >
+      <Route path="/" element={token ? <App /> : <Navigate to="/login" />}>
         <Route index element={<BoardLayout />} />
         <Route path="boards" element={<BoardLayout />} />
       </Route>

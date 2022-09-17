@@ -1,24 +1,30 @@
 /* eslint-disable no-param-reassign */
+
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { LoginResponse } from '../services/types'
+import loginEndpoints from '../services/loginEndpoints'
+import { scrumApi } from '../services/scrumApi'
+import { Auth, User } from '../services/types'
 
 interface AuthState {
+  user: Pick<User, 'email' | 'fullName' | 'admin'>
   token: string
-  name: string
-  email: string
 }
 
-const initialState = { token: '', name: '', email: '' } as AuthState
+const initialState = {
+  user: { email: '', fullName: '' },
+  token: '',
+} as AuthState
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setToken(state, { payload }: PayloadAction<LoginResponse>) {
+    setAuth(state, { payload }: PayloadAction<Auth>) {
       window.localStorage.setItem('user', JSON.stringify(payload))
-      return payload
+      state.token = payload.token
+      state.user = payload.user
     },
-    checkStorageForToken(state) {
+    checkAuth(state) {
       const cachedUserJSON = window.localStorage.getItem('user')
       console.log('JSON: ', cachedUserJSON)
       if (cachedUserJSON) {
@@ -28,14 +34,24 @@ const authSlice = createSlice({
       }
       return state
     },
-    removeToken() {
+    removeAuth() {
       window.localStorage.removeItem('user')
       return initialState
     },
   },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      loginEndpoints.endpoints.authenticate.matchFulfilled,
+      (state, { payload }: PayloadAction<Auth>) => {
+        window.localStorage.setItem('user', JSON.stringify(payload))
+        state.token = payload.token
+        state.user = payload.user
+      }
+    )
+  },
 })
 
 // Extract and export each action creator by name
-export const { setToken, checkStorageForToken, removeToken } = authSlice.actions
+export const { setAuth, checkAuth, removeAuth } = authSlice.actions
 // Export the reducer, either as a default or named export
 export default authSlice.reducer
