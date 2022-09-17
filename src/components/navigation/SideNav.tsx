@@ -9,7 +9,12 @@ import {
   IconStack2,
   IconChalkboard,
 } from '@tabler/icons'
+import { useNavigate } from 'react-router-dom'
 import UserButton from './UserButton'
+import { RootState } from '../../store'
+import { removeLogin } from '../../reducers/authentication'
+import { Auth } from '../../services/types'
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -104,6 +109,15 @@ const data = [
 function SideNav({ width }: { width: number }) {
   const { classes, cx } = useStyles()
   const [active, setActive] = useState('Billing')
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const selectAuth = (state: RootState) => state.auth
+  const auth: Auth = useAppSelector(selectAuth)
+
+  const handleLogout = () => {
+    dispatch(removeLogin())
+    navigate('/login')
+  }
 
   const links = data.map((item) => (
     <a
@@ -122,45 +136,28 @@ function SideNav({ width }: { width: number }) {
     </a>
   ))
 
-  // if (isLoading) {
-  //   return <div>Loading ...</div>
-  // }
-
-  // if (!isAuthenticated || !user) {
-  //   return (
-  //     <Navbar width={{ sm: width }} p="md" className={classes.container}>
-  //       <Navbar.Section grow>{links}</Navbar.Section>
-
-  //       <Navbar.Section className={classes.footer}>
-  //         <LoginButton />
-  //       </Navbar.Section>
-  //     </Navbar>
-  //   )
-  // }
-
-  const user = {
-    picture: null,
-    name: 'Brad Bissell',
-    email: 'bb@gmail.com',
-  }
-
   return (
     <Navbar width={{ sm: width }} p="md" className={classes.container}>
       <Navbar.Section grow>{links}</Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        {user && (
+        {auth.user && (
           <Menu position="top" withArrow width={200}>
             <Menu.Target>
               <UserButton
-                image={user.picture ?? 'default picture'}
-                name={user.name ?? 'no name'}
-                email={user.email ?? 'no email'}
+                image="default picture"
+                name={auth.user.fullName ?? 'no name'}
+                email={auth.user.email ?? 'no email'}
               />
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>
-              <Menu.Item icon={<IconLogout size={14} />}>Logout</Menu.Item>
+              <Menu.Item
+                icon={<IconLogout size={14} />}
+                onClick={() => handleLogout()}
+              >
+                Logout
+              </Menu.Item>
             </Menu.Dropdown>
           </Menu>
         )}

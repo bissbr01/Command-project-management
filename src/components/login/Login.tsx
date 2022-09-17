@@ -2,10 +2,10 @@ import { Paper, createStyles, Button, Title, Text, Anchor } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconX } from '@tabler/icons'
 import { Formik, Form, Field } from 'formik'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
-import { setAuth } from '../../reducers/authentication'
+import { useAppDispatch } from '../../hooks/hooks'
+import { setLogin } from '../../reducers/authentication'
 import { useAuthenticateMutation } from '../../services/loginEndpoints'
 import PasswordField from '../common/forms/PasswordInput'
 import TextField from '../common/forms/TextField'
@@ -53,7 +53,7 @@ const LoginSchema = Yup.object().shape({
 export default function Login() {
   const { classes } = useStyles()
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const [login, { data, isSuccess, isError, error }] = useAuthenticateMutation()
   return (
     <div className={classes.wrapper}>
@@ -63,7 +63,7 @@ export default function Login() {
         onSubmit={async (values) => {
           try {
             const res = await login(values).unwrap()
-            dispatch(setAuth(res))
+            dispatch(setLogin(res))
             navigate('/')
           } catch (e: unknown) {
             showNotification({

@@ -1,6 +1,7 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { scrumApi } from './services/scrumApi'
+// eslint-disable-next-line import/no-cycle
 import authReducer from './reducers/authentication'
 
 export const store = configureStore({

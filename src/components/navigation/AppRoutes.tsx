@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import App from '../../App'
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { setAuth } from '../../reducers/authentication'
 import { RootState } from '../../store'
 import BoardLayout from '../boards/BoardLayout'
@@ -10,15 +10,14 @@ import Login from '../login/Login'
 
 export default function AppRoutes() {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const tokenSelector = (state: RootState) => state.auth.token
-  const token = useSelector(tokenSelector)
+  const token = useAppSelector(tokenSelector)
 
   // check if login token saved in local storage
   useEffect(() => {
     if (!token) {
-      console.log('no token, setting')
-      const cachedUserJSON = window.localStorage.getItem('user')
+      const cachedUserJSON = window.localStorage.getItem('auth')
       if (cachedUserJSON) {
         const cachedUser = JSON.parse(cachedUserJSON)
         dispatch(setAuth(cachedUser))
@@ -27,7 +26,6 @@ export default function AppRoutes() {
     }
   }, [dispatch, navigate, token])
 
-  console.log('in routes app: ', token)
   return (
     <Routes>
       <Route path="/" element={token ? <App /> : <Navigate to="/login" />}>
