@@ -7,6 +7,7 @@ import { RootState } from '../../store'
 import BoardLayout from '../boards/BoardLayout'
 import NotFound from '../common/NotFound'
 import Login from '../login/Login'
+import Register from '../login/Register'
 
 export default function AppRoutes() {
   const navigate = useNavigate()
@@ -34,6 +35,7 @@ export default function AppRoutes() {
       </Route>
       <Route path="*" element={<NotFound />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   )
 }

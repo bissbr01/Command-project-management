@@ -72,7 +72,7 @@ export default function CreatePasswordField({
   const color = strength === 100 ? 'teal' : strength > 50 ? 'yellow' : 'red'
 
   return (
-    <div style={{ maxWidth: 340, margin: 'auto' }}>
+    <div style={{ width: '100%', margin: 'auto' }}>
       <Popover
         opened={popoverOpened}
         position="bottom"

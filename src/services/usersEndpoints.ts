@@ -11,7 +11,7 @@ const usersEndpoints = scrumApi.injectEndpoints({
       query: (id) => `/users/${id}`,
       providesTags: ['User'],
     }),
-    addUser: build.mutation<User, Omit<User, 'id'>>({
+    addUser: build.mutation<User, Omit<User, 'id' | 'fullName'>>({
       query: (body) => ({
         url: '/users',
         method: 'POST',

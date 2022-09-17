@@ -1,12 +1,21 @@
-import { Paper, createStyles, Button, Title, Text, Anchor } from '@mantine/core'
+import {
+  Paper,
+  createStyles,
+  Button,
+  Title,
+  Text,
+  Anchor,
+  Group,
+  Divider,
+} from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
-import { IconX } from '@tabler/icons'
+import { IconBrandGithub, IconBrandGoogle, IconX } from '@tabler/icons'
 import { Formik, Form, Field } from 'formik'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useAppDispatch } from '../../hooks/hooks'
 import { setLogin } from '../../reducers/authentication'
-import { useAuthenticateMutation } from '../../services/loginEndpoints'
+import { useLoginMutation } from '../../services/loginEndpoints'
 import PasswordField from '../common/forms/PasswordInput'
 import TextField from '../common/forms/TextField'
 
@@ -54,7 +63,7 @@ export default function Login() {
   const { classes } = useStyles()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const [login, { data, isSuccess, isError, error }] = useAuthenticateMutation()
+  const [login, { data, isSuccess, isError, error }] = useLoginMutation()
   return (
     <div className={classes.wrapper}>
       <Formik
@@ -91,6 +100,21 @@ export default function Login() {
               >
                 Welcome to Scrum Bus
               </Title>
+              <Group grow mb="md" mt="md">
+                <Button variant="default" radius="xl">
+                  <IconBrandGoogle />
+                  Google
+                </Button>
+                <Button variant="default" radius="xl">
+                  <IconBrandGithub />
+                  Github
+                </Button>
+              </Group>
+              <Divider
+                label="Or continue with email"
+                labelPosition="center"
+                my="lg"
+              />
               <Field
                 id="email"
                 name="email"
@@ -119,11 +143,7 @@ export default function Login() {
 
               <Text align="center" mt="md">
                 Don&apos;t have an account?{' '}
-                <Anchor<'a'>
-                  href="#"
-                  weight={700}
-                  onClick={(event) => event.preventDefault()}
-                >
+                <Anchor component={Link} to="/register" weight={700}>
                   Register
                 </Anchor>
               </Text>

@@ -3,7 +3,7 @@ import { Auth, Credentials } from './types'
 
 const loginEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
-    authenticate: build.mutation<Auth, Credentials>({
+    login: build.mutation<Auth, Credentials>({
       query: (body) => ({
         url: '/login',
         method: 'POST',
@@ -15,4 +15,4 @@ const loginEndpoints = scrumApi.injectEndpoints({
 })
 
 export default loginEndpoints
-export const { useAuthenticateMutation } = loginEndpoints
+export const { useLoginMutation } = loginEndpoints
