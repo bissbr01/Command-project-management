@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import App from '../../App'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
-import { setAuth } from '../../reducers/authentication'
+import { setToken } from '../../reducers/authentication'
 import { RootState } from '../../store'
 import BoardLayout from '../boards/BoardLayout'
 import NotFound from '../common/NotFound'
@@ -18,10 +18,10 @@ export default function AppRoutes() {
   // check if login token saved in local storage
   useEffect(() => {
     if (!token) {
-      const cachedUserJSON = window.localStorage.getItem('auth')
+      const cachedUserJSON = window.localStorage.getItem('token')
       if (cachedUserJSON) {
         const cachedUser = JSON.parse(cachedUserJSON)
-        dispatch(setAuth(cachedUser))
+        dispatch(setToken(cachedUser))
         navigate('/')
       }
     }

@@ -7,8 +7,8 @@ const usersEndpoints = scrumApi.injectEndpoints({
       query: () => '/users',
       providesTags: ['User'],
     }),
-    getUserById: build.query<User, string>({
-      query: (id) => `/users/${id}`,
+    getUserByToken: build.query<User, void>({
+      query: () => '/users/me',
       providesTags: ['User'],
     }),
     addUser: build.mutation<User, Omit<User, 'id' | 'fullName'>>({
@@ -31,10 +31,10 @@ const usersEndpoints = scrumApi.injectEndpoints({
   overrideExisting: true,
 })
 
-// eslint-disable-next-line import/prefer-default-export
+export default usersEndpoints
 export const {
   useGetUsersQuery,
-  useGetUserByIdQuery,
+  useGetUserByTokenQuery,
   useAddUserMutation,
   useUpdateUserMutation,
 } = usersEndpoints

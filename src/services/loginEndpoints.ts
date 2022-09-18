@@ -1,9 +1,9 @@
 import { scrumApi } from './scrumApi'
-import { Auth, Credentials } from './types'
+import { Credentials, Token } from './types'
 
 const loginEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
-    login: build.mutation<Auth, Credentials>({
+    login: build.mutation<Token, Credentials>({
       query: (body) => ({
         url: '/login',
         method: 'POST',

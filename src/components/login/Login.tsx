@@ -63,7 +63,7 @@ export default function Login() {
   const { classes } = useStyles()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const [login, { data, isSuccess, isError, error }] = useLoginMutation()
+  const [login] = useLoginMutation()
   return (
     <div className={classes.wrapper}>
       <Formik

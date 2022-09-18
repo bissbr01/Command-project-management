@@ -13,7 +13,6 @@ import { useNavigate } from 'react-router-dom'
 import UserButton from './UserButton'
 import { RootState } from '../../store'
 import { removeLogin } from '../../reducers/authentication'
-import { Auth } from '../../services/types'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 
 const useStyles = createStyles((theme, _params, getRef) => {
@@ -111,8 +110,8 @@ function SideNav({ width }: { width: number }) {
   const [active, setActive] = useState('Billing')
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const selectAuth = (state: RootState) => state.auth
-  const auth: Auth = useAppSelector(selectAuth)
+  // const selectAuth = (state: RootState) => state.auth
+  // const auth: Auth = useAppSelector(selectAuth)
 
   const handleLogout = () => {
     dispatch(removeLogin())
@@ -141,26 +140,26 @@ function SideNav({ width }: { width: number }) {
       <Navbar.Section grow>{links}</Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        {auth.user && (
-          <Menu position="top" withArrow width={200}>
-            <Menu.Target>
-              <UserButton
+        {/* {auth.user && ( */}
+        <Menu position="top" withArrow width={200}>
+          <Menu.Target>
+            {/* <UserButton
                 image="default picture"
                 name={auth.user.fullName ?? 'no name'}
                 email={auth.user.email ?? 'no email'}
-              />
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>
-              <Menu.Item
-                icon={<IconLogout size={14} />}
-                onClick={() => handleLogout()}
-              >
-                Logout
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
-        )}
+              /> */}
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>
+            <Menu.Item
+              icon={<IconLogout size={14} />}
+              onClick={() => handleLogout()}
+            >
+              Logout
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+        {/* )} */}
       </Navbar.Section>
     </Navbar>
   )

@@ -56,8 +56,7 @@ export interface User {
   disabled?: boolean
 }
 
-export interface Auth {
-  user: Pick<User, 'email' | 'fullName' | 'admin'>
+export interface Token {
   token: string
 }
 

@@ -1,50 +1,42 @@
 /* eslint-disable no-param-reassign */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import loginEndpoints from '../services/loginEndpoints'
-import { Auth, User } from '../services/types'
+import { Token } from '../services/types'
 // eslint-disable-next-line import/no-cycle
 import { AppThunk } from '../store'
 
-interface AuthState {
-  user: Pick<User, 'email' | 'fullName' | 'admin'>
-  token: string
-}
-
 const initialState = {
-  user: { email: '', fullName: '', admin: false },
   token: '',
-} as AuthState
+} as Token
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAuth(state, { payload }: PayloadAction<Auth>) {
+    setToken(state, { payload }: PayloadAction<Token>) {
       state.token = payload.token
-      state.user = payload.user
     },
-    removeAuth() {
+    removeToken() {
       return initialState
     },
   },
 })
 
 // Extract and export each action creator by name
-export const { setAuth, removeAuth } = authSlice.actions
+export const { setToken, removeToken } = authSlice.actions
 // Export the reducer, either as a default or named export
 export default authSlice.reducer
 
 export const setLogin =
-  (auth: Auth): AppThunk =>
+  (token: Token): AppThunk =>
   (dispatch) => {
     console.log('setLogin thunk')
-    window.localStorage.setItem('auth', JSON.stringify(auth))
-    dispatch(setAuth(auth))
+    window.localStorage.setItem('token', JSON.stringify(token))
+    dispatch(setToken(token))
   }
 
 export const removeLogin = (): AppThunk => (dispatch) => {
   console.log('removeLogin thunk')
-  window.localStorage.removeItem('auth')
-  dispatch(removeAuth())
+  window.localStorage.removeItem('token')
+  dispatch(removeToken())
 }
