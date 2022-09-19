@@ -1,6 +1,8 @@
 import { Button, Container, createStyles, Title } from '@mantine/core'
+import _ from 'lodash'
 import { useGetIssuesQuery } from '../../services/issuesEndpoints'
 import { Issue, IssueStatus } from '../../services/types'
+import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import NavBreadcrumbs from '../common/Breadcrumbs'
 import Boards, { BoardColumns } from './Boards'
 
@@ -32,26 +34,30 @@ const useStyles = createStyles((theme) => ({
 
 export default function BoardLayout() {
   const { classes } = useStyles()
-  const { isLoading, data } = useGetIssuesQuery()
+  const { data: user, isLoading } = useGetUserByTokenQuery()
 
   if (isLoading) return <div>loading</div>
-  if (!data) return <div>Issues failed to load</div>
+  // if (!user) return <div>Issues failed to load</div>
+
+  const issues = _.groupBy(user?.authoredIssues, 'status')
+
+  console.log(issues)
 
   const columnsFromBackend: BoardColumns = {
     [IssueStatus.Todo]: {
       status: IssueStatus.Todo,
       name: 'To do',
-      items: data,
+      items: issues.todo,
     },
     [IssueStatus.InProgress]: {
       status: IssueStatus.InProgress,
       name: 'In Progress',
-      items: [],
+      items: issues.inProgress ?? [],
     },
     [IssueStatus.Done]: {
       status: IssueStatus.Done,
       name: 'Done',
-      items: [],
+      items: issues.done ?? [],
     },
   }
   return (

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from 'react'
-import { createStyles, Navbar, Menu } from '@mantine/core'
+import { createStyles, Navbar, Menu, Loader } from '@mantine/core'
 import {
   IconBellRinging,
   IconSettings,
@@ -14,6 +14,7 @@ import UserButton from './UserButton'
 import { RootState } from '../../store'
 import { removeLogin } from '../../reducers/authentication'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
+import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -98,7 +99,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
   }
 })
 
-const data = [
+const navLinks = [
   { link: '', label: 'Notifications', icon: IconBellRinging },
   { link: '', label: 'Backlog', icon: IconStack2 },
   { link: '', label: 'Board', icon: IconChalkboard },
@@ -110,15 +111,14 @@ function SideNav({ width }: { width: number }) {
   const [active, setActive] = useState('Billing')
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  // const selectAuth = (state: RootState) => state.auth
-  // const auth: Auth = useAppSelector(selectAuth)
+  const { data: user, isLoading } = useGetUserByTokenQuery()
 
   const handleLogout = () => {
     dispatch(removeLogin())
     navigate('/login')
   }
 
-  const links = data.map((item) => (
+  const links = navLinks.map((item) => (
     <a
       className={cx(classes.link, {
         [classes.linkActive]: item.label === active,
@@ -135,6 +135,9 @@ function SideNav({ width }: { width: number }) {
     </a>
   ))
 
+  if (isLoading) return <Loader />
+  if (!user) return <div>No user found</div>
+
   return (
     <Navbar width={{ sm: width }} p="md" className={classes.container}>
       <Navbar.Section grow>{links}</Navbar.Section>
@@ -143,11 +146,11 @@ function SideNav({ width }: { width: number }) {
         {/* {auth.user && ( */}
         <Menu position="top" withArrow width={200}>
           <Menu.Target>
-            {/* <UserButton
-                image="default picture"
-                name={auth.user.fullName ?? 'no name'}
-                email={auth.user.email ?? 'no email'}
-              /> */}
+            <UserButton
+              image="default picture"
+              name={user.fullName ?? 'no name'}
+              email={user.email ?? 'no email'}
+            />
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>

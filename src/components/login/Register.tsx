@@ -9,7 +9,6 @@ import { useAddUserMutation } from '../../services/usersEndpoints'
 import TextField from '../common/forms/TextField'
 import CreatePasswordField from '../common/forms/CreatePasswordField'
 import CheckBoxField from '../common/forms/CheckboxField'
-import { useLoginMutation } from '../../services/loginEndpoints'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -35,7 +34,6 @@ export default function Register() {
   const { classes } = useStyles()
   const navigate = useNavigate()
   const [addUser] = useAddUserMutation()
-  const [login] = useLoginMutation()
 
   const registerSchema = Yup.object().shape({
     firstName: Yup.string().required('Required'),

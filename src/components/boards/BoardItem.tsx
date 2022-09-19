@@ -37,7 +37,6 @@ function BoardItem({ item: issue, index }: BoardItemProps): JSX.Element {
         >
           <Text>{issue.id}</Text>
           <Text weight="bold">{issue.title}</Text>
-          <Text>{issue.author.fullName}</Text>
           <Text>{issue.status}</Text>
           <Text>{issue.description}</Text>
         </div>

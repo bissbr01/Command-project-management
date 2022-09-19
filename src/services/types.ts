@@ -51,9 +51,15 @@ export interface User {
   lastName: string
   fullName: string
   email: string
+  createdAt: string
+  updatedAt: string
   password?: string
   admin?: boolean
   disabled?: boolean
+  projects?: Project[]
+  sprints?: Sprint[]
+  authoredIssues?: Issue[]
+  assignedIssues?: Issue[]
 }
 
 export interface Token {
