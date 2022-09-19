@@ -37,21 +37,22 @@ export default function BoardLayout() {
 
   if (isLoading) return <Loader />
 
+  console.log(issues)
   const columnsFromBackend: BoardColumns = {
     [IssueStatus.Todo]: {
       status: IssueStatus.Todo,
       name: 'To do',
-      items: issues?.todo ?? [],
+      issues: issues?.todo ?? [],
     },
     [IssueStatus.InProgress]: {
       status: IssueStatus.InProgress,
       name: 'In Progress',
-      items: issues?.inProgress ?? [],
+      issues: issues?.inProgress ?? [],
     },
     [IssueStatus.Done]: {
       status: IssueStatus.Done,
       name: 'Done',
-      items: issues?.done ?? [],
+      issues: issues?.done ?? [],
     },
   }
   return (

@@ -36,7 +36,7 @@ export interface BoardColumns {
   [x: string]: {
     status: IssueStatus
     name: string
-    items: Issue[]
+    issues: Issue[]
   }
 }
 
@@ -48,7 +48,7 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
 
   const handleDragEnd = async (
     result: DropResult,
-    items: BoardColumns,
+    cols: BoardColumns,
     setItems: React.Dispatch<SetStateAction<BoardColumns>>
   ) => {
     if (!result.destination) return
@@ -56,42 +56,56 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
 
     // item dragged to new column
     if (source.droppableId !== destination.droppableId) {
-      const sourceColumn = items[source.droppableId]
-      const destColumn = items[destination.droppableId]
-      const sourceItems = [...sourceColumn.items]
-      const destItems = [...destColumn.items]
+      const sourceColumn = cols[source.droppableId]
+      const destColumn = cols[destination.droppableId]
+      const sourceItems = [...sourceColumn.issues]
+      const destItems = [...destColumn.issues]
       const [removedIssue] = sourceItems.splice(source.index, 1)
       const movedIssue = {
         ...removedIssue,
         status: destination.droppableId as IssueStatus,
+        boardOrder: destination.index,
       }
       destItems.splice(destination.index, 0, movedIssue)
       setItems({
-        ...items,
+        ...cols,
         [source.droppableId]: {
           ...sourceColumn,
-          items: sourceItems,
+          issues: sourceItems,
         },
         [destination.droppableId]: {
           ...destColumn,
-          items: destItems,
+          issues: destItems,
         },
       })
-      console.log('moved Issue: ', movedIssue)
-      await updateIssue(movedIssue)
+      const res = await updateIssue({
+        id: movedIssue.id,
+        status: movedIssue.status,
+        boardOrder: movedIssue.boardOrder,
+      })
+      console.log('move response', res)
       // item dragged within same column
     } else {
-      const column = items[source.droppableId]
-      const copiedItems = [...column.items]
-      const [removed] = copiedItems.splice(source.index, 1)
-      copiedItems.splice(destination.index, 0, removed)
+      const column = cols[source.droppableId]
+      const copiedItems = [...column.issues]
+      const [removedIssue] = copiedItems.splice(source.index, 1)
+      const movedIssue = {
+        ...removedIssue,
+        boardOrder: destination.index,
+      }
+      copiedItems.splice(destination.index, 0, movedIssue)
       setItems({
-        ...items,
+        ...cols,
         [source.droppableId]: {
           ...column,
-          items: copiedItems,
+          issues: copiedItems,
         },
       })
+      const res = await updateIssue({
+        id: movedIssue.id,
+        boardOrder: movedIssue.boardOrder,
+      })
+      console.log('move response: ', res)
     }
   }
 
@@ -139,7 +153,7 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
                         : theme.colors.gray[0],
                     }}
                   >
-                    {column.items.map((item, index) => (
+                    {column.issues.map((item, index) => (
                       <BoardItem key={item.id} item={item} index={index} />
                     ))}
                     {provided.placeholder}

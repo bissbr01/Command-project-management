@@ -10,7 +10,10 @@ const issuesEndpoints = scrumApi.injectEndpoints({
     }),
     getIssuesByToken: build.query<Dictionary<Issue[]>, void>({
       query: () => '/issues/me',
-      transformResponse: (response: Issue[]) => _.groupBy(response, 'status'),
+      transformResponse: (response: Issue[]) => {
+        const sorted = _.orderBy(response, ['boardOrder'], ['asc'])
+        return _.groupBy(sorted, 'status')
+      },
       providesTags: ['Issue'],
     }),
     getIssueById: build.query<Issue, string>({

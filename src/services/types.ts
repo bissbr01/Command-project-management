@@ -25,6 +25,7 @@ export interface Issue {
   description?: string
   title?: string
   type: IssueType
+  boardOrder?: number
   assignee?: User
   author?: User
   sprint?: Sprint
