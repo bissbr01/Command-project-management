@@ -70,3 +70,7 @@ export interface Credentials {
   email: string
   password: string
 }
+
+export function assertUnreachable(x: never): never {
+  throw new Error('Exhaustive switch reached default condition!')
+}

@@ -1,13 +1,25 @@
-import { createStyles, Text, useMantineTheme } from '@mantine/core'
+import {
+  createStyles,
+  Group,
+  Text,
+  ThemeIcon,
+  useMantineTheme,
+} from '@mantine/core'
+import { IconBookmark, IconBug, IconCheckbox } from '@tabler/icons'
 import { Draggable } from 'react-beautiful-dnd'
-import { Issue } from '../../services/types'
+import { assertUnreachable, Issue, IssueType } from '../../services/types'
 
-const useStyles = createStyles(() => ({
+const useStyles = createStyles((theme) => ({
   draggable: {
     userSelect: 'none',
     padding: '1em',
     margin: '0 0 8px 0',
     minHeight: '50px',
+  },
+  issueStatus: {
+    color: theme.colors.gray[6],
+    fontSize: '.8em',
+    paddingTop: '.5em',
   },
 }))
 
@@ -19,6 +31,19 @@ interface BoardItemProps {
 function BoardItem({ item: issue, index }: BoardItemProps): JSX.Element {
   const { classes } = useStyles()
   const theme = useMantineTheme()
+
+  const getTypeIcon = (type: IssueType) => {
+    switch (type) {
+      case IssueType.Bug:
+        return <IconBug />
+      case IssueType.Task:
+        return <IconCheckbox />
+      case IssueType.UserStory:
+        return <IconBookmark />
+      default:
+        return assertUnreachable(type)
+    }
+  }
 
   return (
     <Draggable draggableId={String(issue.id)} index={index}>
@@ -35,10 +60,13 @@ function BoardItem({ item: issue, index }: BoardItemProps): JSX.Element {
             ...provided.draggableProps.style,
           }}
         >
-          <Text>{issue.id}</Text>
-          <Text weight="bold">{issue.title}</Text>
-          <Text>{issue.status}</Text>
-          <Text>{issue.description}</Text>
+          <Text>{issue.title}</Text>
+          <Group className={classes.issueStatus}>
+            <ThemeIcon size="sm" variant="light">
+              {getTypeIcon(issue.type)}
+            </ThemeIcon>
+            <Text>Issue {issue.id}</Text>
+          </Group>
         </div>
       )}
     </Draggable>

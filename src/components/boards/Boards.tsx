@@ -57,23 +57,22 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
 
   const handleDragEnd = (
     result: DropResult,
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    columns: BoardColumns,
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    setColumns: React.Dispatch<SetStateAction<BoardColumns>>
+    items: BoardColumns,
+    setItems: React.Dispatch<SetStateAction<BoardColumns>>
   ) => {
     if (!result.destination) return
     const { source, destination } = result
 
+    // item dragged to new column
     if (source.droppableId !== destination.droppableId) {
-      const sourceColumn = columns[source.droppableId]
-      const destColumn = columns[destination.droppableId]
+      const sourceColumn = items[source.droppableId]
+      const destColumn = items[destination.droppableId]
       const sourceItems = [...sourceColumn.items]
       const destItems = [...destColumn.items]
       const [removed] = sourceItems.splice(source.index, 1)
       destItems.splice(destination.index, 0, removed)
-      setColumns({
-        ...columns,
+      setItems({
+        ...items,
         [source.droppableId]: {
           ...sourceColumn,
           items: sourceItems,
@@ -83,13 +82,14 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
           items: destItems,
         },
       })
+      // item dragged within same column
     } else {
-      const column = columns[source.droppableId]
+      const column = items[source.droppableId]
       const copiedItems = [...column.items]
       const [removed] = copiedItems.splice(source.index, 1)
       copiedItems.splice(destination.index, 0, removed)
-      setColumns({
-        ...columns,
+      setItems({
+        ...items,
         [source.droppableId]: {
           ...column,
           items: copiedItems,

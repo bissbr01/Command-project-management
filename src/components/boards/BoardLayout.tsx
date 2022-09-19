@@ -1,7 +1,7 @@
-import { Button, Container, createStyles, Title } from '@mantine/core'
+import { Button, Container, createStyles, Loader, Title } from '@mantine/core'
 import _ from 'lodash'
 import { useGetIssuesByTokenQuery } from '../../services/issuesEndpoints'
-import { Issue, IssueStatus } from '../../services/types'
+import { IssueStatus } from '../../services/types'
 import NavBreadcrumbs from '../common/Breadcrumbs'
 import Boards, { BoardColumns } from './Boards'
 
@@ -35,10 +35,7 @@ export default function BoardLayout() {
   const { classes } = useStyles()
   const { data: issues, isLoading } = useGetIssuesByTokenQuery()
 
-  if (isLoading) return <div>loading</div>
-  // if (!user) return <div>Issues failed to load</div>
-
-  console.log(issues)
+  if (isLoading) return <Loader />
 
   const columnsFromBackend: BoardColumns = {
     [IssueStatus.Todo]: {
