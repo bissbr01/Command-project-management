@@ -26,8 +26,8 @@ export interface Issue {
   title?: string
   type: IssueType
   assignee?: User
-  author: User
-  sprint: Sprint
+  author?: User
+  sprint?: Sprint
 }
 
 export interface Sprint {

@@ -11,7 +11,7 @@ const loginEndpoints = scrumApi.injectEndpoints({
       }),
     }),
   }),
-  overrideExisting: true,
+  overrideExisting: false,
 })
 
 export default loginEndpoints

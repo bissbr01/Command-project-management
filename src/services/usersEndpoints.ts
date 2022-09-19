@@ -31,7 +31,7 @@ const usersEndpoints = scrumApi.injectEndpoints({
       invalidatesTags: ['User'],
     }),
   }),
-  overrideExisting: true,
+  overrideExisting: false,
 })
 
 export default usersEndpoints

@@ -27,7 +27,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
       }),
     }),
   }),
-  overrideExisting: true,
+  overrideExisting: false,
 })
 
 // eslint-disable-next-line import/prefer-default-export
