@@ -3,17 +3,7 @@ import React, { SetStateAction, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import BoardItem from './BoardItem'
 import { Issue, IssueStatus } from '../../services/types'
-
-// const itemsFromBackend = [
-//   { id: uuid(), content: 'First task' },
-//   { id: uuid(), content: 'Second task' },
-//   { id: uuid(), content: 'Third task' },
-//   { id: uuid(), content: 'Fourth task' },
-//   { id: uuid(), content: 'Fifth task' },
-//   { id: uuid(), content: 'Sixth task' },
-//   { id: uuid(), content: 'Seventh task' },
-//   { id: uuid(), content: 'Eight task' },
-// ]
+import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 
 const useStyles = createStyles((theme) => ({
   boards: {
@@ -54,8 +44,9 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
   const { classes } = useStyles()
   const theme = useMantineTheme()
   const [columns, setColumns] = useState(boardColumns)
+  const [updateIssue] = useUpdateIssueMutation()
 
-  const handleDragEnd = (
+  const handleDragEnd = async (
     result: DropResult,
     items: BoardColumns,
     setItems: React.Dispatch<SetStateAction<BoardColumns>>
@@ -69,8 +60,12 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
       const destColumn = items[destination.droppableId]
       const sourceItems = [...sourceColumn.items]
       const destItems = [...destColumn.items]
-      const [removed] = sourceItems.splice(source.index, 1)
-      destItems.splice(destination.index, 0, removed)
+      const [removedIssue] = sourceItems.splice(source.index, 1)
+      const movedIssue = {
+        ...removedIssue,
+        status: destination.droppableId as IssueStatus,
+      }
+      destItems.splice(destination.index, 0, movedIssue)
       setItems({
         ...items,
         [source.droppableId]: {
@@ -82,6 +77,8 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
           items: destItems,
         },
       })
+      console.log('moved Issue: ', movedIssue)
+      await updateIssue(movedIssue)
       // item dragged within same column
     } else {
       const column = items[source.droppableId]

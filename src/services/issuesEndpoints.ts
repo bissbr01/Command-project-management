@@ -25,10 +25,10 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: ['Issue'],
     }),
-    updateIssue: build.mutation<Issue, Partial<Issue>>({
+    updateIssue: build.mutation<Issue, Partial<Issue> & Pick<Issue, 'id'>>({
       query: ({ id, ...body }) => ({
         url: `/issues/${id}`,
-        method: 'PUT',
+        method: 'PATCH',
         body,
       }),
       invalidatesTags: ['Issue'],
