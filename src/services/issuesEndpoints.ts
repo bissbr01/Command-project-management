@@ -2,6 +2,10 @@ import _, { Dictionary } from 'lodash'
 import { scrumApi } from './scrumApi'
 import { Issue } from './types'
 
+export interface UpdateIssuesBody {
+  issues: Partial<Issue> & Pick<Issue, 'id'>[]
+}
+
 const issuesEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
     getIssues: build.query<Issue[], void>({
@@ -36,6 +40,14 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: ['Issue'],
     }),
+    updateIssues: build.mutation<void, UpdateIssuesBody>({
+      query: (body) => ({
+        url: '/issues/me',
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['Issue'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -47,4 +59,5 @@ export const {
   useGetIssueByIdQuery,
   useAddIssueMutation,
   useUpdateIssueMutation,
+  useUpdateIssuesMutation,
 } = issuesEndpoints

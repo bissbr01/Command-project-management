@@ -3,7 +3,10 @@ import React, { SetStateAction, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import BoardItem from './BoardItem'
 import { Issue, IssueStatus } from '../../services/types'
-import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
+import {
+  useUpdateIssueMutation,
+  useUpdateIssuesMutation,
+} from '../../services/issuesEndpoints'
 
 const useStyles = createStyles((theme) => ({
   boards: {
@@ -45,6 +48,7 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
   const theme = useMantineTheme()
   const [columns, setColumns] = useState(boardColumns)
   const [updateIssue] = useUpdateIssueMutation()
+  const [updateIssues] = useUpdateIssuesMutation()
 
   const handleDragEnd = async (
     result: DropResult,
@@ -78,12 +82,22 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
           issues: destItems,
         },
       })
-      const res = await updateIssue({
-        id: movedIssue.id,
-        status: movedIssue.status,
-        boardOrder: movedIssue.boardOrder,
-      })
+      // const res = await updateIssue({
+      //   id: movedIssue.id,
+      //   status: movedIssue.status,
+      //   boardOrder: movedIssue.boardOrder,
+      // })
+      const issuesToUpdate = [...sourceColumn.issues, ...destColumn.issues]
+      const onlyUpdatedKeys = issuesToUpdate.reduce<
+        Pick<Issue, 'id' | 'status' | 'boardOrder'>[]
+      >(
+        (prev, { id, status, boardOrder }) =>
+          prev.concat({ id, status, boardOrder }),
+        []
+      )
+      const res = await updateIssues({ issues: onlyUpdatedKeys })
       console.log('move response', res)
+
       // item dragged within same column
     } else {
       const column = cols[source.droppableId]
@@ -101,11 +115,15 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
           issues: copiedItems,
         },
       })
-      const res = await updateIssue({
-        id: movedIssue.id,
-        boardOrder: movedIssue.boardOrder,
-      })
-      console.log('move response: ', res)
+      // const res = await updateIssue({
+      //   id: movedIssue.id,
+      //   boardOrder: movedIssue.boardOrder,
+      // })
+      const onlyUpdatedKeys = column.issues.reduce<
+        Pick<Issue, 'id' | 'boardOrder'>[]
+      >((prev, { id, boardOrder }) => prev.concat({ id, boardOrder }), [])
+      const res = await updateIssues({ issues: onlyUpdatedKeys })
+      console.log('move response', res)
     }
   }
 
