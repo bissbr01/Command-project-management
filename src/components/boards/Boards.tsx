@@ -82,20 +82,33 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
           issues: destItems,
         },
       })
-      // const res = await updateIssue({
-      //   id: movedIssue.id,
-      //   status: movedIssue.status,
-      //   boardOrder: movedIssue.boardOrder,
-      // })
-      const issuesToUpdate = [...sourceColumn.issues, ...destColumn.issues]
-      const onlyUpdatedKeys = issuesToUpdate.reduce<
+
+      const sourceItemsForUpdate = sourceItems.reduce<
         Pick<Issue, 'id' | 'status' | 'boardOrder'>[]
       >(
-        (prev, { id, status, boardOrder }) =>
-          prev.concat({ id, status, boardOrder }),
+        (prev, { id }, index) =>
+          prev.concat({
+            id,
+            status: destination.droppableId as IssueStatus,
+            boardOrder: index,
+          }),
         []
       )
-      const res = await updateIssues({ issues: onlyUpdatedKeys })
+      const destItemsForUpdate = destItems.reduce<
+        Pick<Issue, 'id' | 'status' | 'boardOrder'>[]
+      >(
+        (prev, { id }, index) =>
+          prev.concat({
+            id,
+            status: destination.droppableId as IssueStatus,
+            boardOrder: index,
+          }),
+        []
+      )
+
+      const res = await updateIssues({
+        issues: [...destItemsForUpdate, ...sourceItemsForUpdate],
+      })
       console.log('move response', res)
 
       // item dragged within same column
@@ -103,11 +116,7 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
       const column = cols[source.droppableId]
       const copiedItems = [...column.issues]
       const [removedIssue] = copiedItems.splice(source.index, 1)
-      const movedIssue = {
-        ...removedIssue,
-        boardOrder: destination.index,
-      }
-      copiedItems.splice(destination.index, 0, movedIssue)
+      copiedItems.splice(destination.index, 0, removedIssue)
       setItems({
         ...cols,
         [source.droppableId]: {
@@ -119,10 +128,14 @@ function Boards({ boardColumns }: { boardColumns: BoardColumns }) {
       //   id: movedIssue.id,
       //   boardOrder: movedIssue.boardOrder,
       // })
-      const onlyUpdatedKeys = column.issues.reduce<
+      const issuesForUpdate = column.issues.reduce<
         Pick<Issue, 'id' | 'boardOrder'>[]
-      >((prev, { id, boardOrder }) => prev.concat({ id, boardOrder }), [])
-      const res = await updateIssues({ issues: onlyUpdatedKeys })
+      >(
+        (prev, { id, boardOrder }, index) =>
+          prev.concat({ id, boardOrder: index }),
+        []
+      )
+      const res = await updateIssues({ issues: issuesForUpdate })
       console.log('move response', res)
     }
   }

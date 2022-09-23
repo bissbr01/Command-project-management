@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { useGetIssuesByTokenQuery } from '../../services/issuesEndpoints'
 import { IssueStatus } from '../../services/types'
 import NavBreadcrumbs from '../common/Breadcrumbs'
-import Boards, { BoardColumns } from './Boards'
+import Boards from './Boards'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -33,28 +33,9 @@ const useStyles = createStyles((theme) => ({
 
 export default function BoardLayout() {
   const { classes } = useStyles()
-  const { data: issues, isLoading } = useGetIssuesByTokenQuery()
+  const { data: boardColumns, isLoading } = useGetIssuesByTokenQuery()
 
-  if (isLoading) return <Loader />
-
-  console.log(issues)
-  const columnsFromBackend: BoardColumns = {
-    [IssueStatus.Todo]: {
-      status: IssueStatus.Todo,
-      name: 'To do',
-      issues: issues?.todo ?? [],
-    },
-    [IssueStatus.InProgress]: {
-      status: IssueStatus.InProgress,
-      name: 'In Progress',
-      issues: issues?.inProgress ?? [],
-    },
-    [IssueStatus.Done]: {
-      status: IssueStatus.Done,
-      name: 'Done',
-      issues: issues?.done ?? [],
-    },
-  }
+  if (isLoading || !boardColumns) return <Loader />
   return (
     <Container className={classes.container}>
       <NavBreadcrumbs />
@@ -64,7 +45,7 @@ export default function BoardLayout() {
           Complete Sprint
         </Button>
       </div>
-      <Boards boardColumns={columnsFromBackend} />
+      <Boards boardColumns={boardColumns} />
     </Container>
   )
 }

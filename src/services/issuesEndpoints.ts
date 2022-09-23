@@ -1,9 +1,17 @@
 import _, { Dictionary } from 'lodash'
 import { scrumApi } from './scrumApi'
-import { Issue } from './types'
+import { Issue, IssueStatus } from './types'
 
 export interface UpdateIssuesBody {
   issues: Partial<Issue> & Pick<Issue, 'id'>[]
+}
+
+export interface BoardColumns {
+  [x: string]: {
+    status: IssueStatus
+    name: string
+    issues: Issue[]
+  }
 }
 
 const issuesEndpoints = scrumApi.injectEndpoints({
@@ -12,11 +20,29 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       query: () => '/issues',
       providesTags: ['Issue'],
     }),
-    getIssuesByToken: build.query<Dictionary<Issue[]>, void>({
+    getIssuesByToken: build.query<BoardColumns, void>({
       query: () => '/issues/me',
       transformResponse: (response: Issue[]) => {
         const sorted = _.orderBy(response, ['boardOrder'], ['asc'])
-        return _.groupBy(sorted, 'status')
+        const issues = _.groupBy(sorted, 'status')
+        const boardColumns: BoardColumns = {
+          [IssueStatus.Todo]: {
+            status: IssueStatus.Todo,
+            name: 'To do',
+            issues: issues?.todo ?? [],
+          },
+          [IssueStatus.InProgress]: {
+            status: IssueStatus.InProgress,
+            name: 'In Progress',
+            issues: issues?.inProgress ?? [],
+          },
+          [IssueStatus.Done]: {
+            status: IssueStatus.Done,
+            name: 'Done',
+            issues: issues?.done ?? [],
+          },
+        }
+        return boardColumns
       },
       providesTags: ['Issue'],
     }),
