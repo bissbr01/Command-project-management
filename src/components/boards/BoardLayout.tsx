@@ -45,7 +45,7 @@ export default function BoardLayout() {
           Complete Sprint
         </Button>
       </div>
-      <Boards boardColumns={boardColumns} />
+      <Boards initColumns={boardColumns} />
     </Container>
   )
 }
