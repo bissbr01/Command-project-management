@@ -1,12 +1,14 @@
 import {
   Button,
   createStyles,
+  NavLink,
   Paper,
   Title,
   useMantineTheme,
 } from '@mantine/core'
 import React, { SetStateAction, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
+import { Link } from 'react-router-dom'
 import BoardItem from './BoardItem'
 import { Issue, IssueStatus } from '../../services/types'
 import {
@@ -54,6 +56,7 @@ export interface BoardColumn {
 function Boards({ initColumns }: { initColumns: BoardColumns }) {
   const { classes } = useStyles()
   const theme = useMantineTheme()
+  const [issueOpened, setIssueOpened] = useState(false)
   const [columns, setColumns] = useState(initColumns)
   const [updateIssue] = useUpdateIssueMutation()
   // const [updateIssues] = useUpdateIssuesMutation()
@@ -80,16 +83,6 @@ function Boards({ initColumns }: { initColumns: BoardColumns }) {
     return res
   }
 
-  const handleSave = async (boardCols: BoardColumns) => {
-    const statuses = Object.values(IssueStatus).filter(
-      (status) => status !== IssueStatus.Backlog
-    )
-    const updates = statuses.map((status) => updateCol(boardCols[status]))
-
-    const res = await Promise.all(updates)
-    console.log('response of state update: ', res)
-  }
-
   const handleDragEnd = async (
     result: DropResult,
     cols: BoardColumns,
@@ -111,6 +104,8 @@ function Boards({ initColumns }: { initColumns: BoardColumns }) {
         boardOrder: destination.index,
       }
       destItems.splice(destination.index, 0, movedIssue)
+
+      // update local state
       setItems({
         ...cols,
         [source.droppableId]: {
@@ -123,12 +118,24 @@ function Boards({ initColumns }: { initColumns: BoardColumns }) {
         },
       })
 
+      // update backend
+      await updateCol({
+        ...sourceColumn,
+        issues: sourceItems,
+      })
+      await updateCol({
+        ...destColumn,
+        issues: destItems,
+      })
+
       // item dragged within same column
     } else {
       const column = cols[source.droppableId]
       const copiedItems = [...column.issues]
       const [removedIssue] = copiedItems.splice(source.index, 1)
       copiedItems.splice(destination.index, 0, removedIssue)
+
+      // update local state
       setItems({
         ...cols,
         [source.droppableId]: {
@@ -136,47 +143,48 @@ function Boards({ initColumns }: { initColumns: BoardColumns }) {
           issues: copiedItems,
         },
       })
+
+      // update backend
+      await updateCol({
+        ...column,
+        issues: copiedItems,
+      })
     }
   }
 
   return (
-    <>
-      <div className={classes.boards}>
-        <DragDropContext
-          onDragEnd={(result) => handleDragEnd(result, columns, setColumns)}
-        >
-          {Object.entries(columns).map(([columnId, column]) => (
-            <Paper className={classes.paper} key={columnId}>
-              <Title order={3}>{column.name}</Title>
-              <div>
-                <Droppable droppableId={columnId} key={columnId}>
-                  {(provided, snapshot) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className={classes.droppable}
-                      style={{
-                        background: snapshot.isDraggingOver
-                          ? theme.colors.blue[0]
-                          : theme.colors.gray[0],
-                      }}
-                    >
-                      {column.issues.map((item, index) => (
-                        <BoardItem key={item.id} item={item} index={index} />
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </div>
-            </Paper>
-          ))}
-        </DragDropContext>
-      </div>
-      <div>
-        <Button onClick={() => handleSave(columns)}>Save</Button>
-      </div>
-    </>
+    <div className={classes.boards}>
+      <DragDropContext
+        onDragEnd={(result) => handleDragEnd(result, columns, setColumns)}
+      >
+        {Object.entries(columns).map(([columnId, column]) => (
+          <Paper className={classes.paper} key={columnId}>
+            <Title order={3}>{column.name}</Title>
+            <div>
+              <Droppable droppableId={columnId} key={columnId}>
+                {(provided, snapshot) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className={classes.droppable}
+                    style={{
+                      background: snapshot.isDraggingOver
+                        ? theme.colors.blue[0]
+                        : theme.colors.gray[0],
+                    }}
+                  >
+                    {column.issues.map((item, index) => (
+                      <BoardItem key={item.id} item={item} index={index} />
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+          </Paper>
+        ))}
+      </DragDropContext>
+    </div>
   )
 }
 

@@ -6,6 +6,7 @@ import { setToken } from '../../reducers/authentication'
 import { RootState } from '../../store'
 import BoardLayout from '../boards/BoardLayout'
 import NotFound from '../common/NotFound'
+import IssueSingle from '../issues/Issue'
 import Login from '../login/Login'
 import Register from '../login/Register'
 
@@ -32,6 +33,7 @@ export default function AppRoutes() {
       <Route path="/" element={token ? <App /> : <Navigate to="/login" />}>
         <Route index element={<BoardLayout />} />
         <Route path="boards" element={<BoardLayout />} />
+        {/* <Route path="issues/:id" elemefnt={<IssueSingle />} /> */}
       </Route>
       <Route path="*" element={<NotFound />} />
       <Route path="/login" element={<Login />} />

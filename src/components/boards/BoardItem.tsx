@@ -3,10 +3,12 @@ import {
   Group,
   Text,
   ThemeIcon,
+  UnstyledButton,
   useMantineTheme,
 } from '@mantine/core'
 import { IconBookmark, IconBug, IconCheckbox } from '@tabler/icons'
 import { Draggable } from 'react-beautiful-dnd'
+import { NavLink } from 'react-router-dom'
 import { assertUnreachable, Issue, IssueType } from '../../services/types'
 
 const useStyles = createStyles((theme) => ({
@@ -60,13 +62,15 @@ function BoardItem({ item: issue, index }: BoardItemProps): JSX.Element {
             ...provided.draggableProps.style,
           }}
         >
-          <Text>{issue.title}</Text>
-          <Group className={classes.issueStatus}>
-            <ThemeIcon size="sm" variant="light">
-              {getTypeIcon(issue.type)}
-            </ThemeIcon>
-            <Text>Issue {issue.id}</Text>
-          </Group>
+          <UnstyledButton>
+            <Text>{issue.title}</Text>
+            <Group className={classes.issueStatus}>
+              <ThemeIcon size="sm" variant="light">
+                {getTypeIcon(issue.type)}
+              </ThemeIcon>
+              <Text>Issue {issue.id}</Text>
+            </Group>
+          </UnstyledButton>
         </div>
       )}
     </Draggable>
