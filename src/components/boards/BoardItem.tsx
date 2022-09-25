@@ -7,9 +7,11 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { IconBookmark, IconBug, IconCheckbox } from '@tabler/icons'
+import { useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { NavLink } from 'react-router-dom'
 import { assertUnreachable, Issue, IssueType } from '../../services/types'
+import IssueDrawer from '../issues/IssueDrawer'
 
 const useStyles = createStyles((theme) => ({
   draggable: {
@@ -33,6 +35,7 @@ interface BoardItemProps {
 function BoardItem({ item: issue, index }: BoardItemProps): JSX.Element {
   const { classes } = useStyles()
   const theme = useMantineTheme()
+  const [issueOpened, setIssueOpened] = useState(false)
 
   const getTypeIcon = (type: IssueType) => {
     switch (type) {
@@ -62,15 +65,14 @@ function BoardItem({ item: issue, index }: BoardItemProps): JSX.Element {
             ...provided.draggableProps.style,
           }}
         >
-          <UnstyledButton>
-            <Text>{issue.title}</Text>
-            <Group className={classes.issueStatus}>
-              <ThemeIcon size="sm" variant="light">
-                {getTypeIcon(issue.type)}
-              </ThemeIcon>
-              <Text>Issue {issue.id}</Text>
-            </Group>
-          </UnstyledButton>
+          <Text>{issue.title}</Text>
+          <Group className={classes.issueStatus}>
+            <ThemeIcon size="sm" variant="light">
+              {getTypeIcon(issue.type)}
+            </ThemeIcon>
+            <Text>Issue {issue.id}</Text>
+          </Group>
+          <IssueDrawer opened={issueOpened} setOpened={setIssueOpened} />
         </div>
       )}
     </Draggable>

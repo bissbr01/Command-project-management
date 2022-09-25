@@ -15,6 +15,7 @@ import {
   useUpdateIssueMutation,
   useUpdateIssuesMutation,
 } from '../../services/issuesEndpoints'
+import IssueDrawer from '../issues/IssueDrawer'
 
 const useStyles = createStyles((theme) => ({
   boards: {
@@ -56,7 +57,6 @@ export interface BoardColumn {
 function Boards({ initColumns }: { initColumns: BoardColumns }) {
   const { classes } = useStyles()
   const theme = useMantineTheme()
-  const [issueOpened, setIssueOpened] = useState(false)
   const [columns, setColumns] = useState(initColumns)
   const [updateIssue] = useUpdateIssueMutation()
   // const [updateIssues] = useUpdateIssuesMutation()

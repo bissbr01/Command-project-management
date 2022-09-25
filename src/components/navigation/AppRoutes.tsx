@@ -1,12 +1,19 @@
 import { useEffect } from 'react'
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import {
+  Navigate,
+  Route,
+  Routes,
+  useMatch,
+  useNavigate,
+} from 'react-router-dom'
 import App from '../../App'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { setToken } from '../../reducers/authentication'
 import { RootState } from '../../store'
 import BoardLayout from '../boards/BoardLayout'
 import NotFound from '../common/NotFound'
-import IssueSingle from '../issues/Issue'
+import IssueDrawer from '../issues/IssueDrawer'
+import IssueSingle from '../issues/IssueSingle'
 import Login from '../login/Login'
 import Register from '../login/Register'
 
@@ -15,6 +22,7 @@ export default function AppRoutes() {
   const dispatch = useAppDispatch()
   const tokenSelector = (state: RootState) => state.auth.token
   const token = useAppSelector(tokenSelector)
+  const matcher = useMatch()
 
   // check if login token saved in local storage
   useEffect(() => {
@@ -33,7 +41,7 @@ export default function AppRoutes() {
       <Route path="/" element={token ? <App /> : <Navigate to="/login" />}>
         <Route index element={<BoardLayout />} />
         <Route path="boards" element={<BoardLayout />} />
-        {/* <Route path="issues/:id" elemefnt={<IssueSingle />} /> */}
+        <Route path="issues/:id" element={<IssueSingle />} />
       </Route>
       <Route path="*" element={<NotFound />} />
       <Route path="/login" element={<Login />} />
