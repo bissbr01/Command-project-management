@@ -1,5 +1,4 @@
 import {
-  Button,
   createStyles,
   Group,
   Text,
@@ -8,11 +7,10 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { IconBookmark, IconBug, IconCheckbox } from '@tabler/icons'
-import { SetStateAction, useState } from 'react'
+import { SetStateAction } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { assertUnreachable, Issue, IssueType } from '../../services/types'
-import IssueDrawer from '../issues/IssueDrawer'
 
 const useStyles = createStyles((theme) => ({
   draggable: {
@@ -20,6 +18,10 @@ const useStyles = createStyles((theme) => ({
     padding: '1em',
     margin: '0 0 8px 0',
     minHeight: '50px',
+    background: theme.white,
+    '&:hover': {
+      background: theme.colors.brand[0],
+    },
   },
   issueStatus: {
     color: theme.colors.gray[6],
@@ -62,7 +64,11 @@ function BoardItem({
   }
 
   return (
-    <Draggable draggableId={String(issue.id)} index={index}>
+    <Draggable
+      draggableId={String(issue.id)}
+      index={index}
+      disableInteractiveElementBlocking
+    >
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
@@ -70,20 +76,20 @@ function BoardItem({
           {...provided.dragHandleProps}
           className={classes.draggable}
           style={{
-            backgroundColor: snapshot.isDragging
-              ? theme.colors.brand[0]
-              : 'white',
+            backgroundColor: snapshot.isDragging ? theme.colors.brand[0] : '',
             ...provided.draggableProps.style,
           }}
         >
-          <Text>{issue.title}</Text>
-          <Group className={classes.issueStatus}>
-            <ThemeIcon size="sm" variant="light">
-              {getTypeIcon(issue.type)}
-            </ThemeIcon>
-            <Text>Issue {issue.id}</Text>
-            <Button onClick={handleClick}>Detail</Button>
-          </Group>
+          <UnstyledButton onClick={handleClick}>
+            <Text>{issue.title}</Text>
+            <Group className={classes.issueStatus}>
+              <ThemeIcon size="sm" variant="light">
+                {getTypeIcon(issue.type)}
+              </ThemeIcon>
+              <Text>Issue {issue.id}</Text>
+              {/* <Button onClick={handleClick}>Detail</Button> */}
+            </Group>
+          </UnstyledButton>
         </div>
       )}
     </Draggable>
