@@ -11,6 +11,7 @@ import { SetStateAction } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
 import { assertUnreachable, Issue, IssueType } from '../../services/types'
+import IssueTypeIcon from '../common/IssueTypeIcon'
 
 const useStyles = createStyles((theme) => ({
   draggable: {
@@ -50,19 +51,6 @@ function BoardItem({
     navigate(`/issues/${issue.id}`)
   }
 
-  const getTypeIcon = (type: IssueType) => {
-    switch (type) {
-      case IssueType.Bug:
-        return <IconBug />
-      case IssueType.Task:
-        return <IconCheckbox />
-      case IssueType.UserStory:
-        return <IconBookmark />
-      default:
-        return assertUnreachable(type)
-    }
-  }
-
   return (
     <Draggable
       draggableId={String(issue.id)}
@@ -84,10 +72,9 @@ function BoardItem({
             <Text>{issue.title}</Text>
             <Group className={classes.issueStatus}>
               <ThemeIcon size="sm" variant="light">
-                {getTypeIcon(issue.type)}
+                <IssueTypeIcon issueType={issue.type} />
               </ThemeIcon>
               <Text>Issue {issue.id}</Text>
-              {/* <Button onClick={handleClick}>Detail</Button> */}
             </Group>
           </UnstyledButton>
         </div>

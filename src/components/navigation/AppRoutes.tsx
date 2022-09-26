@@ -4,7 +4,6 @@ import {
   Route,
   Routes,
   useLocation,
-  useMatch,
   useNavigate,
 } from 'react-router-dom'
 import jwt_decode, { JwtPayload } from 'jwt-decode'
@@ -14,8 +13,6 @@ import { removeLogin, setToken } from '../../reducers/authentication'
 import { RootState } from '../../store'
 import BoardLayout from '../boards/BoardLayout'
 import NotFound from '../common/NotFound'
-import IssueDrawer from '../issues/IssueDrawer'
-import IssueSingle from '../issues/IssueSingle'
 import Login from '../login/Login'
 import Register from '../login/Register'
 
