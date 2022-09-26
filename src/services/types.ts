@@ -73,5 +73,5 @@ export interface Credentials {
 }
 
 export function assertUnreachable(x: never): never {
-  throw new Error('Exhaustive switch reached default condition!')
+  throw Error('Exhaustive switch reached default condition!')
 }

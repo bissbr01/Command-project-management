@@ -162,7 +162,6 @@ function SideNav({ width }: { width: number }) {
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
-        {/* )} */}
       </Navbar.Section>
     </Navbar>
   )

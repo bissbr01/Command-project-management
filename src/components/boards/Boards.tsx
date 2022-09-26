@@ -1,20 +1,9 @@
-import {
-  Button,
-  createStyles,
-  NavLink,
-  Paper,
-  Title,
-  useMantineTheme,
-} from '@mantine/core'
+import { createStyles, Paper, Title, useMantineTheme } from '@mantine/core'
 import React, { SetStateAction, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
-import { Link } from 'react-router-dom'
 import BoardItem from './BoardItem'
 import { Issue, IssueStatus } from '../../services/types'
-import {
-  useUpdateIssueMutation,
-  useUpdateIssuesMutation,
-} from '../../services/issuesEndpoints'
+import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import IssueDrawer from '../issues/IssueDrawer'
 
 const useStyles = createStyles((theme) => ({
@@ -59,7 +48,7 @@ function Boards({ initColumns }: { initColumns: BoardColumns }) {
   const theme = useMantineTheme()
   const [columns, setColumns] = useState(initColumns)
   const [updateIssue] = useUpdateIssueMutation()
-  // const [updateIssues] = useUpdateIssuesMutation()
+  const [issueOpened, setIssueOpened] = useState(false)
 
   const getColForUpdate = (col: BoardColumn) => {
     const colForUpdate = col.issues.reduce<
@@ -174,7 +163,12 @@ function Boards({ initColumns }: { initColumns: BoardColumns }) {
                     }}
                   >
                     {column.issues.map((item, index) => (
-                      <BoardItem key={item.id} item={item} index={index} />
+                      <BoardItem
+                        key={item.id}
+                        item={item}
+                        index={index}
+                        setIssueOpened={setIssueOpened}
+                      />
                     ))}
                     {provided.placeholder}
                   </div>
@@ -184,6 +178,7 @@ function Boards({ initColumns }: { initColumns: BoardColumns }) {
           </Paper>
         ))}
       </DragDropContext>
+      <IssueDrawer issueOpened={issueOpened} setIssueOpened={setIssueOpened} />
     </div>
   )
 }

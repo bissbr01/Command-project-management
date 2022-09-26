@@ -1,8 +1,11 @@
 import { Button, Container, createStyles, Loader, Title } from '@mantine/core'
 import _ from 'lodash'
+import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 import { useGetIssuesByTokenQuery } from '../../services/issuesEndpoints'
 import { IssueStatus } from '../../services/types'
 import NavBreadcrumbs from '../common/Breadcrumbs'
+import IssueDrawer from '../issues/IssueDrawer'
 import Boards from './Boards'
 
 const useStyles = createStyles((theme) => ({

@@ -1,4 +1,5 @@
 import {
+  Button,
   createStyles,
   Group,
   Text,
@@ -7,9 +8,9 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { IconBookmark, IconBug, IconCheckbox } from '@tabler/icons'
-import { useState } from 'react'
+import { SetStateAction, useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { assertUnreachable, Issue, IssueType } from '../../services/types'
 import IssueDrawer from '../issues/IssueDrawer'
 
@@ -30,12 +31,22 @@ const useStyles = createStyles((theme) => ({
 interface BoardItemProps {
   item: Issue
   index: number
+  setIssueOpened: React.Dispatch<SetStateAction<boolean>>
 }
 
-function BoardItem({ item: issue, index }: BoardItemProps): JSX.Element {
+function BoardItem({
+  item: issue,
+  index,
+  setIssueOpened,
+}: BoardItemProps): JSX.Element {
   const { classes } = useStyles()
   const theme = useMantineTheme()
-  const [issueOpened, setIssueOpened] = useState(false)
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    setIssueOpened(true)
+    navigate(`/issues/${issue.id}`)
+  }
 
   const getTypeIcon = (type: IssueType) => {
     switch (type) {
@@ -71,8 +82,8 @@ function BoardItem({ item: issue, index }: BoardItemProps): JSX.Element {
               {getTypeIcon(issue.type)}
             </ThemeIcon>
             <Text>Issue {issue.id}</Text>
+            <Button onClick={handleClick}>Detail</Button>
           </Group>
-          <IssueDrawer opened={issueOpened} setOpened={setIssueOpened} />
         </div>
       )}
     </Draggable>

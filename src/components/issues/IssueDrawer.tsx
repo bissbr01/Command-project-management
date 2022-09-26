@@ -1,32 +1,34 @@
-import { Drawer, Loader } from '@mantine/core'
-import { useParams } from 'react-router-dom'
-import { useGetIssueByIdQuery } from '../../services/issuesEndpoints'
-import { Issue } from '../../services/types'
+import { Drawer } from '@mantine/core'
+import { SetStateAction } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import IssueSingle from './IssueSingle'
 
 export interface IssueDrawerProps {
-  opened: boolean
-  setOpened: React.Dispatch<React.SetStateAction<boolean>>
-  issue: Issue
+  issueOpened: boolean
+  setIssueOpened: React.Dispatch<SetStateAction<boolean>>
 }
 
 export default function IssueDrawer({
-  opened,
-  setOpened,
-  issue,
+  issueOpened,
+  setIssueOpened,
 }: IssueDrawerProps) {
-  const params = useParams()
-  if (!params.id || typeof params.id !== 'string')
-    return <div>error: no id</div>
+  const navigate = useNavigate()
+  const { id } = useParams()
+
+  const handleClose = () => {
+    setIssueOpened(false)
+    navigate('/')
+  }
+
   return (
     <Drawer
       position="right"
-      opened={opened}
-      onClose={() => setOpened(false)}
+      opened={issueOpened}
+      onClose={handleClose}
       padding="xl"
       size="xl"
     >
-      <IssueSingle issue={issue} />
+      {id && <IssueSingle issueId={id} />}
     </Drawer>
   )
 }
