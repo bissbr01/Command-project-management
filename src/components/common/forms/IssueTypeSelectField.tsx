@@ -56,14 +56,13 @@ export default function IssueTypeSelectField({
       name={field.name}
       value={field.value}
       onChange={(value) => {
-        console.log('trying to change:', value)
-        const e = {
+        const event = {
           target: {
             value: value,
             name: field.name,
           },
         }
-        field.onChange(e)
+        field.onChange(event)
       }}
       // {...field}
     />

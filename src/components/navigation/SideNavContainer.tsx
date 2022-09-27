@@ -44,8 +44,7 @@ function SideNavContainer() {
         overlayColor={
           theme.colorScheme === 'dark' ? theme.colors.dark[9] : 'white'
         }
-        overlayOpacity={0.3}
-        overlayBlur={1}
+        overlayOpacity={0.5}
         size={250}
         classNames={{ drawer: classes.drawer }}
         shadow="md"

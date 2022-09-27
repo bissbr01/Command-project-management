@@ -5,7 +5,6 @@ import {
   LoadingOverlay,
   Paper,
   Text,
-  ThemeIcon,
 } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
@@ -16,24 +15,38 @@ import {
   useUpdateIssueMutation,
 } from '../../services/issuesEndpoints'
 import TextAreaField from '../common/forms/TextAreaField'
-import IssueTypeIcon from '../common/IssueTypeIcon'
 import IssueTypeSelectField from '../common/forms/IssueTypeSelectField'
+import IssueComments from './IssueComments'
 
 const useStyles = createStyles((theme) => ({
   container: {
     margin: '1em',
+    height: '100%',
   },
+
+  form: {
+    height: '100%',
+  },
+
   title: {
     fontSize: theme.fontSizes.xl,
     marginBottom: '.5em',
   },
+
   description: {
     fontSize: theme.fontSizes.md,
   },
+
   issueStatus: {
     color: theme.colors.gray[6],
     fontSize: '.8em',
     paddingTop: '.5em',
+    marginTop: -50,
+  },
+
+  save: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }))
 
@@ -49,7 +62,7 @@ export default function IssueSingle({ issueId }: IssueSingleProps) {
   if (isLoading) return <LoadingOverlay visible={isLoading} />
   if (!issue) return <div>error: no issue</div>
 
-  const LoginSchema = Yup.object().shape({
+  const IssueSchema = Yup.object().shape({
     type: Yup.string(),
     title: Yup.string(),
     description: Yup.string(),
@@ -63,7 +76,7 @@ export default function IssueSingle({ issueId }: IssueSingleProps) {
           title: issue.title,
           description: issue.description,
         }}
-        validationSchema={LoginSchema}
+        validationSchema={IssueSchema}
         onSubmit={async (values) => {
           try {
             const res = await update({ id: issue.id, ...values }).unwrap()
@@ -90,7 +103,7 @@ export default function IssueSingle({ issueId }: IssueSingleProps) {
         }}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form className={classes.form}>
             <Group className={classes.issueStatus}>
               <Field
                 // stylesApi={{ input: classes.title }}
@@ -114,12 +127,16 @@ export default function IssueSingle({ issueId }: IssueSingleProps) {
               id="description"
               name="description"
               label="description"
+              placeholder="Add a description..."
               variant="unstyled"
               component={TextAreaField}
             />
-            <Button type="submit" disabled={isSubmitting}>
-              Save
-            </Button>
+            <IssueComments comments={issue.comments} />
+            <Group className={classes.save}>
+              <Button type="submit" disabled={isSubmitting}>
+                Save
+              </Button>
+            </Group>
           </Form>
         )}
       </Formik>

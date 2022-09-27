@@ -1,4 +1,4 @@
-import { Drawer } from '@mantine/core'
+import { Drawer, useMantineTheme } from '@mantine/core'
 import { SetStateAction } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import IssueSingle from './IssueSingle'
@@ -14,6 +14,7 @@ export default function IssueDrawer({
 }: IssueDrawerProps) {
   const navigate = useNavigate()
   const { id } = useParams()
+  const theme = useMantineTheme()
 
   const handleClose = () => {
     setIssueOpened(false)
@@ -27,6 +28,10 @@ export default function IssueDrawer({
       onClose={handleClose}
       padding="xl"
       size="xl"
+      overlayOpacity={0.5}
+      overlayColor={
+        theme.colorScheme === 'dark' ? theme.colors.dark[9] : 'white'
+      }
     >
       {id && <IssueSingle issueId={id} />}
     </Drawer>

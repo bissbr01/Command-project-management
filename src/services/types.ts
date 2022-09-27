@@ -1,8 +1,12 @@
 export interface Comment {
   id: number
   text: string
-  author: User
-  issue: Issue
+  authorId: number
+  author?: User
+  issueId: number
+  issue?: Issue
+  createdAt: string
+  updatedAt: string
 }
 
 export enum IssueStatus {
@@ -29,6 +33,7 @@ export interface Issue {
   assignee?: User
   author?: User
   sprint?: Sprint
+  comments: Comment[]
 }
 
 export interface Sprint {

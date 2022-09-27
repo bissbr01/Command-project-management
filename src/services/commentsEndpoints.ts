@@ -11,7 +11,10 @@ const commentsEndpoints = scrumApi.injectEndpoints({
       query: (id) => `/comments/${id}`,
       providesTags: ['Comment'],
     }),
-    addComment: build.mutation<Comment, Omit<Comment, 'id'>>({
+    addComment: build.mutation<
+      Comment,
+      Omit<Comment, 'id' | 'createdAt' | 'updatedAt' | 'authorId'>
+    >({
       query: (body) => ({
         url: '/comments',
         method: 'POST',
