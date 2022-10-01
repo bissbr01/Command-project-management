@@ -1,9 +1,11 @@
 import { createStyles, InputVariant, Select, SelectItem } from '@mantine/core'
 import { IconBookmark, IconBug, IconCheckbox } from '@tabler/icons'
 import { FieldProps } from 'formik'
+import { ChangeEventHandler } from 'react'
 import { IssueType } from '../../../services/types'
 import IssueTypeSelectItem from './IssueTypeSelectItem'
 import IssueTypeIcon from '../IssueTypeIcon'
+import { useUpdateIssueMutation } from '../../../services/issuesEndpoints'
 
 const typeData = [
   {
@@ -46,6 +48,7 @@ export interface IssueTypeSelectFieldProps extends FieldProps {
   required?: boolean
   data: SelectItem[]
   icon: JSX.Element
+  updateOnChange: boolean
 }
 
 export default function IssueTypeSelectField({

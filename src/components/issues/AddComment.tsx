@@ -26,9 +26,9 @@ const useStyles = createStyles((theme) => ({
   },
 
   buttons: {
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
     paddingRight: '2rem',
-    paddingTop: '0.5em',
+    // paddingTop: '0.5em',
   },
 
   container: {
@@ -109,10 +109,12 @@ export default function AddComment({ issueId }: AddCommentProps) {
               />
             </Group>
             {focused && (
-              <FieldFocusedButtons
-                isSubmitting={isSubmitting}
-                handleFocused={handleFocused}
-              />
+              <div className={classes.buttons}>
+                <FieldFocusedButtons
+                  isSubmitting={isSubmitting}
+                  handleFocused={handleFocused}
+                />
+              </div>
             )}
           </div>
         </Form>

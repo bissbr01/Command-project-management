@@ -60,8 +60,7 @@ interface IssueTypeFormProps {
 }
 
 export default function IssueTypeForm({ issue }: IssueTypeFormProps) {
-  const { classes, cx } = useStyles()
-  const [update] = useUpdateIssueMutation()
+  const { classes } = useStyles()
 
   const IssueTypeFormSchema = Yup.object().shape({
     type: Yup.string(),
@@ -97,12 +96,13 @@ export default function IssueTypeForm({ issue }: IssueTypeFormProps) {
         }
       }}
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, submitForm }) => (
         <Form>
           <Group className={classes.issueStatus}>
             <Field
               id="type"
               name="type"
+              value="type"
               variant="unstyled"
               component={IssueTypeSelectField}
             />

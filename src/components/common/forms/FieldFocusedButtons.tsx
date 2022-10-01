@@ -6,12 +6,11 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { IconCheck } from '@tabler/icons'
-import { FormikState } from 'formik'
 
 const useStyles = createStyles(() => ({
   buttons: {
     justifyContent: 'flex-end',
-    paddingRight: '2rem',
+    // paddingRight: '1rem',
     paddingTop: '0.5em',
   },
 }))
