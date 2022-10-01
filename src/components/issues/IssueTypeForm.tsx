@@ -61,6 +61,7 @@ interface IssueTypeFormProps {
 
 export default function IssueTypeForm({ issue }: IssueTypeFormProps) {
   const { classes } = useStyles()
+  const [update] = useUpdateIssueMutation()
 
   const IssueTypeFormSchema = Yup.object().shape({
     type: Yup.string(),
