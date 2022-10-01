@@ -6,11 +6,10 @@ import {
   UnstyledButton,
   useMantineTheme,
 } from '@mantine/core'
-import { IconBookmark, IconBug, IconCheckbox } from '@tabler/icons'
 import { SetStateAction } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
-import { assertUnreachable, Issue, IssueType } from '../../services/types'
+import { Issue } from '../../services/types'
 import IssueTypeIcon from '../common/IssueTypeIcon'
 
 const useStyles = createStyles((theme) => ({

@@ -1,11 +1,9 @@
 import {
   ActionIcon,
   Avatar,
-  Button,
   CloseButton,
   createStyles,
   Group,
-  Stack,
   useMantineTheme,
 } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
@@ -13,9 +11,7 @@ import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import { useState } from 'react'
 import * as Yup from 'yup'
-import { useFocused } from '../../hooks/useFocused'
 import { useAddCommentMutation } from '../../services/commentsEndpoints'
-import FieldFocusedButtons from '../common/forms/FieldFocusedButtons'
 import TextAreaField from '../common/forms/TextAreaField'
 
 const useStyles = createStyles((theme) => ({
@@ -41,15 +37,31 @@ const CommentSchema = Yup.object().shape({
   text: Yup.string().required('Your comment must not be blank'),
 })
 
-interface AddCommentProps {
+export interface SingleFieldFormProps {
   issueId: number
+  id: string
+  name: string
+  placeholder?: string
+  size?: string
+  inputIcon?: boolean
 }
 
-export default function AddComment({ issueId }: AddCommentProps) {
+export default function SingleFieldIssueForm({
+  issueId,
+  id,
+  name = id,
+  placeholder,
+  size = 'sm',
+  inputIcon = false,
+}: SingleFieldFormProps) {
   const { classes } = useStyles()
   const theme = useMantineTheme()
-  const { focused, handleFocused } = useFocused()
+  const [focused, setFocused] = useState(false)
   const [addComment] = useAddCommentMutation()
+
+  // formik requires timeouts to wrap setState to not conflict:
+  // https://stackoverflow.com/questions/61031464/setstate-called-in-render-prop-is-causing-a-react-warning
+  const handleFocus = (bool: boolean) => setTimeout(() => setFocused(bool), 0)
 
   return (
     <Formik
@@ -59,10 +71,10 @@ export default function AddComment({ issueId }: AddCommentProps) {
         text: '',
       }}
       validationSchema={CommentSchema}
-      onSubmit={async ({ text }, { resetForm }) => {
+      onSubmit={async ({ text }) => {
         try {
           const res = await addComment({
-            issueId,
+            issueId: issueId,
             text,
           }).unwrap()
           console.log('update res: ', res)
@@ -73,8 +85,6 @@ export default function AddComment({ issueId }: AddCommentProps) {
             color: 'green',
             icon: <IconCheck />,
           })
-          resetForm()
-          handleFocused(false)
         } catch (e: unknown) {
           showNotification({
             title: 'Error',
@@ -89,30 +99,43 @@ export default function AddComment({ issueId }: AddCommentProps) {
         }
       }}
     >
-      {({ isSubmitting, handleBlur }) => (
+      {({ isSubmitting }) => (
         <Form>
           <div className={classes.container}>
             <Group>
-              <Avatar color={theme.colors.brand[1]} radius="xl" />
+              {inputIcon && (
+                <Avatar color={theme.colors.brand[1]} radius="xl" />
+              )}
               <Field
                 stylesApi={{ root: classes.field }}
-                id="text"
-                name="text"
-                placeholder="Add a comment..."
-                size="xs"
-                onFocus={() => handleFocused(true)}
-                onBlur={(e: Event) => {
-                  handleBlur(e)
-                  handleFocused(false)
-                }}
+                id={id}
+                name={name}
+                placeholder={placeholder}
+                size={size}
+                onFocus={() => handleFocus(true)}
                 component={TextAreaField}
               />
             </Group>
             {focused && (
-              <FieldFocusedButtons
-                isSubmitting={isSubmitting}
-                handleFocused={handleFocused}
-              />
+              <Group className={classes.buttons}>
+                <ActionIcon
+                  type="submit"
+                  aria-label="save"
+                  disabled={isSubmitting}
+                  size="sm"
+                  variant="filled"
+                  color={theme.colors.brand[1]}
+                >
+                  <IconCheck />
+                </ActionIcon>
+                <CloseButton
+                  type="reset"
+                  aria-label="close"
+                  size="sm"
+                  variant="default"
+                  onClick={() => handleFocus(false)}
+                />
+              </Group>
             )}
           </div>
         </Form>

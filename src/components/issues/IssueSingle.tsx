@@ -17,6 +17,9 @@ import {
 import TextAreaField from '../common/forms/TextAreaField'
 import IssueTypeSelectField from '../common/forms/IssueTypeSelectField'
 import IssueComments from './IssueComments'
+import IssueTitle from './IssueTitle'
+import IssueDescription from './IssueDescription'
+import IssueTypeForm from './IssueTypeForm'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -24,8 +27,20 @@ const useStyles = createStyles((theme) => ({
     height: '100%',
   },
 
-  form: {
-    height: '100%',
+  form: {},
+
+  inputStyles: {
+    padding: 10,
+    '&:hover': {
+      backgroundColor: theme.colors.gray[1],
+    },
+    '&:focus': {
+      border: `2px solid ${theme.colors.brand[1]}`,
+      borderRadius: 5,
+      '&:hover': {
+        backgroundColor: theme.white,
+      },
+    },
   },
 
   title: {
@@ -57,89 +72,16 @@ export interface IssueSingleProps {
 export default function IssueSingle({ issueId }: IssueSingleProps) {
   const { classes } = useStyles()
   const { data: issue, isLoading } = useGetIssueByIdQuery(issueId)
-  const [update] = useUpdateIssueMutation()
 
   if (isLoading) return <LoadingOverlay visible={isLoading} />
   if (!issue) return <div>error: no issue</div>
 
-  const IssueSchema = Yup.object().shape({
-    type: Yup.string(),
-    title: Yup.string(),
-    description: Yup.string(),
-  })
-
   return (
     <Paper className={classes.container}>
-      <Formik
-        initialValues={{
-          type: issue.type,
-          title: issue.title,
-          description: issue.description,
-        }}
-        validationSchema={IssueSchema}
-        onSubmit={async (values) => {
-          try {
-            const res = await update({ id: issue.id, ...values }).unwrap()
-            console.log('update res: ', res)
-            showNotification({
-              title: 'Success',
-              message: 'Issue successfully saved.',
-              autoClose: 4000,
-              color: 'green',
-              icon: <IconCheck />,
-            })
-          } catch (e: unknown) {
-            showNotification({
-              title: 'Error',
-              message: 'Issue could not be updated.',
-              autoClose: 4000,
-              color: 'red',
-              icon: <IconX />,
-            })
-            if (e instanceof Error) {
-              console.log(e.message)
-            }
-          }
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form className={classes.form}>
-            <Group className={classes.issueStatus}>
-              <Field
-                // stylesApi={{ input: classes.title }}
-                id="type"
-                name="type"
-                variant="unstyled"
-                component={IssueTypeSelectField}
-              />
-              <Text>Issue {issue.id}</Text>
-            </Group>
-
-            <Field
-              stylesApi={{ input: classes.title }}
-              id="title"
-              name="title"
-              variant="unstyled"
-              component={TextAreaField}
-            />
-            <Field
-              stylesApi={{ input: classes.description }}
-              id="description"
-              name="description"
-              label="description"
-              placeholder="Add a description..."
-              variant="unstyled"
-              component={TextAreaField}
-            />
-            <IssueComments comments={issue.comments} />
-            <Group className={classes.save}>
-              <Button type="submit" disabled={isSubmitting}>
-                Save
-              </Button>
-            </Group>
-          </Form>
-        )}
-      </Formik>
+      <IssueTypeForm issue={issue} />
+      <IssueTitle issue={issue} />
+      <IssueDescription issue={issue} />
+      <IssueComments issue={issue} />
     </Paper>
   )
 }

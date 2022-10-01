@@ -7,7 +7,7 @@ const useStyles = createStyles((theme) => ({
     background: theme.colors.red[4],
   },
   task: {
-    background: theme.colors.green[4],
+    background: theme.colors.brand[4],
   },
   userStory: {
     background: theme.colors.blue[4],

@@ -1,5 +1,11 @@
-import { InputVariant, Textarea, TextInputStylesNames } from '@mantine/core'
+import {
+  InputVariant,
+  MantineSize,
+  Textarea,
+  TextInputStylesNames,
+} from '@mantine/core'
 import { FieldProps } from 'formik'
+import { FocusEventHandler } from 'react'
 
 export interface TextAreaProps extends FieldProps {
   label?: string
@@ -7,6 +13,10 @@ export interface TextAreaProps extends FieldProps {
   variant?: InputVariant
   stylesApi?: Partial<Record<TextInputStylesNames, string>> | undefined
   required?: boolean
+  minRows?: number
+  onFocus?: FocusEventHandler<HTMLTextAreaElement>
+  onBlur?: FocusEventHandler<HTMLTextAreaElement>
+  size?: MantineSize
 }
 
 export default function TextAreaField({
@@ -15,6 +25,10 @@ export default function TextAreaField({
   placeholder,
   variant,
   stylesApi,
+  minRows = 1,
+  size = 'md',
+  onFocus,
+  onBlur,
   form,
   required = false,
 }: TextAreaProps) {
@@ -22,14 +36,18 @@ export default function TextAreaField({
   const meta = form.getFieldMeta(field.name)
   return (
     <Textarea
+      {...field}
       label={label}
       placeholder={placeholder}
       withAsterisk={required}
       classNames={stylesApi}
       autosize
+      minRows={minRows}
+      size={size}
+      onFocus={onFocus}
+      onBlur={onBlur}
       error={meta.touched && meta.error}
       variant={variant}
-      {...field}
     />
   )
 }

@@ -1,4 +1,4 @@
-import { InputVariant, Select, SelectItem } from '@mantine/core'
+import { createStyles, InputVariant, Select, SelectItem } from '@mantine/core'
 import { IconBookmark, IconBug, IconCheckbox } from '@tabler/icons'
 import { FieldProps } from 'formik'
 import { IssueType } from '../../../services/types'
@@ -23,6 +23,22 @@ const typeData = [
   },
 ]
 
+const useStyles = createStyles((theme) => ({
+  root: {
+    width: 135,
+  },
+
+  dropdown: {
+    '&[data-selected]': {
+      backgroundColor: theme.colors.brand[1],
+      color: theme.black,
+      '&:hover': {
+        backgroundColor: theme.colors.brand[2],
+      },
+    },
+  },
+}))
+
 export interface IssueTypeSelectFieldProps extends FieldProps {
   label?: string
   placeholder?: string
@@ -43,6 +59,8 @@ export default function IssueTypeSelectField({
 }: IssueTypeSelectFieldProps) {
   // workaround to get meta.  Might be fixed in future of formik
   const meta = form.getFieldMeta(field.name)
+  const { classes } = useStyles()
+
   return (
     <Select
       label={label}
@@ -55,6 +73,7 @@ export default function IssueTypeSelectField({
       icon={<IssueTypeIcon issueType={field.value} />}
       name={field.name}
       value={field.value}
+      classNames={{ item: classes.dropdown, root: classes.root }}
       onChange={(value) => {
         const event = {
           target: {

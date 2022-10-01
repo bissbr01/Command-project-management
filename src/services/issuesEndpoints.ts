@@ -50,7 +50,10 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       query: (id) => `/issues/${id}`,
       providesTags: ['Issue'],
     }),
-    addIssue: build.mutation<Issue, Omit<Issue, 'id'>>({
+    addIssue: build.mutation<
+      Issue,
+      Omit<Issue, 'id' | 'createdAt' | 'updatedAt' | 'authorId'>
+    >({
       query: (body) => ({
         url: '/issues',
         method: 'POST',
