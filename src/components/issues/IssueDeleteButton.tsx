@@ -1,8 +1,23 @@
-import { Button, Group, Modal, Text, ThemeIcon, Title } from '@mantine/core'
+import {
+  Button,
+  createStyles,
+  Group,
+  Modal,
+  Text,
+  ThemeIcon,
+  Title,
+} from '@mantine/core'
 import { IconAlertTriangle, IconExclamationMark } from '@tabler/icons'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDeleteIssueMutation } from '../../services/issuesEndpoints'
+
+const useStyles = createStyles((theme) => ({
+  icon: {
+    color: theme.colors.red[6],
+    marginRight: '1rem',
+  },
+}))
 
 interface IssueDeleteButtonProps {
   issueId: number
@@ -11,6 +26,7 @@ interface IssueDeleteButtonProps {
 export default function IssueDeleteButton({ issueId }: IssueDeleteButtonProps) {
   const [deleteIssue] = useDeleteIssueMutation()
   const navigate = useNavigate()
+  const { classes } = useStyles()
   const [opened, setOpened] = useState(false)
 
   const handleDelete = async () => {
@@ -20,8 +36,14 @@ export default function IssueDeleteButton({ issueId }: IssueDeleteButtonProps) {
   return (
     <>
       <Group position="right" m="md">
-        <Button onClick={() => setOpened(true)} color="red" variant="subtle">
-          Delete
+        <Button
+          onClick={() => setOpened(true)}
+          color="red"
+          variant="subtle"
+          size="sm"
+          radius="xl"
+        >
+          Delete Issue
         </Button>
       </Group>
 
@@ -31,7 +53,7 @@ export default function IssueDeleteButton({ issueId }: IssueDeleteButtonProps) {
         title={
           <Title order={3}>
             <ThemeIcon color="red">
-              <IconAlertTriangle />
+              <IconAlertTriangle className={classes.icon} />
             </ThemeIcon>{' '}
             Delete Issue {issueId}?
           </Title>

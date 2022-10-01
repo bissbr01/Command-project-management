@@ -28,6 +28,14 @@ const commentsEndpoints = scrumApi.injectEndpoints({
         method: 'PUT',
         body,
       }),
+      invalidatesTags: ['Comment'],
+    }),
+    deleteComment: build.mutation<{ success: boolean; id: number }, number>({
+      query: (id) => ({
+        url: `/comments/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Comment'],
     }),
   }),
   overrideExisting: true,
@@ -39,4 +47,5 @@ export const {
   useGetCommentByIdQuery,
   useAddCommentMutation,
   useUpdateCommentMutation,
+  useDeleteCommentMutation,
 } = commentsEndpoints
