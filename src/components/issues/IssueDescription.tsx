@@ -2,7 +2,7 @@ import { createStyles } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
-import { useState } from 'react'
+import { FocusEvent, useState } from 'react'
 import * as Yup from 'yup'
 import { useFocused } from '../../hooks/useFocused'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
@@ -107,9 +107,15 @@ export default function IssueDescription({ issue }: IssueDescriptionProps) {
             minRows="3"
             component={TextAreaField}
             onFocus={() => handleFocused(true)}
-            onBlur={(e: Event) => {
+            onBlur={(e: FocusEvent) => {
               handleBlur(e)
-              handleFocused(false)
+              // if not clicking a form button, unfocus
+              if (
+                !(e.relatedTarget?.id === 'save') &&
+                !(e.relatedTarget?.id === 'reset')
+              ) {
+                handleFocused(false)
+              }
             }}
           />
           {focused && (

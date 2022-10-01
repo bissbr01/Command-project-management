@@ -6,6 +6,7 @@ import { IssueType } from '../../../services/types'
 import IssueTypeSelectItem from './IssueTypeSelectItem'
 import IssueTypeIcon from '../IssueTypeIcon'
 import { useUpdateIssueMutation } from '../../../services/issuesEndpoints'
+import { useFormikSubmit } from '../../../hooks/useFormikSubmit'
 
 const typeData = [
   {
@@ -63,6 +64,7 @@ export default function IssueTypeSelectField({
   // workaround to get meta.  Might be fixed in future of formik
   const meta = form.getFieldMeta(field.name)
   const { classes } = useStyles()
+  const { formik } = useFormikSubmit()
 
   return (
     <Select

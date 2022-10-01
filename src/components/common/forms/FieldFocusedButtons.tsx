@@ -30,6 +30,7 @@ export default function FieldFocusedButtons({
   return (
     <Group className={classes.buttons}>
       <ActionIcon
+        id="save"
         type="submit"
         aria-label="save"
         disabled={isSubmitting}
@@ -40,6 +41,7 @@ export default function FieldFocusedButtons({
         <IconCheck />
       </ActionIcon>
       <CloseButton
+        id="reset"
         type="reset"
         aria-label="close"
         size="sm"

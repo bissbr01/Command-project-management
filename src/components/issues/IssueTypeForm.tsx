@@ -2,14 +2,11 @@ import { createStyles, Group, Text } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
-import { useState } from 'react'
 import * as Yup from 'yup'
-import { useFocused } from '../../hooks/useFocused'
+import { useFormikSubmit } from '../../hooks/useFormikSubmit'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import { Issue } from '../../services/types'
-import FieldFocusedButtons from '../common/forms/FieldFocusedButtons'
 import IssueTypeSelectField from '../common/forms/IssueTypeSelectField'
-import TextAreaField from '../common/forms/TextAreaField'
 
 const useStyles = createStyles((theme) => ({
   container: {
