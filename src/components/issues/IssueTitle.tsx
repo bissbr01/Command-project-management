@@ -35,6 +35,7 @@ const useStyles = createStyles((theme) => ({
   title: {
     fontSize: theme.fontSizes.xl,
     marginBottom: '.5em',
+    marginTop: '1rem',
   },
 
   description: {

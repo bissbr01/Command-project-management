@@ -77,6 +77,13 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: ['Issue'],
     }),
+    deleteIssue: build.mutation<{ success: boolean; id: number }, number>({
+      query: (id) => ({
+        url: `/issues/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Issue'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -89,4 +96,5 @@ export const {
   useAddIssueMutation,
   useUpdateIssueMutation,
   useUpdateIssuesMutation,
+  useDeleteIssueMutation,
 } = issuesEndpoints

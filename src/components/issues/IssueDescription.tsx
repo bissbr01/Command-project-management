@@ -104,6 +104,7 @@ export default function IssueDescription({ issue }: IssueDescriptionProps) {
             id="description"
             name="description"
             variant="unstyled"
+            label="Description"
             minRows="3"
             component={TextAreaField}
             onFocus={() => handleFocused(true)}
