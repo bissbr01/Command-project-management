@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from 'react'
-import { createStyles, Navbar, Menu, Loader } from '@mantine/core'
+import { createStyles, Navbar, Menu, Loader, NavLink } from '@mantine/core'
 import {
   IconBellRinging,
   IconSettings,
@@ -9,11 +9,10 @@ import {
   IconStack2,
   IconChalkboard,
 } from '@tabler/icons'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import UserButton from './UserButton'
-import { RootState } from '../../store'
 import { removeLogin } from '../../reducers/authentication'
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
+import { useAppDispatch } from '../../hooks/hooks'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 
 const useStyles = createStyles((theme, _params, getRef) => {
@@ -99,16 +98,16 @@ const useStyles = createStyles((theme, _params, getRef) => {
   }
 })
 
-const navLinks = [
-  { link: '', label: 'Notifications', icon: IconBellRinging },
-  { link: '', label: 'Backlog', icon: IconStack2 },
-  { link: '', label: 'Board', icon: IconChalkboard },
-  { link: '', label: 'Settings', icon: IconSettings },
+const navData = [
+  { link: '/', label: 'Board', icon: IconChalkboard },
+  { link: '/backlog', label: 'Backlog', icon: IconStack2 },
+  { link: '/notifications', label: 'Notifications', icon: IconBellRinging },
+  { link: '/settings', label: 'Settings', icon: IconSettings },
 ]
 
 function SideNav({ width }: { width: number }) {
-  const { classes, cx } = useStyles()
-  const [active, setActive] = useState('Billing')
+  const { classes } = useStyles()
+  const [active, setActive] = useState('/')
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { data: user, isLoading } = useGetUserByTokenQuery()
@@ -118,21 +117,20 @@ function SideNav({ width }: { width: number }) {
     navigate('/login')
   }
 
-  const links = navLinks.map((item) => (
-    <a
-      className={cx(classes.link, {
-        [classes.linkActive]: item.label === active,
-      })}
-      href={item.link}
+  const navLinks = navData.map((item) => (
+    <NavLink
+      // className={cx(classes.link, {
+      //   [classes.linkActive]: item.label === active,
+      // })}
       key={item.label}
-      onClick={(event) => {
-        event.preventDefault()
-        setActive(item.label)
-      }}
-    >
-      <item.icon className={classes.linkIcon} stroke={1.5} />
-      <span>{item.label}</span>
-    </a>
+      active={item.link === active}
+      component={Link}
+      label={item.label}
+      to={item.link}
+      icon={<item.icon className={classes.linkIcon} stroke={1.5} />}
+      // variant="subtle"
+      onClick={() => setActive(item.link)}
+    />
   ))
 
   if (isLoading) return <Loader />
@@ -140,7 +138,7 @@ function SideNav({ width }: { width: number }) {
 
   return (
     <Navbar width={{ sm: width }} p="md" className={classes.container}>
-      <Navbar.Section grow>{links}</Navbar.Section>
+      <Navbar.Section grow>{navLinks}</Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
         {/* {auth.user && ( */}
