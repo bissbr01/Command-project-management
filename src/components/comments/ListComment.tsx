@@ -56,7 +56,7 @@ export default function ListComment({ comment }: ListCommentProps) {
 
   const handleDelete = async () => {
     await deleteComment(comment.id)
-    navigate('/')
+    setOpened(false)
   }
 
   if (isLoading || !me) return <Loader />

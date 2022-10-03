@@ -1,22 +1,6 @@
-import {
-  Button,
-  createStyles,
-  Group,
-  LoadingOverlay,
-  Paper,
-  Text,
-} from '@mantine/core'
-import { showNotification } from '@mantine/notifications'
-import { IconCheck, IconX } from '@tabler/icons'
-import { Field, Form, Formik } from 'formik'
-import * as Yup from 'yup'
-import {
-  useGetIssueByIdQuery,
-  useUpdateIssueMutation,
-} from '../../services/issuesEndpoints'
-import TextAreaField from '../common/forms/TextAreaField'
-import IssueTypeSelectField from '../common/forms/IssueTypeSelectField'
-import IssueComments from './IssueComments'
+import { createStyles, LoadingOverlay, Paper } from '@mantine/core'
+import { useGetIssueByIdQuery } from '../../services/issuesEndpoints'
+import CommentsList from '../comments/CommentsList'
 import IssueTitle from './IssueTitle'
 import IssueDescription from './IssueDescription'
 import IssueTypeForm from './IssueTypeForm'
@@ -82,7 +66,7 @@ export default function IssueSingle({ issueId }: IssueSingleProps) {
       <IssueTypeForm issue={issue} />
       <IssueTitle issue={issue} />
       <IssueDescription issue={issue} />
-      <IssueComments issue={issue} />
+      <CommentsList issueId={issue.id} />
       <IssueDeleteButton issueId={issue.id} />
     </Paper>
   )

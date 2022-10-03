@@ -1,4 +1,4 @@
-import _, { Dictionary } from 'lodash'
+import _ from 'lodash'
 import { scrumApi } from './scrumApi'
 import { Issue, IssueStatus } from './types'
 
@@ -48,7 +48,9 @@ const issuesEndpoints = scrumApi.injectEndpoints({
     }),
     getIssueById: build.query<Issue, string>({
       query: (id) => `/issues/${id}`,
-      providesTags: ['Issue'],
+      providesTags: (result, error, arg) => [
+        { type: 'Issue' as const, id: arg },
+      ],
     }),
     addIssue: build.mutation<
       Issue,
@@ -67,7 +69,9 @@ const issuesEndpoints = scrumApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: ['Issue'],
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Issue' as const, id: arg.id },
+      ],
     }),
     updateIssues: build.mutation<void, UpdateIssuesBody>({
       query: (body) => ({
@@ -82,7 +86,9 @@ const issuesEndpoints = scrumApi.injectEndpoints({
         url: `/issues/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Issue'],
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Issue' as const, id: arg },
+      ],
     }),
   }),
   overrideExisting: false,

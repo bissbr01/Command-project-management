@@ -7,9 +7,13 @@ const commentsEndpoints = scrumApi.injectEndpoints({
       query: () => '/comments',
       providesTags: ['Comment'],
     }),
+    getCommentsByIssue: build.query<Comment[], number>({
+      query: (issueId) => `/comments/issue/${issueId}`,
+      providesTags: ['Comment'],
+    }),
     getCommentById: build.query<Comment, string>({
       query: (id) => `/comments/${id}`,
-      providesTags: ['Comment'],
+      providesTags: (result, error, arg) => [{ type: 'Comment', id: arg }],
     }),
     addComment: build.mutation<
       Comment,
@@ -28,14 +32,19 @@ const commentsEndpoints = scrumApi.injectEndpoints({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Comment'],
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Comment', id: arg.id },
+      ],
     }),
     deleteComment: build.mutation<{ success: boolean; id: number }, number>({
       query: (id) => ({
         url: `/comments/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Comment'],
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Comment', id: arg },
+        'Comment',
+      ],
     }),
   }),
   overrideExisting: true,
@@ -44,6 +53,7 @@ const commentsEndpoints = scrumApi.injectEndpoints({
 // eslint-disable-next-line import/prefer-default-export
 export const {
   useGetCommentsQuery,
+  useGetCommentsByIssueQuery,
   useGetCommentByIdQuery,
   useAddCommentMutation,
   useUpdateCommentMutation,

@@ -1,4 +1,8 @@
-import { createStyles, Title } from '@mantine/core'
+import { createStyles, Loader, Title } from '@mantine/core'
+import {
+  useGetCommentsByIssueQuery,
+  useGetCommentsQuery,
+} from '../../services/commentsEndpoints'
 import { Issue } from '../../services/types'
 import AddComment from './AddComment'
 import ListComment from './ListComment'
@@ -14,12 +18,15 @@ const useStyles = createStyles(() => ({
   },
 }))
 
-interface IssueCommentsProps {
-  issue: Issue
+interface CommentsListProps {
+  issueId: number
 }
 
-export default function IssueComments({ issue }: IssueCommentsProps) {
+export default function CommentsList({ issueId }: CommentsListProps) {
   const { classes } = useStyles()
+  const { data: comments, isLoading } = useGetCommentsByIssueQuery(issueId)
+
+  if (isLoading || !comments) return <Loader />
 
   return (
     <>
@@ -27,8 +34,8 @@ export default function IssueComments({ issue }: IssueCommentsProps) {
         Comments
       </Title>
       <section className={classes.container}>
-        <AddComment issueId={issue.id} />
-        {issue.comments.map((comment) => (
+        <AddComment issueId={issueId} />
+        {comments.map((comment) => (
           <ListComment key={comment.id} comment={comment} />
         ))}
       </section>

@@ -1,4 +1,4 @@
-import { createStyles } from '@mantine/core'
+import { createStyles, Title } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
@@ -104,7 +104,11 @@ export default function IssueDescription({ issue }: IssueDescriptionProps) {
             id="description"
             name="description"
             variant="unstyled"
-            label="Description"
+            label={
+              <Title order={3} size="h5">
+                Description
+              </Title>
+            }
             minRows="3"
             component={TextAreaField}
             onFocus={() => handleFocused(true)}

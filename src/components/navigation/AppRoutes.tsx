@@ -26,14 +26,14 @@ export default function AppRoutes() {
   useEffect(() => {
     // check if login token saved in local storage, if so set to auth state
     if (!token) {
-      const cachedUserJSON = window.localStorage.getItem('token')
-      if (cachedUserJSON) {
-        const cachedUser = JSON.parse(cachedUserJSON)
-        dispatch(setToken(cachedUser))
+      const cachedTokenJSON = window.localStorage.getItem('token')
+      if (cachedTokenJSON) {
+        const cachedToken = JSON.parse(cachedTokenJSON)
+        dispatch(setToken(cachedToken))
         navigate('/')
       }
     } else {
-      // cehck if token is expired, and if so logout
+      // check if token is expired, and if so logout
       const decoded = jwt_decode<JwtPayload>(token)
       if (decoded.exp && decoded.exp < Date.now() / 1000) {
         dispatch(removeLogin())
