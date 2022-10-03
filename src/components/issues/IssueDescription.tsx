@@ -83,6 +83,7 @@ export default function IssueDescription({ issue }: IssueDescriptionProps) {
             color: 'green',
             icon: <IconCheck />,
           })
+          handleFocused(false)
         } catch (e: unknown) {
           showNotification({
             title: 'Error',

@@ -20,7 +20,11 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       query: () => '/issues',
       providesTags: ['Issue'],
     }),
-    getIssuesByToken: build.query<BoardColumns, void>({
+    getIssuesByToken: build.query<Issue[], void>({
+      query: () => '/issues/me',
+      providesTags: ['Issue'],
+    }),
+    getIssuesForBoard: build.query<BoardColumns, void>({
       query: () => '/issues/me',
       transformResponse: (response: Issue[]) => {
         const sorted = _.orderBy(response, ['boardOrder'], ['asc'])
@@ -100,6 +104,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
 export const {
   useGetIssuesQuery,
   useGetIssuesByTokenQuery,
+  useGetIssuesForBoardQuery,
   useGetIssueByIdQuery,
   useAddIssueMutation,
   useUpdateIssueMutation,

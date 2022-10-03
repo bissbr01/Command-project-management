@@ -33,7 +33,8 @@ export interface Issue {
   assignee?: User
   author?: User
   sprint?: Sprint
-  comments: Comment[]
+  sprintId: number
+  comments?: Comment[]
 }
 
 export interface Sprint {
@@ -41,7 +42,10 @@ export interface Sprint {
   goal: string
   startOn?: Date
   length?: number
+  active: boolean
+  projectId: number
   project: Project
+  issues?: Issue[]
   author: User
 }
 

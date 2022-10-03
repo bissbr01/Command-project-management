@@ -10,7 +10,7 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import BoardItem from './BoardItem'
 import { Issue, IssueStatus } from '../../services/types'
 import {
-  useGetIssuesByTokenQuery,
+  useGetIssuesForBoardQuery,
   useUpdateIssueMutation,
 } from '../../services/issuesEndpoints'
 import IssueDrawer from '../issues/IssueDrawer'
@@ -52,12 +52,12 @@ export interface BoardColumn {
   issues: Issue[]
 }
 
-function Boards() {
+function Board() {
   const { classes } = useStyles()
   const theme = useMantineTheme()
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
-  const { data: boardColumns, isLoading } = useGetIssuesByTokenQuery()
+  const { data: boardColumns, isLoading } = useGetIssuesForBoardQuery()
   const [columns, setColumns] = useState<BoardColumns | null>(null)
 
   useEffect(() => {
@@ -201,4 +201,4 @@ function Boards() {
   )
 }
 
-export default Boards
+export default Board

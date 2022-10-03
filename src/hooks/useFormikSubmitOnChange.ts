@@ -2,7 +2,7 @@ import { useFormikContext } from 'formik'
 import { isEqual, debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 
-export function useFormikSubmit() {
+export function useFormikSubmitOnChange() {
   const formik = useFormikContext()
   const [lastValues, updateState] = useState(formik.values)
 
@@ -20,23 +20,26 @@ export function useFormikSubmit() {
 
   useEffect(() => {
     const valuesEqualLastValues = isEqual(lastValues, formik.values)
-    const valuesEqualInitialValues = isEqual(
-      formik.values,
-      formik.initialValues
-    )
+    // const valuesEqualInitialValues = isEqual(
+    //   formik.values,
+    //   formik.initialValues
+    // )
 
     if (!valuesEqualLastValues) {
       updateState(formik.values)
     }
 
-    if (!valuesEqualLastValues && !valuesEqualInitialValues && formik.isValid) {
+    if (!valuesEqualLastValues && formik.isValid) {
+      formik.setSubmitting(true)
       submitForm()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     formik.values,
     formik.isValid,
     lastValues,
     formik.initialValues,
+    formik.setSubmitting,
     submitForm,
   ])
 

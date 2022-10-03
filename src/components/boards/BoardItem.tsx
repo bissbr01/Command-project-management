@@ -10,7 +10,7 @@ import { SetStateAction } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
 import { Issue } from '../../services/types'
-import IssueTypeIcon from '../common/IssueTypeIcon'
+import IssueTypeIcon from '../issues/IssueTypeIcon'
 
 const useStyles = createStyles((theme) => ({
   draggable: {

@@ -1,14 +1,15 @@
-import { createStyles } from '@mantine/core'
-import { showNotification } from '@mantine/notifications'
-import { IconCheck, IconX } from '@tabler/icons'
-import { Field, Form, Formik } from 'formik'
-import { FocusEvent, useState } from 'react'
 import * as Yup from 'yup'
+import { Field, Form, Formik } from 'formik'
+import { showNotification } from '@mantine/notifications'
+import { createStyles, Group } from '@mantine/core'
+import { IconCheck, IconX } from '@tabler/icons'
+import { FocusEvent } from 'react'
+import { IssueStatus, IssueType } from '../../services/types'
+import { useAddIssueMutation } from '../../services/issuesEndpoints'
+import TextField from '../common/forms/TextField'
 import { useFocused } from '../../hooks/useFocused'
-import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
-import { Issue } from '../../services/types'
 import FieldFocusedButtons from '../common/forms/FieldFocusedButtons'
-import TextAreaField from '../common/forms/TextAreaField'
+import IssueTypeSelectField from '../common/forms/IssueTypeSelectField'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -55,29 +56,36 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-interface IssueTitleProps {
-  issue: Issue
+interface BacklogCreateIssueProps {
+  sprintId: number
+  status: IssueStatus
 }
 
-export default function IssueTitle({ issue }: IssueTitleProps) {
+export default function BacklogCreateIssue({
+  sprintId,
+  status,
+}: BacklogCreateIssueProps) {
   const { classes, cx } = useStyles()
   const { focused, handleFocused } = useFocused()
-  const [update] = useUpdateIssueMutation()
+  const [createIssue] = useAddIssueMutation()
 
-  const TitleSchema = Yup.object().shape({
-    title: Yup.string(),
+  const CreateIssueSchema = Yup.object().shape({
+    status: Yup.string().required(),
+    type: Yup.string().required(),
+    title: Yup.string().required('You must provide a title'),
   })
 
   return (
     <Formik
       initialValues={{
-        title: issue.title,
+        status,
+        type: IssueType.Task,
+        title: '',
       }}
-      validationSchema={TitleSchema}
+      validationSchema={CreateIssueSchema}
       onSubmit={async (values) => {
         try {
-          await update({ id: issue.id, ...values })
-          handleFocused(false)
+          await createIssue({ ...values, sprintId })
           showNotification({
             title: 'Success',
             message: 'Issue successfully saved.',
@@ -101,13 +109,7 @@ export default function IssueTitle({ issue }: IssueTitleProps) {
     >
       {({ isSubmitting, handleBlur }) => (
         <Form>
-          <Field
-            stylesApi={{ input: cx(classes.title, classes.inputStyles) }}
-            id="title"
-            name="title"
-            variant="unstyled"
-            minRows="3"
-            component={TextAreaField}
+          <Group
             onFocus={() => handleFocused(true)}
             onBlur={(e: FocusEvent) => {
               handleBlur(e)
@@ -119,13 +121,30 @@ export default function IssueTitle({ issue }: IssueTitleProps) {
                 handleFocused(false)
               }
             }}
-          />
-          {focused && (
-            <FieldFocusedButtons
-              isSubmitting={isSubmitting}
-              handleFocused={handleFocused}
+          >
+            <Field
+              id="type"
+              name="type"
+              value="type"
+              variant="unstyled"
+              onFocus={() => handleFocused(true)}
+              component={IssueTypeSelectField}
             />
-          )}
+            <Field
+              stylesApi={{ input: cx(classes.title, classes.inputStyles) }}
+              id="title"
+              name="title"
+              variant="unstyled"
+              minRows="3"
+              component={TextField}
+            />
+            {focused && (
+              <FieldFocusedButtons
+                isSubmitting={isSubmitting}
+                handleFocused={handleFocused}
+              />
+            )}
+          </Group>
         </Form>
       )}
     </Formik>

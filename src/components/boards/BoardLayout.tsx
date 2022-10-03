@@ -6,7 +6,7 @@ import { useGetIssuesByTokenQuery } from '../../services/issuesEndpoints'
 import { IssueStatus } from '../../services/types'
 import NavBreadcrumbs from '../common/Breadcrumbs'
 import IssueDrawer from '../issues/IssueDrawer'
-import Boards from './Boards'
+import Board from './Board'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -38,15 +38,14 @@ export default function BoardLayout() {
   const { classes } = useStyles()
 
   return (
-    <Container className={classes.container}>
-      <NavBreadcrumbs />
+    <main>
       <Title className={classes.title}>Project Title</Title>
       <div className={classes.sprintItems}>
         <Button variant="default" size="sm" className={classes.sprintButton}>
           Complete Sprint
         </Button>
       </div>
-      <Boards />
-    </Container>
+      <Board />
+    </main>
   )
 }

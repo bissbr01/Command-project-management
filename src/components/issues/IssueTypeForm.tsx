@@ -3,9 +3,9 @@ import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { useFormikSubmit } from '../../hooks/useFormikSubmit'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import { Issue } from '../../services/types'
+import FormikSubmitOnChange from '../common/forms/FormikSubmitOnChange'
 import IssueTypeSelectField from '../common/forms/IssueTypeSelectField'
 
 const useStyles = createStyles((theme) => ({
@@ -94,11 +94,13 @@ export default function IssueTypeForm({ issue }: IssueTypeFormProps) {
         }
       }}
     >
-      {({ isSubmitting, submitForm }) => (
+      {({ isSubmitting }) => (
         <Form>
+          <FormikSubmitOnChange />
           <Group className={classes.issueStatus}>
             <Field
               id="type"
+              disabled={isSubmitting}
               name="type"
               value="type"
               variant="unstyled"

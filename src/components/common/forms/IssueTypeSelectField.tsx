@@ -1,12 +1,8 @@
 import { createStyles, InputVariant, Select, SelectItem } from '@mantine/core'
-import { IconBookmark, IconBug, IconCheckbox } from '@tabler/icons'
 import { FieldProps } from 'formik'
-import { ChangeEventHandler } from 'react'
 import { IssueType } from '../../../services/types'
 import IssueTypeSelectItem from './IssueTypeSelectItem'
-import IssueTypeIcon from '../IssueTypeIcon'
-import { useUpdateIssueMutation } from '../../../services/issuesEndpoints'
-import { useFormikSubmit } from '../../../hooks/useFormikSubmit'
+import IssueTypeIcon from '../../issues/IssueTypeIcon'
 
 const typeData = [
   {
@@ -49,6 +45,7 @@ export interface IssueTypeSelectFieldProps extends FieldProps {
   required?: boolean
   data: SelectItem[]
   icon: JSX.Element
+  disabled: boolean
   updateOnChange: boolean
 }
 
@@ -58,13 +55,13 @@ export default function IssueTypeSelectField({
   variant,
   required = false,
   data = typeData,
+  disabled = false,
   field,
   form,
 }: IssueTypeSelectFieldProps) {
   // workaround to get meta.  Might be fixed in future of formik
   const meta = form.getFieldMeta(field.name)
   const { classes } = useStyles()
-  const { formik } = useFormikSubmit()
 
   return (
     <Select
@@ -78,6 +75,7 @@ export default function IssueTypeSelectField({
       icon={<IssueTypeIcon issueType={field.value} />}
       name={field.name}
       value={field.value}
+      disabled={disabled}
       classNames={{ item: classes.dropdown, root: classes.root }}
       onChange={(value) => {
         const event = {

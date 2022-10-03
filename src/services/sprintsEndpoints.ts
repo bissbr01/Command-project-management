@@ -11,6 +11,10 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
       query: (id) => `/sprints/${id}`,
       providesTags: ['Sprint'],
     }),
+    GetSprintByActive: build.query<Sprint, void>({
+      query: () => 'sprints/active',
+      providesTags: ['Sprint'],
+    }),
     addSprint: build.mutation<Sprint, Omit<Sprint, 'id'>>({
       query: (body) => ({
         url: '/sprints',
@@ -34,6 +38,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
 export const {
   useGetSprintsQuery,
   useGetSprintByIdQuery,
+  useGetSprintByActiveQuery,
   useAddSprintMutation,
   useUpdateSprintMutation,
 } = sprintsEndpoints

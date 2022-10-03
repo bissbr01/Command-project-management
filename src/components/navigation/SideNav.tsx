@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createStyles, Navbar, Menu, Loader, NavLink } from '@mantine/core'
 import {
   IconBellRinging,
@@ -9,7 +9,7 @@ import {
   IconStack2,
   IconChalkboard,
 } from '@tabler/icons'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import UserButton from './UserButton'
 import { removeLogin } from '../../reducers/authentication'
 import { useAppDispatch } from '../../hooks/hooks'
@@ -111,6 +111,11 @@ function SideNav({ width }: { width: number }) {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { data: user, isLoading } = useGetUserByTokenQuery()
+  const location = useLocation()
+
+  useEffect(() => {
+    setActive(location.pathname)
+  }, [setActive, location])
 
   const handleLogout = () => {
     dispatch(removeLogin())

@@ -15,6 +15,8 @@ import BoardLayout from '../boards/BoardLayout'
 import NotFound from '../common/NotFound'
 import Login from '../login/Login'
 import Register from '../login/Register'
+import Board from '../boards/Board'
+import Backlog from '../backlog/Backlog'
 
 export default function AppRoutes() {
   const navigate = useNavigate()
@@ -51,9 +53,8 @@ export default function AppRoutes() {
       <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={token ? <App /> : <Navigate to="/login" />}>
           <Route index element={<BoardLayout />} />
-          <Route path="issues" element={<BoardLayout />}>
-            <Route path=":id" element={<BoardLayout />} />
-          </Route>
+          <Route path="issues/:id" element={<BoardLayout />} />
+          <Route path="backlog" element={<Backlog />} />
         </Route>
         <Route path="*" element={<NotFound />} />
         <Route path="/login" element={<Login />} />
