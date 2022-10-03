@@ -52,9 +52,7 @@ export default function IssueDeleteButton({ issueId }: IssueDeleteButtonProps) {
         onClose={() => setOpened(false)}
         title={
           <Title order={3}>
-            <ThemeIcon color="red">
-              <IconAlertTriangle className={classes.icon} />
-            </ThemeIcon>{' '}
+            <IconAlertTriangle className={classes.icon} />
             Delete Issue {issueId}?
           </Title>
         }
