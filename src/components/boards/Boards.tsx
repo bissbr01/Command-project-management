@@ -1,9 +1,18 @@
-import { createStyles, Paper, Title, useMantineTheme } from '@mantine/core'
-import React, { SetStateAction, useState } from 'react'
+import {
+  createStyles,
+  Loader,
+  Paper,
+  Title,
+  useMantineTheme,
+} from '@mantine/core'
+import React, { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import BoardItem from './BoardItem'
 import { Issue, IssueStatus } from '../../services/types'
-import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
+import {
+  useGetIssuesByTokenQuery,
+  useUpdateIssueMutation,
+} from '../../services/issuesEndpoints'
 import IssueDrawer from '../issues/IssueDrawer'
 
 const useStyles = createStyles((theme) => ({
@@ -43,12 +52,19 @@ export interface BoardColumn {
   issues: Issue[]
 }
 
-function Boards({ initColumns }: { initColumns: BoardColumns }) {
+function Boards() {
   const { classes } = useStyles()
   const theme = useMantineTheme()
-  const [columns, setColumns] = useState(initColumns)
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
+  const { data: boardColumns, isLoading } = useGetIssuesByTokenQuery()
+  const [columns, setColumns] = useState<BoardColumns | null>(null)
+
+  useEffect(() => {
+    if (boardColumns) {
+      setColumns(boardColumns)
+    }
+  }, [setColumns, boardColumns])
 
   const getColForUpdate = (col: BoardColumn) => {
     const colForUpdate = col.issues.reduce<
@@ -75,7 +91,7 @@ function Boards({ initColumns }: { initColumns: BoardColumns }) {
   const handleDragEnd = async (
     result: DropResult,
     cols: BoardColumns,
-    setItems: React.Dispatch<SetStateAction<BoardColumns>>
+    setItems: React.Dispatch<SetStateAction<BoardColumns | null>>
   ) => {
     if (!result.destination) return
     const { source, destination } = result
@@ -140,6 +156,8 @@ function Boards({ initColumns }: { initColumns: BoardColumns }) {
       })
     }
   }
+
+  if (isLoading || !columns) return <Loader />
 
   return (
     <div className={classes.boards}>

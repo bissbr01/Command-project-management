@@ -36,9 +36,7 @@ const useStyles = createStyles((theme) => ({
 
 export default function BoardLayout() {
   const { classes } = useStyles()
-  const { data: boardColumns, isLoading } = useGetIssuesByTokenQuery()
 
-  if (isLoading || !boardColumns) return <Loader />
   return (
     <Container className={classes.container}>
       <NavBreadcrumbs />
@@ -48,7 +46,7 @@ export default function BoardLayout() {
           Complete Sprint
         </Button>
       </div>
-      <Boards initColumns={boardColumns} />
+      <Boards />
     </Container>
   )
 }

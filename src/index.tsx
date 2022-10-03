@@ -38,7 +38,7 @@ if (container) {
             primaryShade: { light: 4, dark: 6 },
           }}
         >
-          <NotificationsProvider position="top-center">
+          <NotificationsProvider position="bottom-left">
             <AppRoutes />
           </NotificationsProvider>
         </MantineProvider>

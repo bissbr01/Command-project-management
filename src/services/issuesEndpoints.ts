@@ -71,6 +71,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: 'Issue' as const, id: arg.id },
+        'Issue',
       ],
     }),
     updateIssues: build.mutation<void, UpdateIssuesBody>({
@@ -87,7 +88,8 @@ const issuesEndpoints = scrumApi.injectEndpoints({
         method: 'DELETE',
       }),
       invalidatesTags: (result, error, arg) => [
-        { type: 'Issue' as const, id: arg },
+        { type: 'Issue', id: arg },
+        'Issue',
       ],
     }),
   }),
