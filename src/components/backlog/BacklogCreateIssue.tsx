@@ -42,6 +42,7 @@ const useStyles = createStyles((theme) => ({
   inputSection: {
     backgroundColor: theme.white,
     flex: '1 0 content',
+    marginTop: '-11px',
     padding: '0 12px 6px 12px',
     border: `2px solid ${theme.colors.blue[4]}`,
   },

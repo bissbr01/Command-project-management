@@ -13,7 +13,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   paper: {
-    padding: '12px 12px 0 12px',
+    padding: '12px',
   },
 }))
 
