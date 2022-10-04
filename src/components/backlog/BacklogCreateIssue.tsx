@@ -1,8 +1,8 @@
 import * as Yup from 'yup'
 import { Field, Form, Formik } from 'formik'
 import { showNotification } from '@mantine/notifications'
-import { createStyles, Group } from '@mantine/core'
-import { IconCheck, IconX } from '@tabler/icons'
+import { createStyles, Group, Text, UnstyledButton } from '@mantine/core'
+import { IconCheck, IconPlus, IconX } from '@tabler/icons'
 import { FocusEvent } from 'react'
 import { IssueStatus, IssueType } from '../../services/types'
 import { useAddIssueMutation } from '../../services/issuesEndpoints'
@@ -17,37 +17,33 @@ const useStyles = createStyles((theme) => ({
     height: '100%',
   },
 
-  form: {},
-
-  inputStyles: {
-    padding: 10,
-    '&:hover': {
-      backgroundColor: theme.colors.gray[1],
-    },
-    '&:focus': {
-      border: `2px solid ${theme.colors.brand[1]}`,
-      borderRadius: 5,
-      '&:hover': {
-        backgroundColor: theme.white,
-      },
-    },
-  },
-
   title: {
-    fontSize: theme.fontSizes.xl,
-    marginBottom: '.5em',
-    marginTop: '1rem',
+    flex: '1 0 content',
   },
 
-  description: {
-    fontSize: theme.fontSizes.md,
+  formGroup: {
+    margin: '0 -12px -12px -12px',
   },
 
-  issueStatus: {
-    color: theme.colors.gray[6],
-    fontSize: '.8em',
-    paddingTop: '.5em',
-    marginTop: -50,
+  createButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: '1 0 content',
+    justifyContent: 'flex-start',
+    padding: '0.5rem 1rem 1rem 1rem',
+    backgroundColor: theme.colors.gray[1],
+  },
+
+  createIcon: {
+    fontSize: '10px',
+    padding: '0 10px 0 0',
+  },
+
+  inputSection: {
+    backgroundColor: theme.white,
+    flex: '1 0 content',
+    padding: '0 12px 6px 12px',
+    border: `2px solid ${theme.colors.blue[4]}`,
   },
 
   save: {
@@ -96,7 +92,7 @@ export default function BacklogCreateIssue({
             message: 'Issue successfully saved.',
             autoClose: 4000,
             color: 'green',
-            icon: <IconCheck />,
+            icon: <IconCheck stroke={0.5} />,
           })
         } catch (e: unknown) {
           showNotification({
@@ -127,27 +123,40 @@ export default function BacklogCreateIssue({
               }
             }}
           >
-            <Field
-              id="type"
-              name="type"
-              value="type"
-              variant="unstyled"
-              onFocus={() => handleFocused(true)}
-              component={IssueTypeSelectField}
-            />
-            <Field
-              stylesApi={{ input: cx(classes.title, classes.inputStyles) }}
-              id="title"
-              name="title"
-              variant="unstyled"
-              minRows="3"
-              component={TextField}
-            />
+            {!focused && (
+              <UnstyledButton
+                className={classes.createButton}
+                onClick={() => handleFocused(true)}
+              >
+                <IconPlus className={classes.createIcon} />
+                <Text>Create Issue</Text>
+              </UnstyledButton>
+            )}
             {focused && (
-              <FieldFocusedButtons
-                isSubmitting={isSubmitting}
-                handleFocused={handleFocused}
-              />
+              <Group className={classes.inputSection}>
+                <Field
+                  id="type"
+                  name="type"
+                  value="type"
+                  variant="unstyled"
+                  onFocus={() => handleFocused(true)}
+                  component={IssueTypeSelectField}
+                />
+                <Field
+                  stylesApi={{ root: classes.title }}
+                  id="title"
+                  name="title"
+                  placeholder="New Issue Title"
+                  variant="unstyled"
+                  minRows="3"
+                  component={TextField}
+                />
+                <FieldFocusedButtons
+                  isSubmitting={isSubmitting}
+                  handleFocused={handleFocused}
+                  size="xs"
+                />
+              </Group>
             )}
           </Group>
         </Form>

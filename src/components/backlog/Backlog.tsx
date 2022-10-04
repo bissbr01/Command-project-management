@@ -11,6 +11,10 @@ const useStyles = createStyles((theme) => ({
     padding: '0.5rem',
     borderRadius: theme.defaultRadius,
   },
+
+  paper: {
+    padding: '12px 12px 0 12px',
+  },
 }))
 
 export default function Backlog() {
@@ -30,31 +34,28 @@ export default function Backlog() {
       </Title>
       <section className={classes.section}>
         <Title order={2} size="h3" p="xs">{`Sprint ${sprint.id}`}</Title>
-        <Paper p="sm">
+        <Paper className={classes.paper}>
           {issues
             .filter((issue) => issue.status !== IssueStatus.Backlog)
             .map((issue) => (
               <BacklogIssue key={issue.id} issue={issue} />
             ))}
-          <BacklogCreateIssue sprintId={sprint.id} status={IssueStatus.Todo} />
         </Paper>
+        <BacklogCreateIssue sprintId={sprint.id} status={IssueStatus.Todo} />
       </section>
       <Space h="lg" />
       <section className={classes.section}>
         <Title order={2} size="h3" p="xs">
           Backlog
         </Title>
-        <Paper p="sm">
+        <Paper className={classes.paper}>
           {issues
             .filter((issue) => issue.status === IssueStatus.Backlog)
             .map((issue) => (
               <BacklogIssue key={issue.id} issue={issue} />
             ))}
-          <BacklogCreateIssue
-            sprintId={sprint.id}
-            status={IssueStatus.Backlog}
-          />
         </Paper>
+        <BacklogCreateIssue sprintId={sprint.id} status={IssueStatus.Backlog} />
       </section>
     </main>
   )

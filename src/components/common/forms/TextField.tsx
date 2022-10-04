@@ -1,4 +1,4 @@
-import { InputVariant, TextInput } from '@mantine/core'
+import { InputVariant, TextInput, TextInputStylesNames } from '@mantine/core'
 import { FieldProps } from 'formik'
 
 export interface TextProps extends FieldProps {
@@ -6,6 +6,7 @@ export interface TextProps extends FieldProps {
   placeholder?: string
   variant?: InputVariant
   required?: boolean
+  stylesApi?: Partial<Record<TextInputStylesNames, string>> | undefined
 }
 
 export default function TextField({
@@ -13,6 +14,7 @@ export default function TextField({
   placeholder,
   variant,
   required = false,
+  stylesApi,
   field,
   form,
 }: TextProps) {
@@ -25,6 +27,7 @@ export default function TextField({
       withAsterisk={required}
       error={meta.touched && meta.error}
       variant={variant}
+      classNames={stylesApi}
       {...field}
     />
   )
