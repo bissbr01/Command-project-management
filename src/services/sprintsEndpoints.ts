@@ -13,7 +13,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
     }),
     GetSprintByActive: build.query<Sprint, void>({
       query: () => 'sprints/active',
-      providesTags: ['Sprint'],
+      providesTags: ['Sprint', 'Issue'],
     }),
     addSprint: build.mutation<Sprint, Omit<Sprint, 'id'>>({
       query: (body) => ({

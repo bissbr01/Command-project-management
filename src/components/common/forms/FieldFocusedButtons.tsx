@@ -3,6 +3,7 @@ import {
   CloseButton,
   createStyles,
   Group,
+  MantineNumberSize,
   useMantineTheme,
 } from '@mantine/core'
 import { IconCheck } from '@tabler/icons'
@@ -15,14 +16,16 @@ const useStyles = createStyles(() => ({
   },
 }))
 
-interface FieldFocusedButtonsProps {
+export interface FieldFocusedButtonsProps {
   handleFocused: (bool: boolean) => NodeJS.Timeout
   isSubmitting: boolean
+  size?: MantineNumberSize
 }
 
 export default function FieldFocusedButtons({
   handleFocused,
   isSubmitting,
+  size = 'sm',
 }: FieldFocusedButtonsProps) {
   const { classes } = useStyles()
   const theme = useMantineTheme()
@@ -34,7 +37,7 @@ export default function FieldFocusedButtons({
         type="submit"
         aria-label="save"
         disabled={isSubmitting}
-        size="sm"
+        size={size}
         variant="filled"
         color={theme.colors.brand[1]}
       >
@@ -44,7 +47,7 @@ export default function FieldFocusedButtons({
         id="reset"
         type="reset"
         aria-label="close"
-        size="sm"
+        size={size}
         variant="default"
         onClick={() => {
           handleFocused(false)
