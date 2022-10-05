@@ -1,5 +1,7 @@
+import _ from 'lodash'
+import { BoardColumns, BoardColumnsData } from './issuesEndpoints'
 import { scrumApi } from './scrumApi'
-import { Sprint } from './types'
+import { IssueStatus, Sprint } from './types'
 
 const sprintsEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
@@ -11,8 +13,38 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
       query: (id) => `/sprints/${id}`,
       providesTags: ['Sprint'],
     }),
-    GetSprintByActive: build.query<Sprint, void>({
+    GetSprintByActive: build.query<BoardColumnsData, void>({
       query: () => 'sprints/active',
+      transformResponse: (response: Sprint) => {
+        const sorted = _.orderBy(response.issues, ['boardOrder'], ['asc'])
+        const issues = _.groupBy(sorted, 'status')
+        const boardColumns = {
+          sprint: response,
+          boardColumns: {
+            [IssueStatus.Backlog]: {
+              status: IssueStatus.Backlog,
+              name: 'Backlog',
+              issues: issues?.backlog ?? [],
+            },
+            [IssueStatus.Todo]: {
+              status: IssueStatus.Todo,
+              name: 'To do',
+              issues: issues?.todo ?? [],
+            },
+            [IssueStatus.InProgress]: {
+              status: IssueStatus.InProgress,
+              name: 'In Progress',
+              issues: issues?.inProgress ?? [],
+            },
+            [IssueStatus.Done]: {
+              status: IssueStatus.Done,
+              name: 'Done',
+              issues: issues?.done ?? [],
+            },
+          },
+        }
+        return boardColumns
+      },
       providesTags: ['Sprint', 'Issue'],
     }),
     addSprint: build.mutation<Sprint, Omit<Sprint, 'id'>>({

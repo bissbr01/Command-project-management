@@ -10,10 +10,13 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import BoardItem from './BoardItem'
 import { Issue, IssueStatus } from '../../services/types'
 import {
+  BoardColumn,
+  BoardColumns,
   useGetIssuesForBoardQuery,
   useUpdateIssueMutation,
 } from '../../services/issuesEndpoints'
 import IssueDrawer from '../issues/IssueDrawer'
+import { useGetSprintByActiveQuery } from '../../services/sprintsEndpoints'
 
 const useStyles = createStyles((theme) => ({
   boards: {
@@ -42,22 +45,13 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export interface BoardColumns {
-  [x: string]: BoardColumn
-}
-
-export interface BoardColumn {
-  status: IssueStatus
-  name: string
-  issues: Issue[]
-}
-
 function Board() {
   const { classes } = useStyles()
   const theme = useMantineTheme()
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
-  const { data: boardColumns, isLoading } = useGetIssuesForBoardQuery()
+  const { data: { sprint, boardColumns } = {}, isLoading } =
+    useGetSprintByActiveQuery()
   const [columns, setColumns] = useState<BoardColumns | null>(null)
 
   useEffect(() => {
@@ -66,6 +60,7 @@ function Board() {
     }
   }, [setColumns, boardColumns])
 
+  // only send id, status, and boardOrder to server
   const getColForUpdate = (col: BoardColumn) => {
     const colForUpdate = col.issues.reduce<
       Pick<Issue, 'id' | 'status' | 'boardOrder'>[]
@@ -84,6 +79,15 @@ function Board() {
   const updateCol = async (col: BoardColumn) => {
     const colToUpdate = getColForUpdate(col)
     const promises = colToUpdate.map((issue) => updateIssue(issue).unwrap())
+    const res = await Promise.all(promises)
+    return res
+  }
+
+  const updateCols = async (cols: BoardColumn[]) => {
+    const colsToUpdate = cols.map((col) => getColForUpdate(col))
+    const promises = colsToUpdate.map((col) =>
+      col.map((issue) => updateIssue(issue).unwrap())
+    )
     const res = await Promise.all(promises)
     return res
   }
@@ -124,14 +128,16 @@ function Board() {
       })
 
       // update backend
-      await updateCol({
-        ...sourceColumn,
-        issues: sourceItems,
-      })
-      await updateCol({
-        ...destColumn,
-        issues: destItems,
-      })
+      await updateCols([
+        {
+          ...sourceColumn,
+          issues: sourceItems,
+        },
+        {
+          ...destColumn,
+          issues: destItems,
+        },
+      ])
 
       // item dragged within same column
     } else {

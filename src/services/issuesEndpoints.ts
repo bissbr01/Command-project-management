@@ -1,17 +1,24 @@
 import _ from 'lodash'
 import { scrumApi } from './scrumApi'
-import { Issue, IssueStatus } from './types'
+import { Issue, IssueStatus, Sprint } from './types'
 
 export interface UpdateIssuesBody {
   issues: Partial<Issue> & Pick<Issue, 'id'>[]
 }
 
+export interface BoardColumnsData {
+  sprint: Sprint
+  boardColumns: BoardColumns
+}
+
 export interface BoardColumns {
-  [x: string]: {
-    status: IssueStatus
-    name: string
-    issues: Issue[]
-  }
+  [x: string]: BoardColumn
+}
+
+export interface BoardColumn {
+  status: IssueStatus
+  name: string
+  issues: Issue[]
 }
 
 const issuesEndpoints = scrumApi.injectEndpoints({
