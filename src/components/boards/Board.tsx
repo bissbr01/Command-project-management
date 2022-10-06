@@ -56,7 +56,8 @@ function Board() {
 
   useEffect(() => {
     if (boardColumns) {
-      setColumns(boardColumns)
+      const { backlog, ...cols } = boardColumns
+      setColumns(cols)
     }
   }, [setColumns, boardColumns])
 

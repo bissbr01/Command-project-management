@@ -68,10 +68,10 @@ export default function Backlog() {
     const colForUpdate = col.issues.reduce<
       Pick<Issue, 'id' | 'status' | 'boardOrder'>[]
     >(
-      (prev, { id }, index) =>
+      (prev, { id, status }, index) =>
         prev.concat({
           id,
-          status: col.status,
+          status: col.name === `Sprint ${sprint?.id}` ? status : col.status,
           boardOrder: index,
         }),
       []
@@ -159,10 +159,10 @@ export default function Backlog() {
       })
 
       // update backend
-      // await updateCol({
-      //   ...column,
-      //   issues: copiedItems,
-      // })
+      await updateCol({
+        ...column,
+        issues: copiedItems,
+      })
     }
   }
 
