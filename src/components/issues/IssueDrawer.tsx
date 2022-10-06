@@ -18,7 +18,7 @@ export default function IssueDrawer({
 
   const handleClose = () => {
     setIssueOpened(false)
-    navigate('/')
+    // navigate('/')
   }
 
   return (

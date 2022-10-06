@@ -33,7 +33,7 @@ function SideNavContainer() {
   const AFFIX_HEIGHT = 160
   const SIDE_NAV_WIDTH = 250
 
-  if (minScreenLarge) return <SideNav width={SIDE_NAV_WIDTH} />
+  if (minScreenLarge) return <SideNav width={SIDE_NAV_WIDTH} close={close} />
 
   return (
     <>
@@ -49,7 +49,7 @@ function SideNavContainer() {
         classNames={{ drawer: classes.drawer }}
         shadow="md"
       >
-        <SideNav width={SIDE_NAV_WIDTH} />
+        <SideNav width={SIDE_NAV_WIDTH} close={close} />
       </Drawer>
       <Affix position={{ left: 0, top: AFFIX_HEIGHT }}>
         <Transition transition="slide-left" mounted={!opened}>

@@ -70,7 +70,7 @@ export default function IssueDescription({ issue }: IssueDescriptionProps) {
   return (
     <Formik
       initialValues={{
-        description: issue.description,
+        description: issue.description ?? '',
       }}
       validationSchema={TitleSchema}
       onSubmit={async (values) => {

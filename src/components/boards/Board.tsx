@@ -23,7 +23,8 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    gap: '1rem',
     [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
       flexDirection: 'row',
       alignItems: 'flex-start',
@@ -50,8 +51,7 @@ function Board() {
   const theme = useMantineTheme()
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
-  const { data: { sprint, boardColumns } = {}, isLoading } =
-    useGetSprintByActiveQuery()
+  const { data: { boardColumns } = {}, isLoading } = useGetSprintByActiveQuery()
   const [columns, setColumns] = useState<BoardColumns | null>(null)
 
   useEffect(() => {

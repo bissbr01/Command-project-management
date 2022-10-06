@@ -1,8 +1,16 @@
-import { Button, Container, createStyles, Loader, Title } from '@mantine/core'
+import {
+  Button,
+  Container,
+  createStyles,
+  Group,
+  Loader,
+  Title,
+} from '@mantine/core'
 import _ from 'lodash'
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { useGetIssuesByTokenQuery } from '../../services/issuesEndpoints'
+import { useGetSprintByActiveQuery } from '../../services/sprintsEndpoints'
 import { IssueStatus } from '../../services/types'
 import NavBreadcrumbs from '../common/Breadcrumbs'
 import IssueDrawer from '../issues/IssueDrawer'
@@ -16,7 +24,9 @@ const useStyles = createStyles((theme) => ({
   title: {
     margin: '.5em 0',
     color: theme.colors.gray[8],
-    textAlign: 'center',
+    justifySelf: 'flex-start',
+    alignSelf: 'flex-start',
+
     [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
       textAlign: 'left',
     },
@@ -24,24 +34,37 @@ const useStyles = createStyles((theme) => ({
   sprintItems: {
     margin: '.5em 0',
     display: 'flex',
+    flex: '0 1 content',
     flexDirection: 'column',
     alignItems: 'center',
     [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
-      justifyContent: 'flex-end',
       flexDirection: 'row',
     },
   },
-  sprintButton: {},
+  sprintButton: {
+    display: 'flex',
+    marginLeft: 'auto',
+    justifyContent: 'flex-end',
+  },
 }))
 
 export default function BoardLayout() {
   const { classes } = useStyles()
+  const { data: { sprint } = {}, isLoading } = useGetSprintByActiveQuery()
+
+  if (isLoading) return <Loader />
 
   return (
     <main>
-      <Title className={classes.title}>Project Title</Title>
       <div className={classes.sprintItems}>
-        <Button variant="default" size="sm" className={classes.sprintButton}>
+        <Title className={classes.title} order={1} size="h2">
+          Sprint {sprint?.id}
+        </Title>
+        <Button
+          variant="default"
+          size="sm"
+          classNames={{ root: classes.sprintButton }}
+        >
           Complete Sprint
         </Button>
       </div>

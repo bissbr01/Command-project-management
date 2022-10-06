@@ -71,7 +71,7 @@ export default function IssueTitle({ issue }: IssueTitleProps) {
   return (
     <Formik
       initialValues={{
-        title: issue.title,
+        title: issue.title ?? '',
       }}
       validationSchema={TitleSchema}
       onSubmit={async (values) => {

@@ -55,7 +55,7 @@ function App() {
       <Group className={classes.group}>
         <SideNavContainer />
         <Container className={classes.container}>
-          <NavBreadcrumbs />
+          {/* <NavBreadcrumbs /> */}
           <Outlet />
         </Container>
       </Group>

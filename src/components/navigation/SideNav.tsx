@@ -33,16 +33,6 @@ const useStyles = createStyles((theme, _params, getRef) => {
       }`,
     },
 
-    footer: {
-      paddingTop: theme.spacing.md,
-      marginTop: theme.spacing.md,
-      borderTop: `1px solid ${
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[4]
-          : theme.colors.gray[2]
-      }`,
-    },
-
     link: {
       ...theme.fn.focusStyles(),
       display: 'flex',
@@ -105,7 +95,12 @@ const navData = [
   { link: '/settings', label: 'Settings', icon: IconSettings },
 ]
 
-function SideNav({ width }: { width: number }) {
+interface SideNavProps {
+  width: number
+  close: () => void
+}
+
+function SideNav({ width, close }: SideNavProps) {
   const { classes } = useStyles()
   const [active, setActive] = useState('/')
   const navigate = useNavigate()
@@ -134,7 +129,10 @@ function SideNav({ width }: { width: number }) {
       to={item.link}
       icon={<item.icon className={classes.linkIcon} stroke={1.5} />}
       // variant="subtle"
-      onClick={() => setActive(item.link)}
+      onClick={() => {
+        setActive(item.link)
+        close()
+      }}
     />
   ))
 
@@ -143,9 +141,7 @@ function SideNav({ width }: { width: number }) {
 
   return (
     <Navbar width={{ sm: width }} p="md" className={classes.container}>
-      <Navbar.Section grow>{navLinks}</Navbar.Section>
-
-      <Navbar.Section className={classes.footer}>
+      <Navbar.Section className={classes.header}>
         {/* {auth.user && ( */}
         <Menu position="top" withArrow width={200}>
           <Menu.Target>
@@ -166,6 +162,8 @@ function SideNav({ width }: { width: number }) {
           </Menu.Dropdown>
         </Menu>
       </Navbar.Section>
+
+      <Navbar.Section grow>{navLinks}</Navbar.Section>
     </Navbar>
   )
 }

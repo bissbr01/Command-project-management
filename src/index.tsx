@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { store } from './store'
+import { CustomFonts } from './components/common/CustomFonts'
 import reportWebVitals from './reportWebVitals'
 import AppRoutes from './components/navigation/AppRoutes'
 
@@ -20,6 +21,10 @@ if (container) {
             // headings: { fontFamily: 'Greycliff CF, sans-serif' },
             // fontFamily: 'Open Sans, sans serif',
             colorScheme: 'light',
+            fontFamily: 'Mitr, sans-serif',
+            headings: {
+              fontFamily: 'Mitr, sans-serif',
+            },
             colors: {
               brand: [
                 '#ECF8F2',
@@ -39,6 +44,7 @@ if (container) {
           }}
         >
           <NotificationsProvider position="bottom-left">
+            <CustomFonts />
             <AppRoutes />
           </NotificationsProvider>
         </MantineProvider>

@@ -28,7 +28,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
             },
             [IssueStatus.Todo]: {
               status: IssueStatus.Todo,
-              name: 'To do',
+              name: 'To Do',
               issues: issues?.todo ?? [],
             },
             [IssueStatus.InProgress]: {

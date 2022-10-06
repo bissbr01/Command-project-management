@@ -2,7 +2,6 @@ import {
   createStyles,
   Loader,
   Paper,
-  Space,
   Title,
   useMantineTheme,
 } from '@mantine/core'
@@ -10,8 +9,6 @@ import { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import {
   BoardColumn,
-  BoardColumns,
-  useGetIssuesByTokenQuery,
   useUpdateIssueMutation,
 } from '../../services/issuesEndpoints'
 import { useGetSprintByActiveQuery } from '../../services/sprintsEndpoints'
@@ -177,7 +174,7 @@ export default function Backlog() {
           Backlog
         </Title>
         {Object.entries(columns).map(([columnId, column]) => (
-          <section className={classes.section}>
+          <section className={classes.section} key={columnId}>
             <Title order={2} size="h3" p="xs">
               {column.name}
             </Title>
@@ -199,7 +196,7 @@ export default function Backlog() {
                         key={issue.id}
                         issue={issue}
                         index={index}
-                        // setIssueOpened={setIssueOpened}
+                        setIssueOpened={setIssueOpened}
                       />
                     ))}
                     {provided.placeholder}
