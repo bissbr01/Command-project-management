@@ -6,15 +6,15 @@ export function CustomFonts() {
       styles={[
         {
           '@font-face': {
-            fontFamily: 'Mitr',
-            src: `url('https://fonts.googleapis.com/css2?family=Mitr&display=swap') format("woff2")`,
+            fontFamily: 'Nunito',
+            src: `url('https://fonts.googleapis.com/css2?family=Nunito&display=swap') format("woff2")`,
             fontWeight: 400,
             fontStyle: 'normal',
           },
         },
         {
           '@font-face': {
-            fontFamily: 'Mitr',
+            fontFamily: 'Nunito',
             src: `url('https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap') format("woff2")`,
             fontWeight: 700,
             fontStyle: 'normal',
