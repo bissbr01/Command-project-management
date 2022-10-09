@@ -100,7 +100,6 @@ function TopNav({ links }: TopNavProps): JSX.Element {
               </Modal>
             </>
           )}
-
           <Logo />
         </Group>
 

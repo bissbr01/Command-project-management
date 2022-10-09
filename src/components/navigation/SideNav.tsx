@@ -14,6 +14,7 @@ import UserButton from './UserButton'
 import { removeLogin } from '../../reducers/authentication'
 import { useAppDispatch } from '../../hooks/hooks'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
+import Logo from '../common/Logo'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -142,7 +143,7 @@ function SideNav({ width, close }: SideNavProps) {
   return (
     <Navbar width={{ sm: width }} p="md" className={classes.container}>
       <Navbar.Section className={classes.header}>
-        {/* {auth.user && ( */}
+        {/* <Logo /> */}
         <Menu position="top" withArrow width={200}>
           <Menu.Target>
             <UserButton

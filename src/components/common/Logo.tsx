@@ -1,14 +1,28 @@
-import { Group, ThemeIcon } from '@mantine/core'
+import {
+  Group,
+  Image,
+  Text,
+  ThemeIcon,
+  Title,
+  useMantineTheme,
+} from '@mantine/core'
 import { IconBus } from '@tabler/icons'
+import musterLogoOnly from '../../logo-only.png'
 
 function Logo() {
+  const theme = useMantineTheme()
   return (
-    <Group>
-      <ThemeIcon variant="filled">
-        <IconBus size={28} />
-      </ThemeIcon>
-      Scrum Bus
-    </Group>
+    <>
+      <span style={{ width: 50, height: 'auto' }}>
+        <Image src={musterLogoOnly} />
+      </span>
+      <Title order={1} size="h5" color={theme.colors.brand[7]}>
+        MUSTER
+      </Title>
+      <Text color="dimmed" size="sm">
+        Project Management
+      </Text>
+    </>
   )
 }
 

@@ -64,7 +64,7 @@ export default function BoardLayout() {
           Sprint {sprint?.id}
         </Title>
         <div className={classes.rightGroup}>
-          <Text color="dimmed">
+          <Text color="dimmed" mr={20}>
             Ends: {sprint?.end && new Date(sprint.end).toLocaleDateString()}
           </Text>
           <Button
