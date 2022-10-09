@@ -24,7 +24,7 @@ const typeData = [
 
 const useStyles = createStyles((theme) => ({
   root: {
-    width: 135,
+    width: 140,
   },
 
   dropdown: {

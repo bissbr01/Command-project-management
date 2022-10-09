@@ -204,10 +204,7 @@ export default function Backlog() {
                 )}
               </Droppable>
             </Paper>
-            <BacklogCreateIssue
-              sprintId={sprint.id}
-              status={IssueStatus.Todo}
-            />
+            <BacklogCreateIssue sprintId={sprint.id} status={column.status} />
           </section>
         ))}
       </DragDropContext>

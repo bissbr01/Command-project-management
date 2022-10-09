@@ -30,7 +30,7 @@ const useStyles = createStyles((theme) => ({
 
   noOverflow: {
     [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
-      maxWidth: '460px',
+      maxWidth: '450px',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',

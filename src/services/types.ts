@@ -42,6 +42,7 @@ export interface Sprint {
   goal: string
   startOn?: Date
   length?: number
+  end?: number
   active: boolean
   projectId: number
   project: Project

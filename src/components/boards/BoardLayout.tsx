@@ -4,6 +4,7 @@ import {
   createStyles,
   Group,
   Loader,
+  Text,
   Title,
 } from '@mantine/core'
 import _ from 'lodash'
@@ -41,11 +42,13 @@ const useStyles = createStyles((theme) => ({
       flexDirection: 'row',
     },
   },
-  sprintButton: {
-    display: 'flex',
+  rightGroup: {
     marginLeft: 'auto',
-    justifyContent: 'flex-end',
+    display: 'flex',
+    flexDirection: 'row',
   },
+
+  sprintButton: {},
 }))
 
 export default function BoardLayout() {
@@ -60,13 +63,18 @@ export default function BoardLayout() {
         <Title className={classes.title} order={1} size="h2">
           Sprint {sprint?.id}
         </Title>
-        <Button
-          variant="default"
-          size="sm"
-          classNames={{ root: classes.sprintButton }}
-        >
-          Complete Sprint
-        </Button>
+        <div className={classes.rightGroup}>
+          <Text color="dimmed">
+            Ends: {sprint?.end && new Date(sprint.end).toLocaleDateString()}
+          </Text>
+          <Button
+            variant="default"
+            size="sm"
+            classNames={{ root: classes.sprintButton }}
+          >
+            Complete Sprint
+          </Button>
+        </div>
       </div>
       <Board />
     </main>
