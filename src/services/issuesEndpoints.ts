@@ -62,6 +62,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       providesTags: (result, error, arg) => [
         { type: 'Issue' as const, id: arg },
       ],
+      keepUnusedDataFor: 0,
     }),
     addIssue: build.mutation<
       Issue,

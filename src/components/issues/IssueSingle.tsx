@@ -52,9 +52,10 @@ const useStyles = createStyles((theme) => ({
 
 export interface IssueSingleProps {
   issueId: string
+  onClose: () => void
 }
 
-export default function IssueSingle({ issueId }: IssueSingleProps) {
+export default function IssueSingle({ issueId, onClose }: IssueSingleProps) {
   const { classes } = useStyles()
   const { data: issue, isLoading } = useGetIssueByIdQuery(issueId)
 
@@ -67,7 +68,7 @@ export default function IssueSingle({ issueId }: IssueSingleProps) {
       <IssueTitle issue={issue} />
       <IssueDescription issue={issue} />
       <CommentsList issueId={issue.id} />
-      <IssueDeleteButton issueId={issue.id} />
+      <IssueDeleteButton issueId={issue.id} onClose={onClose} />
     </Paper>
   )
 }

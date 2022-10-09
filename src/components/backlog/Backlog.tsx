@@ -208,7 +208,11 @@ export default function Backlog() {
           </section>
         ))}
       </DragDropContext>
-      <IssueDrawer issueOpened={issueOpened} setIssueOpened={setIssueOpened} />
+      <IssueDrawer
+        issueOpened={issueOpened}
+        setIssueOpened={setIssueOpened}
+        redirectUrl="/backlog"
+      />
     </main>
   )
 }

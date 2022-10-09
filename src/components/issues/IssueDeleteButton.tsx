@@ -19,19 +19,23 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-interface IssueDeleteButtonProps {
+export interface IssueDeleteButtonProps {
   issueId: number
+  onClose: () => void
 }
 
-export default function IssueDeleteButton({ issueId }: IssueDeleteButtonProps) {
+export default function IssueDeleteButton({
+  issueId,
+  onClose,
+}: IssueDeleteButtonProps) {
   const [deleteIssue] = useDeleteIssueMutation()
   const navigate = useNavigate()
   const { classes } = useStyles()
   const [opened, setOpened] = useState(false)
 
   const handleDelete = async () => {
+    onClose()
     await deleteIssue(issueId)
-    navigate('/')
   }
   return (
     <>

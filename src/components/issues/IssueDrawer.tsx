@@ -6,19 +6,21 @@ import IssueSingle from './IssueSingle'
 export interface IssueDrawerProps {
   issueOpened: boolean
   setIssueOpened: React.Dispatch<SetStateAction<boolean>>
+  redirectUrl?: string
 }
 
 export default function IssueDrawer({
   issueOpened,
   setIssueOpened,
+  redirectUrl = '/',
 }: IssueDrawerProps) {
-  const navigate = useNavigate()
   const { id } = useParams()
+  const navigate = useNavigate()
   const theme = useMantineTheme()
 
   const handleClose = () => {
     setIssueOpened(false)
-    // navigate('/')
+    navigate(redirectUrl)
   }
 
   return (
@@ -33,7 +35,7 @@ export default function IssueDrawer({
         theme.colorScheme === 'dark' ? theme.colors.dark[9] : 'white'
       }
     >
-      {id && <IssueSingle issueId={id} />}
+      {id && <IssueSingle issueId={id} onClose={handleClose} />}
     </Drawer>
   )
 }
