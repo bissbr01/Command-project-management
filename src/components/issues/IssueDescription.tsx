@@ -12,11 +12,8 @@ import TextAreaField from '../common/forms/TextAreaField'
 
 const useStyles = createStyles((theme) => ({
   container: {
-    margin: '1em',
-    height: '100%',
+    paddingBottom: '1rem',
   },
-
-  form: {},
 
   inputStyles: {
     padding: 10,
@@ -99,7 +96,7 @@ export default function IssueDescription({ issue }: IssueDescriptionProps) {
       }}
     >
       {({ isSubmitting, handleBlur }) => (
-        <Form>
+        <Form className={classes.container}>
           <Field
             stylesApi={{ input: cx(classes.description, classes.inputStyles) }}
             id="description"
@@ -110,7 +107,8 @@ export default function IssueDescription({ issue }: IssueDescriptionProps) {
                 Description
               </Title>
             }
-            minRows="3"
+            minRows={2}
+            maxRows={4}
             component={TextAreaField}
             onFocus={() => handleFocused(true)}
             onBlur={(e: FocusEvent) => {

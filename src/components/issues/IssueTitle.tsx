@@ -12,11 +12,8 @@ import TextAreaField from '../common/forms/TextAreaField'
 
 const useStyles = createStyles((theme) => ({
   container: {
-    margin: '1em',
-    height: '100%',
+    margin: '1rem 0',
   },
-
-  form: {},
 
   inputStyles: {
     padding: 10,
@@ -34,24 +31,6 @@ const useStyles = createStyles((theme) => ({
 
   title: {
     fontSize: theme.fontSizes.xl,
-    marginBottom: '.5em',
-    marginTop: '1rem',
-  },
-
-  description: {
-    fontSize: theme.fontSizes.md,
-  },
-
-  issueStatus: {
-    color: theme.colors.gray[6],
-    fontSize: '.8em',
-    paddingTop: '.5em',
-    marginTop: -50,
-  },
-
-  save: {
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 }))
 
@@ -100,13 +79,13 @@ export default function IssueTitle({ issue }: IssueTitleProps) {
       }}
     >
       {({ isSubmitting, handleBlur }) => (
-        <Form>
+        <Form className={classes.container}>
           <Field
             stylesApi={{ input: cx(classes.title, classes.inputStyles) }}
             id="title"
             name="title"
             variant="unstyled"
-            minRows="3"
+            minRows="2"
             component={TextAreaField}
             onFocus={() => handleFocused(true)}
             onBlur={(e: FocusEvent) => {

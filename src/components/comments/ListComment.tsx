@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDeleteCommentMutation } from '../../services/commentsEndpoints'
 import { Comment } from '../../services/types'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
+import CommentMenu from './CommentMenu'
 
 const useStyles = createStyles((theme) => ({
   comment: {
@@ -65,32 +66,18 @@ export default function ListComment({ comment }: ListCommentProps) {
     <article className={classes.comment}>
       <Group>
         <Avatar color={theme.colors.brand[1]} radius="xl" />
-        <div>
-          <Text size="sm">{comment.author?.fullName}</Text>
-          <Text size="xs" color="dimmed">
-            {timeCreated()}
-          </Text>
-        </div>
-      </Group>
-      <div className={classes.body}>
-        <Text component="p" size="sm" p="0">
-          {comment.text}
+        <Text size="sm">{comment.author?.fullName}</Text>
+        <Text size="xs" color="dimmed">
+          {timeCreated()}
         </Text>
         {comment.authorId === me.id && (
-          <Group position="left">
-            <Button size="xs" variant="subtle" color="gray">
-              Edit
-            </Button>
-            <Button
-              size="xs"
-              onClick={() => setOpened(true)}
-              color="gray"
-              variant="subtle"
-            >
-              Delete
-            </Button>
-          </Group>
+          <CommentMenu handleDelete={setOpened} handleEdit={undefined} />
         )}
+      </Group>
+      <div className={classes.body}>
+        <Text component="p" size="sm" mr="3rem">
+          {comment.text}
+        </Text>
       </div>
       <Modal
         opened={opened}

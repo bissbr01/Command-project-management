@@ -14,6 +14,7 @@ export interface TextAreaProps extends FieldProps {
   stylesApi?: Partial<Record<TextInputStylesNames, string>> | undefined
   required?: boolean
   minRows?: number
+  maxRows?: number
   onFocus?: FocusEventHandler<HTMLTextAreaElement>
   onBlur?: FocusEventHandler<HTMLTextAreaElement>
   size?: MantineSize
@@ -26,6 +27,7 @@ export default function TextAreaField({
   variant,
   stylesApi,
   minRows = 1,
+  maxRows = 4,
   size = 'md',
   onFocus,
   onBlur,
@@ -43,6 +45,7 @@ export default function TextAreaField({
       classNames={stylesApi}
       autosize
       minRows={minRows}
+      maxRows={maxRows}
       size={size}
       onFocus={onFocus}
       onBlur={onBlur}

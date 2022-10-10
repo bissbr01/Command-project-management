@@ -39,13 +39,6 @@ const useStyles = createStyles((theme) => ({
     fontSize: theme.fontSizes.md,
   },
 
-  issueStatus: {
-    color: theme.colors.gray[6],
-    fontSize: '.8em',
-    paddingTop: '.5em',
-    marginTop: -50,
-  },
-
   save: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -97,17 +90,14 @@ export default function IssueTypeForm({ issue }: IssueTypeFormProps) {
       {({ isSubmitting }) => (
         <Form>
           <FormikSubmitOnChange />
-          <Group className={classes.issueStatus}>
-            <Field
-              id="type"
-              disabled={isSubmitting}
-              name="type"
-              value="type"
-              variant="unstyled"
-              component={IssueTypeSelectField}
-            />
-            <Text>Issue {issue.id}</Text>
-          </Group>
+          <Field
+            id="type"
+            disabled={isSubmitting}
+            name="type"
+            value="type"
+            variant="unstyled"
+            component={IssueTypeSelectField}
+          />
         </Form>
       )}
     </Formik>

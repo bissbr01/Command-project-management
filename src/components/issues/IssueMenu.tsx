@@ -1,56 +1,68 @@
 import {
+  ActionIcon,
   Button,
   createStyles,
   Group,
+  Menu,
   Modal,
   Text,
-  ThemeIcon,
   Title,
 } from '@mantine/core'
-import { IconAlertTriangle, IconExclamationMark } from '@tabler/icons'
+import {
+  IconAlertTriangle,
+  IconDotsVertical,
+  IconEdit,
+  IconTrash,
+} from '@tabler/icons'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useDeleteIssueMutation } from '../../services/issuesEndpoints'
 
 const useStyles = createStyles((theme) => ({
+  container: {
+    marginLeft: 'auto',
+    marginRight: '2rem',
+  },
+
   icon: {
     color: theme.colors.red[6],
     marginRight: '1rem',
   },
 }))
 
-export interface IssueDeleteButtonProps {
+interface IssueMenuProps {
   issueId: number
   onClose: () => void
 }
 
-export default function IssueDeleteButton({
-  issueId,
-  onClose,
-}: IssueDeleteButtonProps) {
-  const [deleteIssue] = useDeleteIssueMutation()
-  const navigate = useNavigate()
+export default function IssueMenu({ issueId, onClose }: IssueMenuProps) {
   const { classes } = useStyles()
+  const [deleteIssue] = useDeleteIssueMutation()
   const [opened, setOpened] = useState(false)
 
   const handleDelete = async () => {
     onClose()
     await deleteIssue(issueId)
+    setOpened(false)
   }
-  return (
-    <>
-      <Group position="right" m="md">
-        <Button
-          onClick={() => setOpened(true)}
-          color="red"
-          variant="subtle"
-          size="sm"
-          radius="xl"
-        >
-          Delete Issue
-        </Button>
-      </Group>
 
+  return (
+    <nav className={classes.container}>
+      <Menu width={200} position="bottom-end">
+        <Menu.Target>
+          <ActionIcon size="sm">
+            <IconDotsVertical />
+          </ActionIcon>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item
+            onClick={() => setOpened(true)}
+            color="red"
+            icon={<IconTrash size={16} />}
+          >
+            Delete
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
@@ -75,6 +87,6 @@ export default function IssueDeleteButton({
           </Button>
         </Group>
       </Modal>
-    </>
+    </nav>
   )
 }

@@ -43,7 +43,7 @@ function App() {
 
   const topNavLinks = [
     { link: 'projects', label: 'Projects' },
-    { link: 'people', label: 'People' },
+    { link: 'team', label: 'Team' },
   ]
 
   if (isLoading) return <main>Loading </main>

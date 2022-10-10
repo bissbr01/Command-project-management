@@ -8,6 +8,7 @@ import {
   Title,
 } from '@mantine/core'
 import _ from 'lodash'
+import { DateTime } from 'luxon'
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { useGetIssuesByTokenQuery } from '../../services/issuesEndpoints'
@@ -46,6 +47,7 @@ const useStyles = createStyles((theme) => ({
     marginLeft: 'auto',
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
   },
 
   sprintButton: {},
@@ -64,9 +66,11 @@ export default function BoardLayout() {
           Sprint {sprint?.id}
         </Title>
         <div className={classes.rightGroup}>
-          <Text color="dimmed" mr={20}>
-            Ends: {sprint?.end && new Date(sprint.end).toLocaleDateString()}
-          </Text>
+          {sprint?.end && (
+            <Text color="dimmed" mr={20}>
+              End: {DateTime.fromMillis(Number(sprint.end)).toFormat('LLL dd')}
+            </Text>
+          )}
           <Button
             variant="default"
             size="sm"

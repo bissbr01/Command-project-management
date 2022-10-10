@@ -1,11 +1,11 @@
-import { createStyles, LoadingOverlay, Paper } from '@mantine/core'
+import { createStyles, Group, LoadingOverlay, Paper, Text } from '@mantine/core'
 import { useGetIssueByIdQuery } from '../../services/issuesEndpoints'
 import CommentsList from '../comments/CommentsList'
 import IssueTitle from './IssueTitle'
 import IssueDescription from './IssueDescription'
 import IssueTypeForm from './IssueTypeForm'
-import IssueDeleteButton from './IssueDeleteButton'
 import IssueStoryPoints from './IssueStoryPoints'
+import IssueMenu from './IssueMenu'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -49,6 +49,13 @@ const useStyles = createStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  header: {
+    color: theme.colors.gray[6],
+    fontSize: '.8em',
+    paddingTop: '.5em',
+    marginTop: -50,
+  },
 }))
 
 export interface IssueSingleProps {
@@ -65,12 +72,15 @@ export default function IssueSingle({ issueId, onClose }: IssueSingleProps) {
 
   return (
     <Paper className={classes.container}>
-      <IssueTypeForm issue={issue} />
+      <Group className={classes.header}>
+        <IssueTypeForm issue={issue} />
+        <Text>Issue {issue.id}</Text>
+        <IssueMenu issueId={issue.id} onClose={onClose} />
+      </Group>
       <IssueTitle issue={issue} />
       <IssueDescription issue={issue} />
       <IssueStoryPoints issue={issue} />
       <CommentsList issueId={issue.id} />
-      <IssueDeleteButton issueId={issue.id} onClose={onClose} />
     </Paper>
   )
 }
