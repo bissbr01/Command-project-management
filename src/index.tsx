@@ -24,6 +24,7 @@ if (container) {
             fontFamily: 'Mitr, sans-serif',
             headings: {
               fontFamily: 'Mitr, sans-serif',
+              fontWeight: 300,
             },
             colors: {
               brand: [

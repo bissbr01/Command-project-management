@@ -16,8 +16,8 @@ function Logo() {
       <span style={{ width: 50, height: 'auto' }}>
         <Image src={musterLogoOnly} />
       </span>
-      <Title order={1} size="h5" color={theme.colors.brand[7]}>
-        MUSTER
+      <Title order={1} size="h2" color={theme.colors.brand[7]}>
+        Command
       </Title>
       <Text color="dimmed" size="sm">
         Project Management

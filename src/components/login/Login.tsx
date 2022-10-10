@@ -18,6 +18,7 @@ import { setLogin } from '../../reducers/authentication'
 import { useLoginMutation } from '../../services/loginEndpoints'
 import PasswordField from '../common/forms/PasswordInput'
 import TextField from '../common/forms/TextField'
+import Logo from '../common/Logo'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -91,15 +92,9 @@ export default function Login() {
         {({ isSubmitting }) => (
           <Form>
             <Paper className={classes.form} radius={0} p={30}>
-              <Title
-                order={2}
-                className={classes.title}
-                align="center"
-                mt="md"
-                mb={50}
-              >
-                Welcome to Scrum Bus
-              </Title>
+              <Group>
+                <Logo />
+              </Group>
               <Group grow mb="md" mt="md">
                 <Button variant="default" radius="xl">
                   <IconBrandGoogle />
