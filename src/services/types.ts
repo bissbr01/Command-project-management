@@ -30,6 +30,7 @@ export interface Issue {
   title?: string
   type: IssueType
   boardOrder?: number
+  storyPoints: number
   assignee?: User
   author?: User
   sprint?: Sprint

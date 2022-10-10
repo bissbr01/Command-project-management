@@ -10,6 +10,7 @@ import { SetStateAction } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
 import { Issue } from '../../services/types'
+import IssueStoryPointsDisplay from '../issues/IssueStoryPointsDisplay'
 import IssueTypeIcon from '../issues/IssueTypeIcon'
 
 const useStyles = createStyles((theme) => ({
@@ -74,6 +75,7 @@ function BoardItem({
                 <IssueTypeIcon issueType={issue.type} />
               </ThemeIcon>
               <Text>Issue {issue.id}</Text>
+              <IssueStoryPointsDisplay storyPoints={issue.storyPoints} />
             </Group>
           </UnstyledButton>
         </div>

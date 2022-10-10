@@ -5,6 +5,7 @@ import IssueTitle from './IssueTitle'
 import IssueDescription from './IssueDescription'
 import IssueTypeForm from './IssueTypeForm'
 import IssueDeleteButton from './IssueDeleteButton'
+import IssueStoryPoints from './IssueStoryPoints'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -67,6 +68,7 @@ export default function IssueSingle({ issueId, onClose }: IssueSingleProps) {
       <IssueTypeForm issue={issue} />
       <IssueTitle issue={issue} />
       <IssueDescription issue={issue} />
+      <IssueStoryPoints issue={issue} />
       <CommentsList issueId={issue.id} />
       <IssueDeleteButton issueId={issue.id} onClose={onClose} />
     </Paper>

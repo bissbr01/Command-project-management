@@ -66,7 +66,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
     }),
     addIssue: build.mutation<
       Issue,
-      Omit<Issue, 'id' | 'createdAt' | 'updatedAt' | 'authorId'>
+      Omit<Issue, 'id' | 'createdAt' | 'updatedAt' | 'authorId' | 'storyPoints'>
     >({
       query: (body) => ({
         url: '/issues',
