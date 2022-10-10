@@ -40,9 +40,9 @@ export interface Issue {
 export interface Sprint {
   id: number
   goal: string
-  startOn?: Date
+  startOn?: string
   length?: number
-  end?: number
+  end?: string
   active: boolean
   projectId: number
   project: Project

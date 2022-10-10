@@ -1,10 +1,13 @@
 import {
   createStyles,
+  Group,
   Loader,
   Paper,
+  Text,
   Title,
   useMantineTheme,
 } from '@mantine/core'
+import { DateTime } from 'luxon'
 import { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import {
@@ -175,9 +178,21 @@ export default function Backlog() {
         </Title>
         {Object.entries(columns).map(([columnId, column]) => (
           <section className={classes.section} key={columnId}>
-            <Title order={2} size="h3" p="xs">
-              {column.name}
-            </Title>
+            <Group>
+              <Title order={2} size="h3" p="xs">
+                {column.name}
+              </Title>
+              {column.status !== IssueStatus.Backlog && (
+                <Text color="dimmed">
+                  {`${DateTime.fromISO(sprint.startOn ?? '').toFormat('LLL dd')}
+                  - 
+                  ${DateTime.fromISO(sprint.startOn ?? '')
+                    .plus({ days: sprint.length })
+                    .toFormat('LLL dd')}`}
+                </Text>
+                // add sprint button and counts of issues in each column
+              )}
+            </Group>
             <Paper className={classes.paper}>
               <Droppable droppableId={columnId} key={columnId}>
                 {(provided, snapshot) => (
