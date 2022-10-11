@@ -1,21 +1,6 @@
-import {
-  Button,
-  Container,
-  createStyles,
-  Group,
-  Loader,
-  Text,
-  Title,
-} from '@mantine/core'
-import _ from 'lodash'
-import { DateTime } from 'luxon'
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
-import { useGetIssuesByTokenQuery } from '../../services/issuesEndpoints'
+import { Button, createStyles, Loader, Text, Title } from '@mantine/core'
+import dayjs from 'dayjs'
 import { useGetSprintByActiveQuery } from '../../services/sprintsEndpoints'
-import { IssueStatus } from '../../services/types'
-import NavBreadcrumbs from '../common/Breadcrumbs'
-import IssueDrawer from '../issues/IssueDrawer'
 import Board from './Board'
 
 const useStyles = createStyles((theme) => ({
@@ -66,9 +51,9 @@ export default function BoardLayout() {
           Sprint {sprint?.id}
         </Title>
         <div className={classes.rightGroup}>
-          {sprint?.end && (
+          {sprint?.endOn && (
             <Text color="dimmed" mr={20}>
-              End: {DateTime.fromMillis(Number(sprint.end)).toFormat('LLL dd')}
+              End: {dayjs(sprint.endOn).format('MMM DD')}
             </Text>
           )}
           <Button

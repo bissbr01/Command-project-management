@@ -8,7 +8,7 @@ import { useFocused } from '../../hooks/useFocused'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import { Issue } from '../../services/types'
 import FieldFocusedButtons from '../common/forms/FieldFocusedButtons'
-import NumberField from '../common/forms/NumberInput'
+import NumberField from '../common/forms/NumberField'
 
 const useStyles = createStyles((theme) => ({
   container: {

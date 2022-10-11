@@ -42,8 +42,8 @@ export interface Sprint {
   id: number
   goal: string
   startOn?: string
+  endOn?: string
   length?: number
-  end?: string
   active: boolean
   projectId: number
   project: Project

@@ -55,12 +55,26 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: ['Sprint'],
     }),
-    updateSprint: build.mutation<Sprint, Partial<Sprint>>({
+    updateSprint: build.mutation<Sprint, Partial<Sprint> | Pick<Sprint, 'id'>>({
       query: ({ id, ...body }) => ({
         url: `/sprints/${id}`,
-        method: 'PUT',
+        method: 'PATCH',
         body,
       }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Sprint', id },
+        'Sprint',
+      ],
+    }),
+    deleteSprint: build.mutation<{ success: boolean; id: number }, number>({
+      query: (id) => ({
+        url: `/sprints/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Sprint', id: arg },
+        'Sprint',
+      ],
     }),
   }),
   overrideExisting: false,
@@ -73,4 +87,5 @@ export const {
   useGetSprintByActiveQuery,
   useAddSprintMutation,
   useUpdateSprintMutation,
+  useDeleteSprintMutation,
 } = sprintsEndpoints

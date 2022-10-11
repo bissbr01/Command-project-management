@@ -7,6 +7,7 @@ export interface NumberFieldProps extends FieldProps {
   placeholder?: string
   variant?: InputVariant
   required?: boolean
+  formatter?: () => string
   defaultValue: number
   onFocus?: FocusEventHandler<HTMLInputElement>
   onBlur?: FocusEventHandler<HTMLInputElement>
@@ -20,6 +21,7 @@ export default function NumberField({
   required = false,
   stylesApi,
   defaultValue,
+  formatter = undefined,
   onFocus,
   onBlur,
   field,
@@ -37,10 +39,13 @@ export default function NumberField({
       withAsterisk={required}
       defaultValue={defaultValue}
       error={meta.touched && meta.error}
+      formatter={formatter}
       variant={variant}
       classNames={stylesApi}
       onFocus={onFocus}
       onBlur={onBlur}
+      stepHoldDelay={500}
+      stepHoldInterval={100}
       onChange={(value) => {
         const event = {
           target: {

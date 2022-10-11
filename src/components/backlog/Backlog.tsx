@@ -7,7 +7,7 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
-import { DateTime } from 'luxon'
+import dayjs from 'dayjs'
 import { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import {
@@ -17,6 +17,7 @@ import {
 import { useGetSprintByActiveQuery } from '../../services/sprintsEndpoints'
 import { Issue, IssueStatus } from '../../services/types'
 import IssueDrawer from '../issues/IssueDrawer'
+import SprintMenu from '../sprints/SprintMenu'
 import BacklogCreateIssue from './BacklogCreateIssue'
 import BacklogIssue from './BacklogIssue'
 
@@ -183,14 +184,14 @@ export default function Backlog() {
                 {column.name}
               </Title>
               {column.status !== IssueStatus.Backlog && (
-                <Text color="dimmed">
-                  {`${DateTime.fromISO(sprint.startOn ?? '').toFormat('LLL dd')}
-                  - 
-                  ${DateTime.fromISO(sprint.startOn ?? '')
-                    .plus({ days: sprint.length })
-                    .toFormat('LLL dd')}`}
-                </Text>
-                // add sprint button and counts of issues in each column
+                <>
+                  <Text color="dimmed">
+                    {`${dayjs(sprint.startOn).format('MMM DD')}
+                    -
+                    ${dayjs(sprint.endOn).format('MMM DD')}`}
+                  </Text>
+                  <SprintMenu sprint={sprint} />
+                </>
               )}
             </Group>
             <Paper className={classes.paper}>

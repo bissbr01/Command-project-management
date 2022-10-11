@@ -1,13 +1,9 @@
-import {
-  InputVariant,
-  MantineSize,
-  TextInput,
-  TextInputStylesNames,
-} from '@mantine/core'
-import { FieldProps } from 'formik'
+import { InputVariant, MantineSize, TextInputStylesNames } from '@mantine/core'
+import { FieldProps, useFormikContext } from 'formik'
 import { DatePicker } from '@mantine/dates'
+import { IconCalendar } from '@tabler/icons'
 
-export interface TextProps extends FieldProps {
+export interface DatePickerProps extends FieldProps {
   label?: string
   placeholder?: string
   variant?: InputVariant
@@ -16,35 +12,31 @@ export interface TextProps extends FieldProps {
   size: MantineSize
 }
 
-export default function TextField({
+export default function DatePickerField({
   label,
   placeholder,
   variant,
   required = false,
   stylesApi,
-  size = 'md',
+  size = 'sm',
   field,
   form,
-}: TextProps) {
+}: DatePickerProps) {
   // workaround to get meta.  Might be fixed in future of formik
   const meta = form.getFieldMeta(field.name)
+  const { setFieldValue } = useFormikContext()
+
   return (
     <DatePicker
       {...field}
-      value={[new Date()]}
-      onChange={({ date }) => setValue(Array.isArray(date) ? date : [date])}
-      quickSelect
-      range
-      clearable
-      positive
+      onChange={(date) => {
+        // workaround, see https://stackoverflow.com/questions/56312372/react-datepicker-with-a-formik-form/56320889#56320889
+        setFieldValue(field.name, date)
+      }}
       size={size}
-      maxDate={undefined}
-      minDate={undefined}
-      timeSelectStart
-      timeSelectEnd
-      disabled
       label={label}
       placeholder={placeholder}
+      icon={<IconCalendar size={16} />}
       withAsterisk={required}
       error={meta.touched && meta.error}
       variant={variant}
