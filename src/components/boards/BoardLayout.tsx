@@ -1,6 +1,8 @@
 import { Button, createStyles, Loader, Text, Title } from '@mantine/core'
 import dayjs from 'dayjs'
+import { useState } from 'react'
 import { useGetSprintByActiveQuery } from '../../services/sprintsEndpoints'
+import SprintCompletedModal from '../sprints/SprintCompletedModal'
 import Board from './Board'
 
 const useStyles = createStyles((theme) => ({
@@ -40,9 +42,11 @@ const useStyles = createStyles((theme) => ({
 
 export default function BoardLayout() {
   const { classes } = useStyles()
-  const { data: { sprint } = {}, isLoading } = useGetSprintByActiveQuery()
+  const { data: { sprint, boardColumns } = {}, isLoading } =
+    useGetSprintByActiveQuery()
+  const [opened, setOpened] = useState(false)
 
-  if (isLoading) return <Loader />
+  if (isLoading || !sprint || !boardColumns) return <Loader />
 
   return (
     <main>
@@ -60,12 +64,19 @@ export default function BoardLayout() {
             variant="default"
             size="sm"
             classNames={{ root: classes.sprintButton }}
+            onClick={() => setOpened(true)}
           >
             Complete Sprint
           </Button>
         </div>
       </div>
       <Board />
+      <SprintCompletedModal
+        sprint={sprint}
+        boardColumns={boardColumns}
+        opened={opened}
+        setOpened={setOpened}
+      />
     </main>
   )
 }

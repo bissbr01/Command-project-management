@@ -47,7 +47,10 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
       },
       providesTags: ['Sprint', 'Issue'],
     }),
-    addSprint: build.mutation<Sprint, Omit<Sprint, 'id'>>({
+    addSprint: build.mutation<
+      Sprint,
+      Omit<Sprint, 'id' | 'author' | 'project'>
+    >({
       query: (body) => ({
         url: '/sprints',
         method: 'POST',
@@ -84,6 +87,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
 export const {
   useGetSprintsQuery,
   useGetSprintByIdQuery,
+  useLazyGetSprintByIdQuery,
   useGetSprintByActiveQuery,
   useAddSprintMutation,
   useUpdateSprintMutation,

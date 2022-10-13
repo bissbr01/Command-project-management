@@ -47,7 +47,7 @@ export interface Sprint {
   active: boolean
   projectId: number
   project: Project
-  issues?: Issue[]
+  issues: Issue[]
   author: User
 }
 

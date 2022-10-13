@@ -3,11 +3,9 @@ import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import { useUpdateSprintMutation } from '../../services/sprintsEndpoints'
 import { Sprint } from '../../services/types'
 import DatePickerField from '../common/forms/DatePickerField'
-import NumberField from '../common/forms/NumberField'
 import TextAreaField from '../common/forms/TextAreaField'
 
 const useStyles = createStyles((theme) => ({
