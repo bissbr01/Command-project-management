@@ -54,7 +54,7 @@ const useStyles = createStyles((theme) => ({
 }))
 
 interface BacklogCreateIssueProps {
-  sprintId: number
+  sprintId: number | null
   status: IssueStatus
 }
 

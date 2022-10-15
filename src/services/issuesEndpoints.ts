@@ -33,7 +33,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
     }),
     getBacklog: build.query<Issue[], void>({
       query: () => '/issues/backlog',
-      providesTags: ['Issue'],
+      providesTags: ['Issue', 'Sprint'],
     }),
     getIssuesForBoard: build.query<BoardColumns, void>({
       query: () => '/issues/me',
@@ -86,7 +86,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
         body,
       }),
       invalidatesTags: (result, error, arg) => [
-        { type: 'Issue' as const, id: arg.id },
+        { type: 'Issue', id: arg.id },
         'Issue',
       ],
     }),

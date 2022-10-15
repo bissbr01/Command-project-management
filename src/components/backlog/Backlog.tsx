@@ -11,11 +11,10 @@ import dayjs from 'dayjs'
 import { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import {
-  BoardColumn,
   useGetBacklogQuery,
   useUpdateIssueMutation,
 } from '../../services/issuesEndpoints'
-import { useGetSprintByActiveQuery } from '../../services/sprintsEndpoints'
+import { useGetSprintsQuery } from '../../services/sprintsEndpoints'
 import { Issue, IssueStatus, Sprint } from '../../services/types'
 import IssueDrawer from '../issues/IssueDrawer'
 import SprintMenu from '../sprints/SprintMenu'
@@ -35,63 +34,77 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export interface BacklogSprints {
-  [x: string]: BoardColumn
+export interface BacklogLists {
+  [x: string]: BacklogList
+}
+
+export interface BacklogList {
+  name: string
+  issues: Issue[]
+  sprint: Sprint | null
 }
 
 export default function Backlog() {
   const { classes } = useStyles()
   const theme = useMantineTheme()
-  const { data, isLoading } = useGetSprintByActiveQuery()
-  const {data: backlog, isLoading: backlogLoading} = useGetBacklogQuery()
+  const { data: sprints } = useGetSprintsQuery({ active: true })
+  const { data: backlog } = useGetBacklogQuery()
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
-  const [sprints, setSprints] = useState<BacklogSprints[] | null>(null)
+  const [lists, setLists] = useState<BacklogLists | null>(null)
 
   useEffect(() => {
-    const backlogSprints = data?.map((d) => {
-      if (d?.boardColumns && d?.sprint?.id) {
-          sprint: {
-            name: `Sprint ${d?.id}`,
-            status: IssueStatus.Todo,
-            issues: [
-              ...boardColumns.todo.issues,
-              ...boardColumns.inProgress.issues,
-              ...boardColumns.done.issues,
-            ],
-          },
-          backlog: boardColumns.backlog,
+    if (sprints && backlog) {
+      const backlogList = {
+        Backlog: {
+          name: 'backlog',
+          issues: backlog,
+          sprint: null,
+        },
       }
-    })
-  }, [setSprints, boardColumns, sprint?.id])
+
+      const backlogSprints: BacklogLists = {}
+
+      sprints.forEach((sprint) => {
+        backlogSprints[`Sprint ${sprint.id}`] = {
+          name: `Sprint ${sprint.id}`,
+          issues: sprint.issues,
+          sprint,
+        }
+      })
+
+      setLists({ ...backlogSprints, ...backlogList })
+    }
+  }, [setLists, sprints, backlog])
 
   // only send id, status, and boardOrder to server
-  const getColForUpdate = (col: BoardColumn) => {
-    const colForUpdate = col.issues.reduce<
+  const getListForUpdate = (list: BacklogList) => {
+    const listForUpdate = list.issues.reduce<
       Pick<Issue, 'id' | 'status' | 'boardOrder'>[]
     >(
       (prev, { id, status }, index) =>
         prev.concat({
           id,
-          status: col.name === `Sprint ${sprint?.id}` ? status : col.status,
+          status,
+          // status: list.name === `Sprint ${list.sprint?.id}` ? status : list.status,
           boardOrder: index,
         }),
       []
     )
-    return colForUpdate
+    return listForUpdate
   }
 
-  const updateCol = async (col: BoardColumn) => {
-    const colToUpdate = getColForUpdate(col)
-    const promises = colToUpdate.map((issue) => updateIssue(issue).unwrap())
+  const updateList = async (list: BacklogList) => {
+    const listToUpdate = getListForUpdate(list)
+    const promises = listToUpdate.map((issue) => updateIssue(issue).unwrap())
     const res = await Promise.all(promises)
     return res
   }
 
-  const updateCols = async (cols: BoardColumn[]) => {
-    const colsToUpdate = cols.map((col) => getColForUpdate(col))
-    const promises = colsToUpdate.map((col) =>
-      col.map((issue) => updateIssue(issue).unwrap())
+  const updateLists = async (items: BacklogList[]) => {
+    const listsToUpdate = items.map((list) => getListForUpdate(list))
+    const promises = listsToUpdate.map((list) =>
+      list.map((issue) => updateIssue(issue).unwrap())
     )
     const res = await Promise.all(promises)
     return res
@@ -99,104 +112,108 @@ export default function Backlog() {
 
   const handleDragEnd = async (
     result: DropResult,
-    cols: BacklogSprints,
-    setItems: React.Dispatch<SetStateAction<BacklogSprints | null>>
+    items: BacklogLists,
+    setItems: React.Dispatch<SetStateAction<BacklogLists | null>>
   ) => {
     if (!result.destination) return
     const { source, destination } = result
 
     // item dragged to new column
     if (source.droppableId !== destination.droppableId) {
-      const sourceColumn = cols[source.droppableId]
-      const destColumn = cols[destination.droppableId]
-      const sourceItems = [...sourceColumn.issues]
-      const destItems = [...destColumn.issues]
+      const sourceList = items[source.droppableId]
+      const destList = items[destination.droppableId]
+      const sourceItems = [...sourceList.issues]
+      const destItems = [...destList.issues]
       const [removedIssue] = sourceItems.splice(source.index, 1)
       const movedIssue = {
         ...removedIssue,
-        status: destColumn.status,
+        status:
+          destination.droppableId === 'Backlog'
+            ? IssueStatus.Backlog
+            : IssueStatus.Todo,
         boardOrder: destination.index,
       }
       destItems.splice(destination.index, 0, movedIssue)
 
       // update local state
       setItems({
-        ...cols,
+        ...items,
         [source.droppableId]: {
-          ...sourceColumn,
+          ...sourceList,
           issues: sourceItems,
         },
         [destination.droppableId]: {
-          ...destColumn,
+          ...destList,
           issues: destItems,
         },
       })
 
       // update backend
-      await updateCols([
+      await updateLists([
         {
-          ...sourceColumn,
+          ...sourceList,
           issues: sourceItems,
         },
         {
-          ...destColumn,
+          ...destList,
           issues: destItems,
         },
       ])
 
       // item dragged within same column
     } else {
-      const column = cols[source.droppableId]
-      const copiedItems = [...column.issues]
+      const list = items[source.droppableId]
+      const copiedItems = [...list.issues]
       const [removedIssue] = copiedItems.splice(source.index, 1)
       copiedItems.splice(destination.index, 0, removedIssue)
 
       // update local state
       setItems({
-        ...cols,
+        ...items,
         [source.droppableId]: {
-          ...column,
+          ...list,
           issues: copiedItems,
         },
       })
 
       // update backend
-      await updateCol({
-        ...column,
+      await updateList({
+        ...list,
         issues: copiedItems,
       })
     }
   }
 
-  if (isLoading || !boardColumns || !sprint || !columns) return <Loader />
+  if (!sprints || !backlog || !lists) return <Loader />
 
   return (
     <main>
       <DragDropContext
-        onDragEnd={(result) => handleDragEnd(result, columns, setSprints)}
+        onDragEnd={(result) => handleDragEnd(result, lists, setLists)}
       >
         <Title order={1} size="h2" p="sm">
           Backlog
         </Title>
-        {Object.entries(columns).map(([columnId, column]) => (
-          <section className={classes.section} key={columnId}>
+        {/* iterate each sprint | backlog list */}
+        {Object.entries(lists).map(([listKey, list]) => (
+          <section className={classes.section} key={listKey}>
             <Group>
               <Title order={2} size="h3" p="xs">
-                {column.name}
+                {listKey}
               </Title>
-              {column.status !== IssueStatus.Backlog && (
+              {list.sprint && (
                 <>
                   <Text color="dimmed">
-                    {`${dayjs(sprint.startOn).format('MMM DD')}
+                    {`${dayjs(list.sprint.startOn).format('MMM DD')}
                     -
-                    ${dayjs(sprint.endOn).format('MMM DD')}`}
+                    ${dayjs(list.sprint.endOn).format('MMM DD')}`}
                   </Text>
-                  <SprintMenu sprint={sprint} />
+                  <SprintMenu sprint={list.sprint} />
                 </>
               )}
             </Group>
             <Paper className={classes.paper}>
-              <Droppable droppableId={columnId} key={columnId}>
+              <Droppable droppableId={listKey}>
                 {(provided, snapshot) => (
                   <div
                     {...provided.droppableProps}
@@ -208,7 +225,8 @@ export default function Backlog() {
                         : theme.colors.gray[0],
                     }}
                   >
-                    {column.issues.map((issue, index) => (
+                    {/* Iterate each issue in each sprint | backlog list */}
+                    {list.issues.map((issue, index) => (
                       <BacklogIssue
                         key={issue.id}
                         issue={issue}
@@ -221,7 +239,10 @@ export default function Backlog() {
                 )}
               </Droppable>
             </Paper>
-            <BacklogCreateIssue sprintId={sprint.id} status={column.status} />
+            <BacklogCreateIssue
+              sprintId={list.sprint?.id ?? null}
+              status={list.sprint ? IssueStatus.Todo : IssueStatus.Backlog}
+            />
           </section>
         ))}
       </DragDropContext>

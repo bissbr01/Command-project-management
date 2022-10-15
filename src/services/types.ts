@@ -34,7 +34,7 @@ export interface Issue {
   assignee?: User
   author?: User
   sprint?: Sprint
-  sprintId: number
+  sprintId: number | null
   comments?: Comment[]
 }
 

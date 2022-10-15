@@ -12,11 +12,10 @@ import { Issue, IssueStatus } from '../../services/types'
 import {
   BoardColumn,
   BoardColumns,
-  useGetIssuesForBoardQuery,
   useUpdateIssueMutation,
 } from '../../services/issuesEndpoints'
 import IssueDrawer from '../issues/IssueDrawer'
-import { useGetSprintByActiveQuery } from '../../services/sprintsEndpoints'
+import { useGetSprintForBoardQuery } from '../../services/sprintsEndpoints'
 
 const useStyles = createStyles((theme) => ({
   boards: {
@@ -51,14 +50,14 @@ function Board() {
   const theme = useMantineTheme()
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
-  const { data, isLoading } = useGetSprintByActiveQuery()
+  const { data: boardColumnsData, isLoading } = useGetSprintForBoardQuery()
   const [columns, setColumns] = useState<BoardColumns | null>(null)
 
   useEffect(() => {
-    if (data) {
-      setColumns(data[0].boardColumns)
+    if (boardColumnsData) {
+      setColumns(boardColumnsData.boardColumns)
     }
-  }, [setColumns, data])
+  }, [setColumns, boardColumnsData])
 
   // only send id, status, and boardOrder to server
   const getColForUpdate = (col: BoardColumn) => {

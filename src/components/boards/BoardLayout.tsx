@@ -1,7 +1,7 @@
 import { Button, createStyles, Loader, Text, Title } from '@mantine/core'
 import dayjs from 'dayjs'
 import { useState } from 'react'
-import { useGetSprintByActiveQuery } from '../../services/sprintsEndpoints'
+import { useGetSprintForBoardQuery } from '../../services/sprintsEndpoints'
 import SprintCompletedModal from '../sprints/SprintCompletedModal'
 import Board from './Board'
 
@@ -43,7 +43,7 @@ const useStyles = createStyles((theme) => ({
 export default function BoardLayout() {
   const { classes } = useStyles()
   const { data: { sprint, boardColumns } = {}, isLoading } =
-    useGetSprintByActiveQuery()
+    useGetSprintForBoardQuery()
   const [opened, setOpened] = useState(false)
 
   if (isLoading || !sprint || !boardColumns) return <Loader />

@@ -18,35 +18,32 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
       query: (id) => `/sprints/${id}`,
       providesTags: ['Sprint'],
     }),
-    GetSprintByActive: build.query<BoardColumnsData[], void>({
-      query: () => 'sprints/active',
-      transformResponse: (response: Sprint[]) => {
-        const transformed = response.map((sprint) => {
-          const sorted = _.orderBy(sprint.issues, ['boardOrder'], ['asc'])
-          const issues = _.groupBy(sorted, 'status')
-          const boardColumnsData = {
-            sprint,
-            boardColumns: {
-              [IssueStatus.Todo]: {
-                status: IssueStatus.Todo,
-                name: 'To Do',
-                issues: issues?.todo ?? [],
-              },
-              [IssueStatus.InProgress]: {
-                status: IssueStatus.InProgress,
-                name: 'In Progress',
-                issues: issues?.inProgress ?? [],
-              },
-              [IssueStatus.Done]: {
-                status: IssueStatus.Done,
-                name: 'Done',
-                issues: issues?.done ?? [],
-              },
+    getSprintForBoard: build.query<BoardColumnsData, void>({
+      query: () => 'sprints/board',
+      transformResponse: (sprint: Sprint) => {
+        const sorted = _.orderBy(sprint.issues, ['boardOrder'], ['asc'])
+        const issues = _.groupBy(sorted, 'status')
+        const boardColumnsData = {
+          sprint,
+          boardColumns: {
+            [IssueStatus.Todo]: {
+              status: IssueStatus.Todo,
+              name: 'To Do',
+              issues: issues?.todo ?? [],
             },
-          }
-          return boardColumnsData
-        })
-        return transformed
+            [IssueStatus.InProgress]: {
+              status: IssueStatus.InProgress,
+              name: 'In Progress',
+              issues: issues?.inProgress ?? [],
+            },
+            [IssueStatus.Done]: {
+              status: IssueStatus.Done,
+              name: 'Done',
+              issues: issues?.done ?? [],
+            },
+          },
+        }
+        return boardColumnsData
       },
       providesTags: ['Sprint', 'Issue'],
     }),
@@ -91,7 +88,7 @@ export const {
   useGetSprintsQuery,
   useGetSprintByIdQuery,
   useLazyGetSprintByIdQuery,
-  useGetSprintByActiveQuery,
+  useGetSprintForBoardQuery,
   useAddSprintMutation,
   useUpdateSprintMutation,
   useDeleteSprintMutation,
