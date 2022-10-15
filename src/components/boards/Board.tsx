@@ -51,15 +51,14 @@ function Board() {
   const theme = useMantineTheme()
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
-  const { data: { boardColumns } = {}, isLoading } = useGetSprintByActiveQuery()
+  const { data, isLoading } = useGetSprintByActiveQuery()
   const [columns, setColumns] = useState<BoardColumns | null>(null)
 
   useEffect(() => {
-    if (boardColumns) {
-      const { backlog, ...cols } = boardColumns
-      setColumns(cols)
+    if (data) {
+      setColumns(data[0].boardColumns)
     }
-  }, [setColumns, boardColumns])
+  }, [setColumns, data])
 
   // only send id, status, and boardOrder to server
   const getColForUpdate = (col: BoardColumn) => {

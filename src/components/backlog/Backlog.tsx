@@ -12,10 +12,11 @@ import { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import {
   BoardColumn,
+  useGetBacklogQuery,
   useUpdateIssueMutation,
 } from '../../services/issuesEndpoints'
 import { useGetSprintByActiveQuery } from '../../services/sprintsEndpoints'
-import { Issue, IssueStatus } from '../../services/types'
+import { Issue, IssueStatus, Sprint } from '../../services/types'
 import IssueDrawer from '../issues/IssueDrawer'
 import SprintMenu from '../sprints/SprintMenu'
 import BacklogCreateIssue from './BacklogCreateIssue'
@@ -34,35 +35,35 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export interface BacklogColumns {
+export interface BacklogSprints {
   [x: string]: BoardColumn
 }
 
 export default function Backlog() {
   const { classes } = useStyles()
   const theme = useMantineTheme()
-  const { data: { sprint, boardColumns } = {}, isLoading } =
-    useGetSprintByActiveQuery()
+  const { data, isLoading } = useGetSprintByActiveQuery()
+  const {data: backlog, isLoading: backlogLoading} = useGetBacklogQuery()
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
-  const [columns, setColumns] = useState<BacklogColumns | null>(null)
+  const [sprints, setSprints] = useState<BacklogSprints[] | null>(null)
 
   useEffect(() => {
-    if (boardColumns && sprint?.id) {
-      setColumns({
-        sprint: {
-          name: `Sprint ${sprint?.id}`,
-          status: IssueStatus.Todo,
-          issues: [
-            ...boardColumns.todo.issues,
-            ...boardColumns.inProgress.issues,
-            ...boardColumns.done.issues,
-          ],
-        },
-        backlog: boardColumns.backlog,
-      })
-    }
-  }, [setColumns, boardColumns, sprint?.id])
+    const backlogSprints = data?.map((d) => {
+      if (d?.boardColumns && d?.sprint?.id) {
+          sprint: {
+            name: `Sprint ${d?.id}`,
+            status: IssueStatus.Todo,
+            issues: [
+              ...boardColumns.todo.issues,
+              ...boardColumns.inProgress.issues,
+              ...boardColumns.done.issues,
+            ],
+          },
+          backlog: boardColumns.backlog,
+      }
+    })
+  }, [setSprints, boardColumns, sprint?.id])
 
   // only send id, status, and boardOrder to server
   const getColForUpdate = (col: BoardColumn) => {
@@ -98,8 +99,8 @@ export default function Backlog() {
 
   const handleDragEnd = async (
     result: DropResult,
-    cols: BacklogColumns,
-    setItems: React.Dispatch<SetStateAction<BacklogColumns | null>>
+    cols: BacklogSprints,
+    setItems: React.Dispatch<SetStateAction<BacklogSprints | null>>
   ) => {
     if (!result.destination) return
     const { source, destination } = result
@@ -172,7 +173,7 @@ export default function Backlog() {
   return (
     <main>
       <DragDropContext
-        onDragEnd={(result) => handleDragEnd(result, columns, setColumns)}
+        onDragEnd={(result) => handleDragEnd(result, columns, setSprints)}
       >
         <Title order={1} size="h2" p="sm">
           Backlog

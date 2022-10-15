@@ -62,7 +62,7 @@ export default function SprintCompletedModal({
   opened,
   setOpened,
 }: SprintCompletedModalProps) {
-  const { data: sprints, isLoading } = useGetSprintsQuery()
+  const { data: sprints, isLoading } = useGetSprintsQuery({ active: true })
   const [fetchSprint, { data: fetchedSprint }] = useLazyGetSprintByIdQuery()
   const [createSprint] = useAddSprintMutation()
   const [updateSprint] = useUpdateSprintMutation()
@@ -82,26 +82,31 @@ export default function SprintCompletedModal({
         (issue) => issue.status !== IssueStatus.Done
       )
 
-      switch (sprintSelect) {
-        case SprintSelect.newSprint: {
-          const result = await createSprint({
-            goal: '',
-            active: true,
-            projectId: sprint.projectId,
-            issues: issuesToCopy,
-          })
-          break
-        }
-        default: {
-          const foundSprint = await fetchSprint(sprintSelect).unwrap()
-          await updateSprint({
-            id: Number(sprintSelect),
-            active: true,
-            issues: [...foundSprint.issues, ...issuesToCopy],
-          })
-        }
+      if (sprintSelect === SprintSelect.newSprint) {
+        // create a new sprint and copy issues over
+        await createSprint({
+          goal: '',
+          active: true,
+          projectId: sprint.projectId,
+          issues: issuesToCopy,
+        })
+      } else {
+        // find selected sprint and copy issues over
+        const foundSprint = await fetchSprint(sprintSelect).unwrap()
+        await updateSprint({
+          id: Number(sprintSelect),
+          active: true,
+          issues: [...foundSprint.issues, ...issuesToCopy],
+        })
       }
-      await updateSprint({ id: sprint.id, active: false })
+      // in either case, remove issues from existing sprint and set to not active
+      await updateSprint({
+        id: sprint.id,
+        active: false,
+        issues: sprint.issues.filter(
+          (issue) => issue.status === IssueStatus.Done
+        ),
+      })
     } catch (error) {
       console.log(error)
     }

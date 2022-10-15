@@ -7,8 +7,8 @@ export interface UpdateIssuesBody {
 }
 
 export interface BoardColumnsData {
-  sprint: Sprint
   boardColumns: BoardColumns
+  sprint: Sprint
 }
 
 export interface BoardColumns {
@@ -29,6 +29,10 @@ const issuesEndpoints = scrumApi.injectEndpoints({
     }),
     getIssuesByToken: build.query<Issue[], void>({
       query: () => '/issues/me',
+      providesTags: ['Issue'],
+    }),
+    getBacklog: build.query<Issue[], void>({
+      query: () => '/issues/backlog',
       providesTags: ['Issue'],
     }),
     getIssuesForBoard: build.query<BoardColumns, void>({
@@ -112,6 +116,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
 export const {
   useGetIssuesQuery,
   useGetIssuesByTokenQuery,
+  useGetBacklogQuery,
   useGetIssuesForBoardQuery,
   useGetIssueByIdQuery,
   useAddIssueMutation,
