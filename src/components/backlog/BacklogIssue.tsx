@@ -30,7 +30,7 @@ const useStyles = createStyles((theme) => ({
 
   noOverflow: {
     [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
-      maxWidth: '450px',
+      maxWidth: '500px',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
@@ -100,7 +100,7 @@ export default function BacklogIssue({
               <Text
                 color="dimmed"
                 strikethrough={issue.status === IssueStatus.Done}
-              >{`Sprint ${issue.sprintId}, Issue: ${issue.id}`}</Text>
+              >{`Issue: ${issue.id}, pos: ${issue.boardOrder}`}</Text>
               <Text className={classes.noOverflow}>{issue.title}</Text>
             </Group>
             <Group className={classes.groupRight} ref={ref}>

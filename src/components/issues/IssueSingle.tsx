@@ -74,7 +74,10 @@ export default function IssueSingle({ issueId, onClose }: IssueSingleProps) {
     <Paper className={classes.container}>
       <Group className={classes.header}>
         <IssueTypeForm issue={issue} />
-        <Text>Issue {issue.id}</Text>
+        <Text>
+          {issue.sprintId ? `Sprint ${issue.sprintId}` : 'Backlog'}: Issue{' '}
+          {issue.id}
+        </Text>
         <IssueMenu issueId={issue.id} onClose={onClose} />
       </Group>
       <IssueTitle issue={issue} />

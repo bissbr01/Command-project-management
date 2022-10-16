@@ -25,15 +25,15 @@ const issuesEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
     getIssues: build.query<Issue[], void>({
       query: () => '/issues',
-      providesTags: ['Issue'],
+      providesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
     getIssuesByToken: build.query<Issue[], void>({
       query: () => '/issues/me',
-      providesTags: ['Issue'],
+      providesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
     getBacklog: build.query<Issue[], void>({
       query: () => '/issues/backlog',
-      providesTags: ['Issue', 'Sprint'],
+      providesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
     getIssuesForBoard: build.query<BoardColumns, void>({
       query: () => '/issues/me',
@@ -59,13 +59,11 @@ const issuesEndpoints = scrumApi.injectEndpoints({
         }
         return boardColumns
       },
-      providesTags: ['Issue'],
+      providesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
     getIssueById: build.query<Issue, string>({
       query: (id) => `/issues/${id}`,
-      providesTags: (result, error, arg) => [
-        { type: 'Issue' as const, id: arg },
-      ],
+      providesTags: (result, error, id) => [{ type: 'Issue' as const, id }],
       keepUnusedDataFor: 0,
     }),
     addIssue: build.mutation<
@@ -77,7 +75,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Issue'],
+      invalidatesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
     updateIssue: build.mutation<Issue, Partial<Issue> & Pick<Issue, 'id'>>({
       query: ({ id, ...body }) => ({
@@ -87,7 +85,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: 'Issue', id: arg.id },
-        'Issue',
+        { type: 'Issue', id: 'LIST' },
       ],
     }),
     updateIssues: build.mutation<void, UpdateIssuesBody>({
@@ -96,7 +94,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: ['Issue'],
+      invalidatesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
     deleteIssue: build.mutation<{ success: boolean; id: number }, number>({
       query: (id) => ({
@@ -105,7 +103,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: 'Issue', id: arg },
-        'Issue',
+        { type: 'Issue', id: 'LIST' },
       ],
     }),
   }),

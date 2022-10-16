@@ -1,22 +1,46 @@
 import _ from 'lodash'
-import { BoardColumns, BoardColumnsData } from './issuesEndpoints'
+import { BoardColumnsData } from './issuesEndpoints'
 import { scrumApi } from './scrumApi'
-import { IssueStatus, Sprint } from './types'
+import { Issue, IssueStatus, Sprint } from './types'
 
 interface SprintQueryParams {
   active?: boolean
   search?: string
 }
 
+export type BacklogList = {
+  name: string
+  issues: Issue[]
+  sprint: Sprint | null
+}
+
+export type BacklogLists = Map<string, BacklogList>
+
 const sprintsEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
     getSprints: build.query<Sprint[], SprintQueryParams>({
       query: (query) => `/sprints?active=${query?.active}`,
-      providesTags: ['Sprint'],
+      providesTags: ['Sprint', { type: 'Issue', id: 'LIST' }],
+    }),
+    getSprintsForBacklog: build.query<BacklogLists, SprintQueryParams>({
+      query: (query) => `/sprints?active=${query?.active}`,
+      transformResponse: (sprints: Sprint[]) => {
+        const backlogLists = new Map<string, BacklogList>()
+        sprints.forEach((sprint) => {
+          const sorted = _.orderBy(sprint.issues, ['boardOrder'], ['asc'])
+          backlogLists.set(`Sprint ${sprint.id}`, {
+            name: `Sprint ${sprint.id}`,
+            issues: sorted,
+            sprint,
+          })
+        })
+        return backlogLists
+      },
+      providesTags: ['Sprint', { type: 'Issue', id: 'LIST' }],
     }),
     getSprintById: build.query<Sprint, string>({
       query: (id) => `/sprints/${id}`,
-      providesTags: ['Sprint'],
+      providesTags: (result, error, id) => [{ type: 'Sprint', id }],
     }),
     getSprintForBoard: build.query<BoardColumnsData, void>({
       query: () => 'sprints/board',
@@ -45,7 +69,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
         }
         return boardColumnsData
       },
-      providesTags: ['Sprint', 'Issue'],
+      providesTags: ['Sprint', { type: 'Issue', id: 'LIST' }],
     }),
     addSprint: build.mutation<
       Sprint,
@@ -86,6 +110,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
 // eslint-disable-next-line import/prefer-default-export
 export const {
   useGetSprintsQuery,
+  useGetSprintsForBacklogQuery,
   useGetSprintByIdQuery,
   useLazyGetSprintByIdQuery,
   useGetSprintForBoardQuery,

@@ -109,7 +109,6 @@ function Board() {
       const movedIssue = {
         ...removedIssue,
         status: destination.droppableId as IssueStatus,
-        boardOrder: destination.index,
       }
       destItems.splice(destination.index, 0, movedIssue)
 

@@ -14,8 +14,12 @@ import {
   useGetBacklogQuery,
   useUpdateIssueMutation,
 } from '../../services/issuesEndpoints'
-import { useGetSprintsQuery } from '../../services/sprintsEndpoints'
-import { Issue, IssueStatus, Sprint } from '../../services/types'
+import {
+  BacklogList,
+  BacklogLists,
+  useGetSprintsForBacklogQuery,
+} from '../../services/sprintsEndpoints'
+import { Issue, IssueStatus } from '../../services/types'
 import IssueDrawer from '../issues/IssueDrawer'
 import SprintMenu from '../sprints/SprintMenu'
 import BacklogCreateIssue from './BacklogCreateIssue'
@@ -34,20 +38,10 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export interface BacklogLists {
-  [x: string]: BacklogList
-}
-
-export interface BacklogList {
-  name: string
-  issues: Issue[]
-  sprint: Sprint | null
-}
-
 export default function Backlog() {
   const { classes } = useStyles()
   const theme = useMantineTheme()
-  const { data: sprints } = useGetSprintsQuery({ active: true })
+  const { data: sprints } = useGetSprintsForBacklogQuery({ active: true })
   const { data: backlog } = useGetBacklogQuery()
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
@@ -63,30 +57,30 @@ export default function Backlog() {
         },
       }
 
-      const backlogSprints: BacklogLists = {}
+      // const backlogSprints: BacklogLists = {}
 
-      sprints.forEach((sprint) => {
-        backlogSprints[`Sprint ${sprint.id}`] = {
-          name: `Sprint ${sprint.id}`,
-          issues: sprint.issues,
-          sprint,
-        }
-      })
+      // sprints.forEach((sprint) => {
+      //   backlogSprints[`Sprint ${sprint.id}`] = {
+      //     name: `Sprint ${sprint.id}`,
+      //     issues: sprint.issues,
+      //     sprint,
+      //   }
+      // })
 
-      setLists({ ...backlogSprints, ...backlogList })
+      setLists({ ...sprints, ...backlogList })
     }
   }, [setLists, sprints, backlog])
 
   // only send id, status, and boardOrder to server
   const getListForUpdate = (list: BacklogList) => {
     const listForUpdate = list.issues.reduce<
-      Pick<Issue, 'id' | 'status' | 'boardOrder'>[]
+      Pick<Issue, 'id' | 'status' | 'boardOrder' | 'sprintId'>[]
     >(
-      (prev, { id, status }, index) =>
+      (prev, { id, status, sprintId }, index) =>
         prev.concat({
           id,
           status,
-          // status: list.name === `Sprint ${list.sprint?.id}` ? status : list.status,
+          sprintId,
           boardOrder: index,
         }),
       []
@@ -120,19 +114,26 @@ export default function Backlog() {
 
     // item dragged to new column
     if (source.droppableId !== destination.droppableId) {
-      const sourceList = items[source.droppableId]
-      const destList = items[destination.droppableId]
+      const sourceList = items.get(source.droppableId) as BacklogList
+      const destList = items.get(destination.droppableId) as BacklogList
       const sourceItems = [...sourceList.issues]
       const destItems = [...destList.issues]
       const [removedIssue] = sourceItems.splice(source.index, 1)
-      const movedIssue = {
+
+      let movedIssue = {
         ...removedIssue,
-        status:
-          destination.droppableId === 'Backlog'
-            ? IssueStatus.Backlog
-            : IssueStatus.Todo,
-        boardOrder: destination.index,
+        status: IssueStatus.Todo,
+        sprintId: destList.sprint?.id ?? null,
       }
+
+      if (destination.droppableId === 'Backlog') {
+        movedIssue = {
+          ...removedIssue,
+          status: IssueStatus.Backlog,
+          sprintId: null,
+        }
+      }
+
       destItems.splice(destination.index, 0, movedIssue)
 
       // update local state
@@ -162,7 +163,7 @@ export default function Backlog() {
 
       // item dragged within same column
     } else {
-      const list = items[source.droppableId]
+      const list = items.get(source.droppableId) as BacklogList
       const copiedItems = [...list.issues]
       const [removedIssue] = copiedItems.splice(source.index, 1)
       copiedItems.splice(destination.index, 0, removedIssue)
@@ -195,7 +196,7 @@ export default function Backlog() {
           Backlog
         </Title>
         {/* iterate each sprint | backlog list */}
-        {Object.entries(lists).map(([listKey, list]) => (
+        {Array.from(lists).map(([listKey, list]) => (
           <section className={classes.section} key={listKey}>
             <Group>
               <Title order={2} size="h3" p="xs">
@@ -218,7 +219,6 @@ export default function Backlog() {
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    // className={classes.droppable}
                     style={{
                       background: snapshot.isDraggingOver
                         ? theme.colors.blue[0]
