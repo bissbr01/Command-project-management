@@ -11,15 +11,17 @@ import {
   Text,
   Title,
 } from '@mantine/core'
-import { FormEvent, useState } from 'react'
+import { FormEvent, SetStateAction, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import {
   useAddSprintMutation,
+  useGetSprintByIdQuery,
   useGetSprintsQuery,
   useLazyGetSprintByIdQuery,
   useUpdateSprintMutation,
 } from '../../services/sprintsEndpoints'
-import { Issue, IssueStatus, Sprint, BoardColumns } from '../../services/types'
+import { Issue, IssueStatus, Sprint } from '../../services/types'
 import { updateIssues } from '../../services/util'
 import trophyBanner from './trophy-banner.svg'
 
@@ -48,19 +50,17 @@ const useStyles = createStyles((theme) => ({
 }))
 
 interface SprintCompletedModalProps {
-  sprint: Sprint
-  boardColumns: BoardColumns
   opened: boolean
-  setOpened: React.Dispatch<React.SetStateAction<boolean>>
+  setOpened: React.Dispatch<SetStateAction<boolean>>
 }
 
 export default function SprintCompletedModal({
-  sprint,
-  boardColumns,
   opened,
   setOpened,
 }: SprintCompletedModalProps) {
-  const { data: sprints, isLoading } = useGetSprintsQuery({ active: true })
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { data: sprint } = useGetSprintByIdQuery(searchParams.get('id') ?? '1')
+  const { data: sprints } = useGetSprintsQuery({ active: true })
   const [fetchSprint] = useLazyGetSprintByIdQuery()
   const [createSprint] = useAddSprintMutation()
   const [updateSprint] = useUpdateSprintMutation()
@@ -73,6 +73,8 @@ export default function SprintCompletedModal({
     backlog = 'backlog',
   }
 
+  if (!sprint || !sprints) return <Loader />
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
@@ -84,12 +86,24 @@ export default function SprintCompletedModal({
 
       if (sprintSelect === SprintSelect.newSprint) {
         // create a new sprint and copy issues over
-        await createSprint({
+        const newSprint = await createSprint({
           goal: '',
           active: true,
+          displayOnBoard: true,
           projectId: sprint.projectId,
-          issues: issuesToCopy,
-        })
+        }).unwrap()
+
+        const issuesForUpdate = issuesToCopy.reduce<
+          (Partial<Issue> & Pick<Issue, 'id'>)[]
+        >(
+          (prev, { id }) =>
+            prev.concat({
+              id,
+              sprintId: newSprint.id,
+            }),
+          []
+        )
+        await updateIssues(issuesForUpdate, updateIssue)
       } else if (sprintSelect === SprintSelect.backlog) {
         // update each issue in sprint to set sprintId to null
         const issuesForUpdate = issuesToCopy.reduce<
@@ -109,23 +123,30 @@ export default function SprintCompletedModal({
         await updateSprint({
           id: Number(sprintSelect),
           active: true,
-          issues: [...foundSprint.issues, ...issuesToCopy],
         })
+
+        const issuesForUpdate = issuesToCopy.reduce<
+          (Partial<Issue> & Pick<Issue, 'id'>)[]
+        >(
+          (prev, { id }) =>
+            prev.concat({
+              id,
+              sprintId: foundSprint.id,
+            }),
+          []
+        )
+        await updateIssues(issuesForUpdate, updateIssue)
       }
       // in either case, remove issues from existing sprint and set to not active
       await updateSprint({
         id: sprint.id,
         active: false,
-        issues: sprint.issues.filter(
-          (issue) => issue.status === IssueStatus.Done
-        ),
+        displayOnBoard: false,
       })
     } catch (error) {
       console.log(error)
     }
   }
-
-  if (isLoading || !sprints || !boardColumns) return <Loader />
 
   const newerSprints = sprints
     .filter((s) => s.id > sprint.id)
@@ -144,6 +165,12 @@ export default function SprintCompletedModal({
     return s
   }
 
+  const openIssueCount = sprint.issues.filter(
+    (issue) => issue.status !== IssueStatus.Done
+  ).length
+
+  const completedIssueCount = sprint.issues.length - openIssueCount
+
   return (
     <Modal
       opened={opened}
@@ -160,15 +187,9 @@ export default function SprintCompletedModal({
         <Text>This Sprint contains:</Text>
         <List withPadding>
           <List.Item>
-            {formatIssuePlural(boardColumns.done.issues.length, 'completed')}
+            {formatIssuePlural(completedIssueCount, 'completed')}
           </List.Item>
-          <List.Item>
-            {formatIssuePlural(
-              boardColumns.todo.issues.length +
-                boardColumns.inProgress.issues.length,
-              'open'
-            )}
-          </List.Item>
+          <List.Item>{formatIssuePlural(openIssueCount, 'open')}</List.Item>
         </List>
         <form onSubmit={handleSubmit}>
           <NativeSelect

@@ -64,7 +64,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
     }),
     addSprint: build.mutation<
       Sprint,
-      Omit<Sprint, 'id' | 'author' | 'project'>
+      Omit<Sprint, 'id' | 'author' | 'project' | 'issues'>
     >({
       query: (body) => ({
         url: '/sprints',

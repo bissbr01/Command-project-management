@@ -8,6 +8,7 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import dayjs from 'dayjs'
+import _ from 'lodash'
 import { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import {
@@ -22,6 +23,8 @@ import {
   updateListIssues,
 } from '../../services/util'
 import IssueDrawer from '../issues/IssueDrawer'
+import SprintCompletedButton from '../sprints/SprintCompletedButton'
+import SprintCompletedModal from '../sprints/SprintCompletedModal'
 import SprintMenu from '../sprints/SprintMenu'
 import BacklogCreateIssue from './BacklogCreateIssue'
 import BacklogIssue from './BacklogIssue'
@@ -46,6 +49,7 @@ export default function Backlog() {
   const { data: backlog } = useGetBacklogQuery()
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
+  const [sprintCompletedOpened, setSprintCompletedOpened] = useState(false)
   const [lists, setLists] = useState<BacklogLists | null>(null)
 
   useEffect(() => {
@@ -184,6 +188,10 @@ export default function Backlog() {
                     -
                     ${dayjs(list.sprint.endOn).format('MMM DD')}`}
                   </Text>
+                  <SprintCompletedButton
+                    sprintId={list.sprint.id}
+                    setOpened={setSprintCompletedOpened}
+                  />
                   <SprintMenu sprint={list.sprint} />
                 </>
               )}
@@ -221,6 +229,10 @@ export default function Backlog() {
           </section>
         ))}
       </DragDropContext>
+      <SprintCompletedModal
+        opened={sprintCompletedOpened}
+        setOpened={setSprintCompletedOpened}
+      />
       <IssueDrawer
         issueOpened={issueOpened}
         setIssueOpened={setIssueOpened}

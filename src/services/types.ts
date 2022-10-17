@@ -45,6 +45,7 @@ export interface Sprint {
   endOn?: string
   length?: number
   active: boolean
+  displayOnBoard: boolean
   projectId: number
   project: Project
   issues: Issue[]

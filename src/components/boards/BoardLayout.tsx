@@ -1,7 +1,9 @@
 import { Button, createStyles, Loader, Text, Title } from '@mantine/core'
+import { listenerCancelled } from '@reduxjs/toolkit/dist/listenerMiddleware/exceptions'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useGetSprintForBoardQuery } from '../../services/sprintsEndpoints'
+import SprintCompletedButton from '../sprints/SprintCompletedButton'
 import SprintCompletedModal from '../sprints/SprintCompletedModal'
 import Board from './Board'
 
@@ -36,8 +38,6 @@ const useStyles = createStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
   },
-
-  sprintButton: {},
 }))
 
 export default function BoardLayout() {
@@ -60,23 +60,11 @@ export default function BoardLayout() {
               {dayjs(sprint.endOn).diff(dayjs(), 'days')} days remaining
             </Text>
           )}
-          <Button
-            variant="default"
-            size="sm"
-            classNames={{ root: classes.sprintButton }}
-            onClick={() => setOpened(true)}
-          >
-            Complete Sprint
-          </Button>
+          <SprintCompletedButton sprintId={sprint.id} setOpened={setOpened} />
         </div>
       </div>
       <Board />
-      <SprintCompletedModal
-        sprint={sprint}
-        boardColumns={boardColumns}
-        opened={opened}
-        setOpened={setOpened}
-      />
+      <SprintCompletedModal opened={opened} setOpened={setOpened} />
     </main>
   )
 }
