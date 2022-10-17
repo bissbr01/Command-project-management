@@ -114,8 +114,8 @@ export default function Backlog() {
 
     // item dragged to new column
     if (source.droppableId !== destination.droppableId) {
-      const sourceList = items.get(source.droppableId) as BacklogList
-      const destList = items.get(destination.droppableId) as BacklogList
+      const sourceList = items[source.droppableId]
+      const destList = items[destination.droppableId]
       const sourceItems = [...sourceList.issues]
       const destItems = [...destList.issues]
       const [removedIssue] = sourceItems.splice(source.index, 1)
@@ -163,7 +163,7 @@ export default function Backlog() {
 
       // item dragged within same column
     } else {
-      const list = items.get(source.droppableId) as BacklogList
+      const list = items[source.droppableId]
       const copiedItems = [...list.issues]
       const [removedIssue] = copiedItems.splice(source.index, 1)
       copiedItems.splice(destination.index, 0, removedIssue)
@@ -196,7 +196,7 @@ export default function Backlog() {
           Backlog
         </Title>
         {/* iterate each sprint | backlog list */}
-        {Array.from(lists).map(([listKey, list]) => (
+        {Object.entries(lists).map(([listKey, list]) => (
           <section className={classes.section} key={listKey}>
             <Group>
               <Title order={2} size="h3" p="xs">

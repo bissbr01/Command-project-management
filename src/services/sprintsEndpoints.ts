@@ -14,7 +14,9 @@ export type BacklogList = {
   sprint: Sprint | null
 }
 
-export type BacklogLists = Map<string, BacklogList>
+export type BacklogLists = {
+  [key: string]: BacklogList
+}
 
 const sprintsEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
@@ -25,14 +27,14 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
     getSprintsForBacklog: build.query<BacklogLists, SprintQueryParams>({
       query: (query) => `/sprints?active=${query?.active}`,
       transformResponse: (sprints: Sprint[]) => {
-        const backlogLists = new Map<string, BacklogList>()
+        const backlogLists: BacklogLists = {}
         sprints.forEach((sprint) => {
           const sorted = _.orderBy(sprint.issues, ['boardOrder'], ['asc'])
-          backlogLists.set(`Sprint ${sprint.id}`, {
+          backlogLists[`Sprint ${sprint.id}`] = {
             name: `Sprint ${sprint.id}`,
             issues: sorted,
             sprint,
-          })
+          }
         })
         return backlogLists
       },

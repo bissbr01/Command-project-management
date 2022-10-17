@@ -100,7 +100,7 @@ export default function BacklogIssue({
               <Text
                 color="dimmed"
                 strikethrough={issue.status === IssueStatus.Done}
-              >{`Issue: ${issue.id}, pos: ${issue.boardOrder}`}</Text>
+              >{`Issue: ${issue.id}`}</Text>
               <Text className={classes.noOverflow}>{issue.title}</Text>
             </Group>
             <Group className={classes.groupRight} ref={ref}>
