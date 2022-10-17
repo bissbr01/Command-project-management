@@ -57,7 +57,7 @@ export default function BoardLayout() {
         <div className={classes.rightGroup}>
           {sprint?.endOn && (
             <Text color="dimmed" mr={20}>
-              End: {dayjs(sprint.endOn).format('MMM DD')}
+              {dayjs(sprint.endOn).diff(dayjs(), 'days')} days remaining
             </Text>
           )}
           <Button
