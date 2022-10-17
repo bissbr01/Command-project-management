@@ -1,25 +1,12 @@
 import _ from 'lodash'
 import { scrumApi } from './scrumApi'
-import { Issue, IssueStatus, Sprint } from './types'
-
-export interface UpdateIssuesBody {
-  issues: Partial<Issue> & Pick<Issue, 'id'>[]
-}
-
-export interface BoardColumnsData {
-  boardColumns: BoardColumns
-  sprint: Sprint
-}
-
-export interface BoardColumns {
-  [x: string]: BoardColumn
-}
-
-export interface BoardColumn {
-  status: IssueStatus
-  name: string
-  issues: Issue[]
-}
+import {
+  BoardColumns,
+  Issue,
+  IssueForUpdate,
+  IssueStatus,
+  Sprint,
+} from './types'
 
 const issuesEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
@@ -77,7 +64,7 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
-    updateIssue: build.mutation<Issue, Partial<Issue> & Pick<Issue, 'id'>>({
+    updateIssue: build.mutation<Issue, IssueForUpdate>({
       query: ({ id, ...body }) => ({
         url: `/issues/${id}`,
         method: 'PATCH',
@@ -87,14 +74,6 @@ const issuesEndpoints = scrumApi.injectEndpoints({
         { type: 'Issue', id: arg.id },
         { type: 'Issue', id: 'LIST' },
       ],
-    }),
-    updateIssues: build.mutation<void, UpdateIssuesBody>({
-      query: (body) => ({
-        url: '/issues/me',
-        method: 'PATCH',
-        body,
-      }),
-      invalidatesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
     deleteIssue: build.mutation<{ success: boolean; id: number }, number>({
       query: (id) => ({
@@ -119,6 +98,5 @@ export const {
   useGetIssueByIdQuery,
   useAddIssueMutation,
   useUpdateIssueMutation,
-  useUpdateIssuesMutation,
   useDeleteIssueMutation,
 } = issuesEndpoints

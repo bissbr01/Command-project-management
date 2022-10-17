@@ -9,20 +9,18 @@ import {
   Modal,
   NativeSelect,
   Text,
-  ThemeIcon,
   Title,
 } from '@mantine/core'
-import { IconTrophy } from '@tabler/icons'
-import { url } from 'inspector'
 import { FormEvent, useState } from 'react'
-import { BoardColumns } from '../../services/issuesEndpoints'
+import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import {
   useAddSprintMutation,
   useGetSprintsQuery,
   useLazyGetSprintByIdQuery,
   useUpdateSprintMutation,
 } from '../../services/sprintsEndpoints'
-import { IssueStatus, Sprint } from '../../services/types'
+import { Issue, IssueStatus, Sprint, BoardColumns } from '../../services/types'
+import { updateIssues } from '../../services/util'
 import trophyBanner from './trophy-banner.svg'
 
 const useStyles = createStyles((theme) => ({
@@ -63,14 +61,16 @@ export default function SprintCompletedModal({
   setOpened,
 }: SprintCompletedModalProps) {
   const { data: sprints, isLoading } = useGetSprintsQuery({ active: true })
-  const [fetchSprint, { data: fetchedSprint }] = useLazyGetSprintByIdQuery()
+  const [fetchSprint] = useLazyGetSprintByIdQuery()
   const [createSprint] = useAddSprintMutation()
   const [updateSprint] = useUpdateSprintMutation()
+  const [updateIssue] = useUpdateIssueMutation()
   const { classes } = useStyles()
   const [sprintSelect, setSprintSelect] = useState('newSprint')
 
   enum SprintSelect {
     newSprint = 'newSprint',
+    backlog = 'backlog',
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -90,6 +90,19 @@ export default function SprintCompletedModal({
           projectId: sprint.projectId,
           issues: issuesToCopy,
         })
+      } else if (sprintSelect === SprintSelect.backlog) {
+        // update each issue in sprint to set sprintId to null
+        const issuesForUpdate = issuesToCopy.reduce<
+          (Partial<Issue> & Pick<Issue, 'id'>)[]
+        >(
+          (prev, { id }) =>
+            prev.concat({
+              id,
+              sprintId: null,
+            }),
+          []
+        )
+        await updateIssues(issuesForUpdate, updateIssue)
       } else {
         // find selected sprint and copy issues over
         const foundSprint = await fetchSprint(sprintSelect).unwrap()
@@ -116,12 +129,20 @@ export default function SprintCompletedModal({
 
   const newerSprints = sprints
     .filter((s) => s.id > sprint.id)
-    .map((s) => ({ value: String(s.id), label: `Sprint ${s.projectId}` }))
+    .map((s) => ({ value: String(s.id), label: `Sprint ${s.id}` }))
 
   const selectData = [
-    { value: SprintSelect.newSprint, label: 'New Sprint' },
     ...newerSprints,
+    { value: SprintSelect.backlog, label: 'Backlog' },
+    { value: SprintSelect.newSprint, label: 'New Sprint' },
   ]
+
+  const formatIssuePlural = (count: number, type: string) => {
+    let s = `${count} ${type} `
+    if (count === 1) s += 'issue'
+    else s += 'issues'
+    return s
+  }
 
   return (
     <Modal
@@ -139,12 +160,14 @@ export default function SprintCompletedModal({
         <Text>This Sprint contains:</Text>
         <List withPadding>
           <List.Item>
-            {boardColumns.done.issues.length} completed issue(s)
+            {formatIssuePlural(boardColumns.done.issues.length, 'completed')}
           </List.Item>
           <List.Item>
-            {boardColumns.todo.issues.length +
-              boardColumns.inProgress.issues.length}{' '}
-            open issue(s)
+            {formatIssuePlural(
+              boardColumns.todo.issues.length +
+                boardColumns.inProgress.issues.length,
+              'open'
+            )}
           </List.Item>
         </List>
         <form onSubmit={handleSubmit}>

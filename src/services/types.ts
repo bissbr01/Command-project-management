@@ -86,3 +86,31 @@ export interface Credentials {
 export function assertUnreachable(x: never): never {
   throw Error('Exhaustive switch reached default condition!')
 }
+
+export type IssueForUpdate = Partial<Issue> & Pick<Issue, 'id'>
+
+export interface IssueList {
+  name: string
+  issues: Issue[]
+}
+
+export interface BacklogList extends IssueList {
+  sprint: Sprint | null
+}
+
+export type BacklogLists = {
+  [key: string]: BacklogList
+}
+
+export interface BoardColumn extends IssueList {
+  status: IssueStatus
+}
+
+export interface BoardColumns {
+  [x: string]: BoardColumn
+}
+
+export interface BoardColumnsData {
+  boardColumns: BoardColumns
+  sprint: Sprint
+}

@@ -1,21 +1,10 @@
 import _ from 'lodash'
-import { BoardColumnsData } from './issuesEndpoints'
 import { scrumApi } from './scrumApi'
-import { Issue, IssueStatus, Sprint } from './types'
+import { IssueStatus, Sprint, BoardColumnsData, BacklogLists } from './types'
 
 interface SprintQueryParams {
   active?: boolean
   search?: string
-}
-
-export type BacklogList = {
-  name: string
-  issues: Issue[]
-  sprint: Sprint | null
-}
-
-export type BacklogLists = {
-  [key: string]: BacklogList
 }
 
 const sprintsEndpoints = scrumApi.injectEndpoints({

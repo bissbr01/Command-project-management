@@ -14,12 +14,13 @@ import {
   useGetBacklogQuery,
   useUpdateIssueMutation,
 } from '../../services/issuesEndpoints'
+import { useGetSprintsForBacklogQuery } from '../../services/sprintsEndpoints'
+import { Issue, IssueStatus, BacklogLists } from '../../services/types'
 import {
-  BacklogList,
-  BacklogLists,
-  useGetSprintsForBacklogQuery,
-} from '../../services/sprintsEndpoints'
-import { Issue, IssueStatus } from '../../services/types'
+  getIssuesForUpdate,
+  updateIssues,
+  updateListIssues,
+} from '../../services/util'
 import IssueDrawer from '../issues/IssueDrawer'
 import SprintMenu from '../sprints/SprintMenu'
 import BacklogCreateIssue from './BacklogCreateIssue'
@@ -57,52 +58,14 @@ export default function Backlog() {
         },
       }
 
-      // const backlogSprints: BacklogLists = {}
-
-      // sprints.forEach((sprint) => {
-      //   backlogSprints[`Sprint ${sprint.id}`] = {
-      //     name: `Sprint ${sprint.id}`,
-      //     issues: sprint.issues,
-      //     sprint,
-      //   }
-      // })
-
       setLists({ ...sprints, ...backlogList })
     }
   }, [setLists, sprints, backlog])
 
-  // only send id, status, and boardOrder to server
-  const getListForUpdate = (list: BacklogList) => {
-    const listForUpdate = list.issues.reduce<
-      Pick<Issue, 'id' | 'status' | 'boardOrder' | 'sprintId'>[]
-    >(
-      (prev, { id, status, sprintId }, index) =>
-        prev.concat({
-          id,
-          status,
-          sprintId,
-          boardOrder: index,
-        }),
-      []
-    )
-    return listForUpdate
-  }
-
-  const updateList = async (list: BacklogList) => {
-    const listToUpdate = getListForUpdate(list)
-    const promises = listToUpdate.map((issue) => updateIssue(issue).unwrap())
-    const res = await Promise.all(promises)
-    return res
-  }
-
-  const updateLists = async (items: BacklogList[]) => {
-    const listsToUpdate = items.map((list) => getListForUpdate(list))
-    const promises = listsToUpdate.map((list) =>
-      list.map((issue) => updateIssue(issue).unwrap())
-    )
-    const res = await Promise.all(promises)
-    return res
-  }
+  const issuePropertiesToUpdate = (issue: Issue) => ({
+    sprintId: issue.sprintId,
+    status: issue.status,
+  })
 
   const handleDragEnd = async (
     result: DropResult,
@@ -150,7 +113,7 @@ export default function Backlog() {
       })
 
       // update backend
-      await updateLists([
+      const listsToUpdate = [
         {
           ...sourceList,
           issues: sourceItems,
@@ -159,7 +122,13 @@ export default function Backlog() {
           ...destList,
           issues: destItems,
         },
-      ])
+      ]
+
+      await updateListIssues(
+        listsToUpdate,
+        updateIssue,
+        issuePropertiesToUpdate
+      )
 
       // item dragged within same column
     } else {
@@ -178,10 +147,16 @@ export default function Backlog() {
       })
 
       // update backend
-      await updateList({
+      const issuesToUpdate = {
         ...list,
         issues: copiedItems,
-      })
+      }
+
+      const listToUpdate = getIssuesForUpdate(
+        issuesToUpdate,
+        issuePropertiesToUpdate
+      )
+      await updateIssues(listToUpdate, updateIssue)
     }
   }
 
