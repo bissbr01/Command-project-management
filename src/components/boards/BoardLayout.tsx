@@ -58,6 +58,14 @@ export default function BoardLayout() {
       </main>
     )
 
+  const formatEndOn = () => {
+    const daysLeft = Math.ceil(dayjs(sprint.endOn).diff(dayjs(), 'day', true))
+    let formatString = `${daysLeft} `
+    formatString += daysLeft === 1 ? 'day ' : 'days '
+    formatString += 'remaining'
+    return formatString
+  }
+
   return (
     <main>
       <div className={classes.sprintItems}>
@@ -67,7 +75,7 @@ export default function BoardLayout() {
         <div className={classes.rightGroup}>
           {sprint?.endOn && (
             <Text color="dimmed" mr={20}>
-              {dayjs(sprint.endOn).diff(dayjs(), 'days')} days remaining
+              {formatEndOn()}
             </Text>
           )}
           <SprintCompletedButton sprintId={sprint.id} setOpened={setOpened} />

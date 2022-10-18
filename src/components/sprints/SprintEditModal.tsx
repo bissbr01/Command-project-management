@@ -1,22 +1,5 @@
-import { createStyles, Title, Button, Modal, Text, Group } from '@mantine/core'
-import { showNotification } from '@mantine/notifications'
-import { IconCheck, IconX } from '@tabler/icons'
-import { Field, Form, Formik } from 'formik'
-import {
-  Navigate,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom'
-import * as Yup from 'yup'
-import {
-  useLazyGetSprintsQuery,
-  useUpdateSprintMutation,
-} from '../../services/sprintsEndpoints'
-import { Sprint } from '../../services/types'
-import CheckBoxField from '../common/forms/CheckboxField'
-import DatePickerField from '../common/forms/DatePickerField'
-import TextAreaField from '../common/forms/TextAreaField'
+import { createStyles, Title, Modal } from '@mantine/core'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import SprintEdit from './SprintEdit'
 
 const useStyles = createStyles((theme) => ({
@@ -61,7 +44,6 @@ export default function SprintEditModal({
   opened,
   setOpened,
 }: SprintEditModalProps) {
-  const { classes, cx } = useStyles()
   const { sprintId } = useParams()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -84,7 +66,7 @@ export default function SprintEditModal({
         </Title>
       }
     >
-      {sprintId && <SprintEdit sprintId={sprintId} setOpened={setOpened} />}
+      {sprintId && <SprintEdit sprintId={sprintId} handleClose={handleClose} />}
     </Modal>
   )
 }

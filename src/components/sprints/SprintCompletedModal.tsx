@@ -23,7 +23,7 @@ export default function SprintCompletedModal({
   return (
     <Modal opened={opened} onClose={handleClose} withCloseButton={false}>
       {sprintId && (
-        <SprintCompleted sprintId={sprintId} setOpened={setOpened} />
+        <SprintCompleted sprintId={sprintId} handleClose={handleClose} />
       )}
     </Modal>
   )

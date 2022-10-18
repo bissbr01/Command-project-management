@@ -10,8 +10,7 @@ import {
   Text,
   Title,
 } from '@mantine/core'
-import { FormEvent, SetStateAction, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FormEvent, useState } from 'react'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import {
   useAddSprintMutation,
@@ -50,14 +49,13 @@ const useStyles = createStyles((theme) => ({
 
 export interface SprintCompletedProps {
   sprintId: string
-  setOpened: React.Dispatch<SetStateAction<boolean>>
+  handleClose: () => void
 }
 
 export default function SprintCompleted({
   sprintId,
-  setOpened,
+  handleClose,
 }: SprintCompletedProps) {
-  const navigate = useNavigate()
   const { data: sprint } = useGetSprintByIdQuery(sprintId ?? '1')
   const { data: sprints } = useGetSprintsQuery({ active: true })
   const [fetchSprint] = useLazyGetSprintByIdQuery()
@@ -77,8 +75,7 @@ export default function SprintCompleted({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      navigate(-1)
-      setOpened(false)
+      handleClose()
 
       const issuesToCopy = sprint.issues.filter(
         (issue) => issue.status !== IssueStatus.Done
@@ -196,7 +193,7 @@ export default function SprintCompleted({
         />
         <Group position="center" py="sm">
           <Button type="submit">Complete Sprint</Button>
-          <Button variant="default" onClick={() => setOpened(false)}>
+          <Button variant="default" onClick={handleClose}>
             Cancel
           </Button>
         </Group>

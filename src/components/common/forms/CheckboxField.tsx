@@ -33,6 +33,7 @@ export default function CheckBoxField({
         label={label}
         size={size}
         checked={field.value}
+        mb="sm"
       />
       <ErrorMessage
         name={field.name}

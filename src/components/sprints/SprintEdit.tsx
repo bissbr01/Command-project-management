@@ -48,10 +48,10 @@ export enum SprintEditModalType {
 
 export interface SprintEditProps {
   sprintId: string
-  setOpened: React.Dispatch<React.SetStateAction<boolean>>
+  handleClose: () => void
 }
 
-export default function SprintEdit({ sprintId, setOpened }: SprintEditProps) {
+export default function SprintEdit({ sprintId, handleClose }: SprintEditProps) {
   const { classes, cx } = useStyles()
   const { data: sprint } = useGetSprintByIdQuery(sprintId)
   const [searchParams] = useSearchParams()
@@ -97,7 +97,7 @@ export default function SprintEdit({ sprintId, setOpened }: SprintEditProps) {
             startOn: values.startOn.toString(),
           })
 
-          setOpened(false)
+          handleClose()
           showNotification({
             title: 'Success',
             message: 'Sprint successfully saved.',
@@ -130,15 +130,6 @@ export default function SprintEdit({ sprintId, setOpened }: SprintEditProps) {
           />
           <Field
             stylesApi={{ input: cx(classes.inputStyles) }}
-            id="goal"
-            name="goal"
-            minRows={2}
-            label={<Text>Goal</Text>}
-            component={TextAreaField}
-          />
-
-          <Field
-            stylesApi={{ input: cx(classes.inputStyles) }}
             id="startOn"
             name="startOn"
             placeholder="Pick start date..."
@@ -153,12 +144,20 @@ export default function SprintEdit({ sprintId, setOpened }: SprintEditProps) {
             label={<Text>End On</Text>}
             component={DatePickerField}
           />
+          <Field
+            stylesApi={{ input: cx(classes.inputStyles) }}
+            id="goal"
+            name="goal"
+            minRows={2}
+            label={<Text>Goal</Text>}
+            component={TextAreaField}
+          />
           <Group position="center">
             <Button type="submit" disabled={isSubmitting}>
               {type === SprintEditModalType.START ? 'Start' : 'Update'}
             </Button>
             <Button
-              onClick={() => setOpened(false)}
+              onClick={handleClose}
               disabled={isSubmitting}
               variant="default"
             >
