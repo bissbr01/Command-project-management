@@ -222,7 +222,7 @@ export default function Backlog() {
                       />
                     )}
                     <SprintMenu
-                      sprint={list.sprint}
+                      sprintId={list.sprint.id}
                       setEditOpened={setSprintEditOpened}
                     />
                   </Group>

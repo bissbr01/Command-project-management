@@ -1,8 +1,10 @@
 import { ActionIcon, createStyles, Menu } from '@mantine/core'
 import { IconDotsVertical, IconEdit, IconTrash } from '@tabler/icons'
 import { useState } from 'react'
+import { createSearchParams, useNavigate } from 'react-router-dom'
 import { Sprint } from '../../services/types'
 import SprintDeleteModal from './SprintDeleteModal'
+import { SprintEditModalType } from './SprintEdit'
 import SprintEditModal from './SprintEditModal'
 
 const useStyles = createStyles((theme) => ({
@@ -13,12 +15,26 @@ const useStyles = createStyles((theme) => ({
 }))
 
 interface SprintMenuProps {
-  sprint: Sprint
+  sprintId: number
   setEditOpened: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function SprintMenu({ sprint, setEditOpened }: SprintMenuProps) {
+export default function SprintMenu({
+  sprintId,
+  setEditOpened,
+}: SprintMenuProps) {
   const [deleteOpened, setDeleteOpened] = useState(false)
+  const navigate = useNavigate()
+
+  const handleEditOpen = () => {
+    navigate({
+      pathname: `sprint/${sprintId}`,
+      search: createSearchParams({
+        type: SprintEditModalType.EDIT,
+      }).toString(),
+    })
+    setEditOpened(true)
+  }
 
   return (
     <nav>
@@ -29,10 +45,7 @@ export default function SprintMenu({ sprint, setEditOpened }: SprintMenuProps) {
           </ActionIcon>
         </Menu.Target>
         <Menu.Dropdown>
-          <Menu.Item
-            onClick={() => setEditOpened(true)}
-            icon={<IconEdit size={16} />}
-          >
+          <Menu.Item onClick={handleEditOpen} icon={<IconEdit size={16} />}>
             Edit
           </Menu.Item>
           <Menu.Item
@@ -45,7 +58,7 @@ export default function SprintMenu({ sprint, setEditOpened }: SprintMenuProps) {
         </Menu.Dropdown>
       </Menu>
       <SprintDeleteModal
-        sprintId={sprint.id}
+        sprintId={sprintId}
         opened={deleteOpened}
         setOpened={setDeleteOpened}
       />

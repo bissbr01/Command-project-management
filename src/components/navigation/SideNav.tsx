@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useEffect, useState } from 'react'
 import { createStyles, Navbar, Menu, Loader, NavLink } from '@mantine/core'
 import {
   IconBellRinging,
@@ -14,7 +13,6 @@ import UserButton from './UserButton'
 import { removeLogin } from '../../reducers/authentication'
 import { useAppDispatch } from '../../hooks/hooks'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
-import Logo from '../common/Logo'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -103,15 +101,10 @@ interface SideNavProps {
 
 function SideNav({ width, close }: SideNavProps) {
   const { classes } = useStyles()
-  const [active, setActive] = useState('/')
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { data: user, isLoading } = useGetUserByTokenQuery()
   const location = useLocation()
-
-  useEffect(() => {
-    setActive(location.pathname)
-  }, [setActive, location])
 
   const handleLogout = () => {
     dispatch(removeLogin())
@@ -120,18 +113,13 @@ function SideNav({ width, close }: SideNavProps) {
 
   const navLinks = navData.map((item) => (
     <NavLink
-      // className={cx(classes.link, {
-      //   [classes.linkActive]: item.label === active,
-      // })}
       key={item.label}
-      active={item.link === active}
       component={Link}
       label={item.label}
       to={item.link}
       icon={<item.icon className={classes.linkIcon} stroke={1.5} />}
-      // variant="subtle"
+      active={location.pathname === item.link}
       onClick={() => {
-        setActive(item.link)
         close()
       }}
     />
