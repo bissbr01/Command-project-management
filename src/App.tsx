@@ -41,17 +41,12 @@ function App() {
   const { classes } = useStyles()
   const { data, isLoading, error } = useGetUserByTokenQuery()
 
-  const topNavLinks = [
-    { link: 'projects', label: 'Projects' },
-    { link: 'team', label: 'Team' },
-  ]
-
   if (isLoading) return <main>Loading </main>
   if (error) return <main>Error!</main>
 
   return (
     <div>
-      <TopNav links={topNavLinks} />
+      <TopNav />
       <Group className={classes.group}>
         <SideNavContainer />
         <Container className={classes.container}>

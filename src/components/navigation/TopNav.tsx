@@ -9,6 +9,7 @@ import {
   NavLink,
 } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
+import { Link, useLocation } from 'react-router-dom'
 import Logo from '../common/Logo'
 import NavSearch from './NavSearch'
 
@@ -27,9 +28,10 @@ const useStyles = createStyles((theme) => ({
   },
 
   links: {
-    [theme.fn.smallerThan('sm')]: {
+    [theme.fn.smallerThan('md')]: {
       display: 'none',
     },
+    flexWrap: 'nowrap',
   },
 
   link: {
@@ -54,28 +56,30 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-interface TopNavProps {
-  links: { link: string; label: string }[]
-}
-
-function TopNav({ links }: TopNavProps): JSX.Element {
+function TopNav(): JSX.Element {
   const [opened, { toggle, close }] = useDisclosure(false)
   const { classes } = useStyles()
   const theme = useMantineTheme()
+  const location = useLocation()
+
+  const links = [
+    { link: '/projects', label: 'Projects' },
+    { link: '/team', label: 'Team' },
+  ]
 
   const minMediumScreen = useMediaQuery(
-    `(min-width: ${theme.breakpoints.sm}px)`
+    `(min-width: ${theme.breakpoints.md}px)`
   )
 
-  const items = links.map((link) => (
-    <a
-      key={link.label}
-      href={link.link}
+  const navLinks = links.map((item) => (
+    <NavLink
       className={classes.link}
-      onClick={(event) => event.preventDefault()}
-    >
-      {link.label}
-    </a>
+      key={item.label}
+      component={Link}
+      label={item.label}
+      to={item.link}
+      active={location.pathname === item.link}
+    />
   ))
 
   return (
@@ -92,9 +96,7 @@ function TopNav({ links }: TopNavProps): JSX.Element {
               />
               <Modal opened={opened} onClose={close} title="Navigation">
                 <Box>
-                  {links.map((link) => (
-                    <NavLink key={link.link} label={link.label} />
-                  ))}
+                  {navLinks.map((item) => item)}
                   <NavSearch />
                 </Box>
               </Modal>
@@ -105,7 +107,7 @@ function TopNav({ links }: TopNavProps): JSX.Element {
 
         <Group>
           <Group ml={50} spacing={5} className={classes.links}>
-            {items}
+            {navLinks}
           </Group>
           <NavSearch />
         </Group>

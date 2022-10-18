@@ -9,7 +9,7 @@ const projectsEndpoints = scrumApi.injectEndpoints({
     }),
     getProjectById: build.query<Project, string>({
       query: (id) => `/projects/${id}`,
-      providesTags: ['Project'],
+      providesTags: (result, error, id) => [{ type: 'Sprint', id }],
     }),
     addProject: build.mutation<Project, Omit<Project, 'id'>>({
       query: (body) => ({
@@ -22,9 +22,23 @@ const projectsEndpoints = scrumApi.injectEndpoints({
     updateProject: build.mutation<Project, Partial<Project>>({
       query: ({ id, ...body }) => ({
         url: `/projects/${id}`,
-        method: 'PUT',
+        method: 'PATCH',
         body,
       }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Project', id },
+        'Project',
+      ],
+    }),
+    deleteProject: build.mutation<{ success: boolean; id: number }, number>({
+      query: (id) => ({
+        url: `/projects/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Project', id: arg },
+        'Project',
+      ],
     }),
   }),
   overrideExisting: false,
@@ -36,4 +50,5 @@ export const {
   useGetProjectByIdQuery,
   useAddProjectMutation,
   useUpdateProjectMutation,
+  useDeleteProjectMutation,
 } = projectsEndpoints
