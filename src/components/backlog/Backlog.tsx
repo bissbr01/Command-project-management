@@ -8,14 +8,16 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import dayjs from 'dayjs'
-import _ from 'lodash'
 import { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import {
   useGetBacklogQuery,
   useUpdateIssueMutation,
 } from '../../services/issuesEndpoints'
-import { useGetSprintsForBacklogQuery } from '../../services/sprintsEndpoints'
+import {
+  useAddSprintMutation,
+  useGetSprintsForBacklogQuery,
+} from '../../services/sprintsEndpoints'
 import { Issue, IssueStatus, BacklogLists } from '../../services/types'
 import {
   getIssuesForUpdate,
@@ -26,6 +28,7 @@ import IssueDrawer from '../issues/IssueDrawer'
 import SprintCompletedButton from '../sprints/SprintCompletedButton'
 import SprintCompletedModal from '../sprints/SprintCompletedModal'
 import SprintMenu from '../sprints/SprintMenu'
+import SprintStartButton from '../sprints/SprintStartButton'
 import BacklogCreateIssue from './BacklogCreateIssue'
 import BacklogIssue from './BacklogIssue'
 
@@ -48,9 +51,23 @@ export default function Backlog() {
   const { data: sprints } = useGetSprintsForBacklogQuery({ active: true })
   const { data: backlog } = useGetBacklogQuery()
   const [updateIssue] = useUpdateIssueMutation()
+  const [createSprint] = useAddSprintMutation()
   const [issueOpened, setIssueOpened] = useState(false)
-  const [sprintCompletedOpened, setSprintCompletedOpened] = useState(false)
+  const [sprintOpened, setSprintOpened] = useState(false)
   const [lists, setLists] = useState<BacklogLists | null>(null)
+
+  useEffect(() => {
+    // if only 1 active sprint, create another to have planning space
+    if (sprints && Object.keys(sprints).length <= 1) {
+      Object.entries(sprints)
+      createSprint({
+        goal: '',
+        active: true,
+        displayOnBoard: false,
+        projectId: 1, // FIX!  refactor away project id hardcode
+      })
+    }
+  }, [createSprint, sprints])
 
   useEffect(() => {
     if (sprints && backlog) {
@@ -183,16 +200,27 @@ export default function Backlog() {
               </Title>
               {list.sprint && (
                 <>
-                  <Text color="dimmed">
-                    {`${dayjs(list.sprint.startOn).format('MMM DD')}
+                  {list.sprint.startOn && (
+                    <Text color="dimmed">
+                      {`${dayjs(list.sprint.startOn).format('MMM DD')}
                     -
                     ${dayjs(list.sprint.endOn).format('MMM DD')}`}
-                  </Text>
-                  <SprintCompletedButton
-                    sprintId={list.sprint.id}
-                    setOpened={setSprintCompletedOpened}
-                  />
-                  <SprintMenu sprint={list.sprint} />
+                    </Text>
+                  )}
+                  <Group m="0 2rem 0 auto">
+                    {list.sprint.startOn ? (
+                      <SprintCompletedButton
+                        sprintId={list.sprint.id}
+                        setOpened={setSprintOpened}
+                      />
+                    ) : (
+                      <SprintStartButton
+                        sprintId={list.sprint.id}
+                        setOpened={setSprintOpened}
+                      />
+                    )}
+                    <SprintMenu sprint={list.sprint} />
+                  </Group>
                 </>
               )}
             </Group>
@@ -229,16 +257,8 @@ export default function Backlog() {
           </section>
         ))}
       </DragDropContext>
-      <SprintCompletedModal
-        opened={sprintCompletedOpened}
-        setOpened={setSprintCompletedOpened}
-        redirectUrl="/backlog"
-      />
-      <IssueDrawer
-        issueOpened={issueOpened}
-        setIssueOpened={setIssueOpened}
-        redirectUrl="/backlog"
-      />
+      <SprintCompletedModal opened={sprintOpened} setOpened={setSprintOpened} />
+      <IssueDrawer issueOpened={issueOpened} setIssueOpened={setIssueOpened} />
     </main>
   )
 }

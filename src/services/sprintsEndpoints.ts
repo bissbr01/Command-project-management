@@ -4,13 +4,20 @@ import { IssueStatus, Sprint, BoardColumnsData, BacklogLists } from './types'
 
 interface SprintQueryParams {
   active?: boolean
+  displayOnBoard?: boolean
   search?: string
 }
 
 const sprintsEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
     getSprints: build.query<Sprint[], SprintQueryParams>({
-      query: (query) => `/sprints?active=${query?.active}`,
+      query: (query) => {
+        let queryString = ''
+        Object.entries(query).forEach(([key, value]) => {
+          queryString += `${key}=${value}&`
+        })
+        return `/sprints?${queryString}`
+      },
       providesTags: ['Sprint', { type: 'Issue', id: 'LIST' }],
     }),
     getSprintsForBacklog: build.query<BacklogLists, SprintQueryParams>({
@@ -64,7 +71,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
     }),
     addSprint: build.mutation<
       Sprint,
-      Omit<Sprint, 'id' | 'author' | 'project' | 'issues'>
+      Omit<Sprint, 'id' | 'author' | 'authorId' | 'project' | 'issues'>
     >({
       query: (body) => ({
         url: '/sprints',
@@ -101,6 +108,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
 // eslint-disable-next-line import/prefer-default-export
 export const {
   useGetSprintsQuery,
+  useLazyGetSprintsQuery,
   useGetSprintsForBacklogQuery,
   useGetSprintByIdQuery,
   useLazyGetSprintByIdQuery,

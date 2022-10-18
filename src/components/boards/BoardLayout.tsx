@@ -46,7 +46,17 @@ export default function BoardLayout() {
     useGetSprintForBoardQuery()
   const [opened, setOpened] = useState(false)
 
-  if (isLoading || !sprint || !boardColumns) return <Loader />
+  if (isLoading) return <Loader />
+
+  if (!sprint || !boardColumns)
+    return (
+      <main>
+        <Text>
+          There are currently no active sprints to display. Go to the Backlog
+          and start a sprint to see it here.
+        </Text>
+      </main>
+    )
 
   return (
     <main>
@@ -64,11 +74,7 @@ export default function BoardLayout() {
         </div>
       </div>
       <Board />
-      <SprintCompletedModal
-        opened={opened}
-        setOpened={setOpened}
-        redirectUrl="/"
-      />
+      <SprintCompletedModal opened={opened} setOpened={setOpened} />
     </main>
   )
 }

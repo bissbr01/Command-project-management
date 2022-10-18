@@ -3,8 +3,12 @@ import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { useUpdateSprintMutation } from '../../services/sprintsEndpoints'
+import {
+  useLazyGetSprintsQuery,
+  useUpdateSprintMutation,
+} from '../../services/sprintsEndpoints'
 import { Sprint } from '../../services/types'
+import CheckBoxField from '../common/forms/CheckboxField'
 import DatePickerField from '../common/forms/DatePickerField'
 import TextAreaField from '../common/forms/TextAreaField'
 
@@ -36,21 +40,30 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-interface SprintEditModalProps {
+export enum SprintEditModalType {
+  START = 'start',
+  EDIT = 'edit',
+}
+
+export interface SprintEditModalProps {
+  type?: SprintEditModalType
   sprint: Sprint
   opened: boolean
   setOpened: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function SprintEditModal({
+  type = SprintEditModalType.EDIT,
   sprint,
   opened,
   setOpened,
 }: SprintEditModalProps) {
   const { classes, cx } = useStyles()
-  const [update] = useUpdateSprintMutation()
+  const [updateSprint] = useUpdateSprintMutation()
+  const [fetchSprints] = useLazyGetSprintsQuery()
 
   const SprintEditModalSchema = Yup.object().shape({
+    displayOnBoard: Yup.bool(),
     goal: Yup.string(),
     startOn: Yup.date(),
     endOn: Yup.date(),
@@ -60,10 +73,16 @@ export default function SprintEditModal({
     <Modal
       opened={opened}
       onClose={() => setOpened(false)}
-      title={<Title order={2}>Edit Sprint {sprint.id}</Title>}
+      title={
+        <Title order={2}>
+          {type === SprintEditModalType.START ? 'Start ' : 'Edit '}Sprint{' '}
+          {sprint.id}
+        </Title>
+      }
     >
       <Formik
         initialValues={{
+          displayOnBoard: sprint.displayOnBoard,
           goal: sprint.goal ?? '',
           startOn: sprint.startOn ? new Date(sprint.startOn) : new Date(),
           endOn: sprint.endOn ? new Date(sprint.endOn) : new Date(),
@@ -71,11 +90,23 @@ export default function SprintEditModal({
         validationSchema={SprintEditModalSchema}
         onSubmit={async (values) => {
           try {
-            await update({
+            // if setting displayOnBoard, first unset existing
+            if (values.displayOnBoard) {
+              const foundSprints = await fetchSprints({
+                displayOnBoard: true,
+              }).unwrap()
+              const promises = foundSprints.map(({ id }) =>
+                updateSprint({ id, displayOnBoard: false })
+              )
+              await Promise.all(promises)
+            }
+
+            await updateSprint({
               id: sprint.id,
               ...values,
               startOn: values.startOn.toString(),
             })
+
             setOpened(false)
             showNotification({
               title: 'Success',
@@ -102,12 +133,20 @@ export default function SprintEditModal({
           <Form className={classes.container}>
             <Field
               stylesApi={{ input: cx(classes.inputStyles) }}
+              id="displayOnBoard"
+              name="displayOnBoard"
+              label={<Text>Display on Board</Text>}
+              component={CheckBoxField}
+            />
+            <Field
+              stylesApi={{ input: cx(classes.inputStyles) }}
               id="goal"
               name="goal"
               minRows={2}
               label={<Text>Goal</Text>}
               component={TextAreaField}
             />
+
             <Field
               stylesApi={{ input: cx(classes.inputStyles) }}
               id="startOn"
@@ -126,7 +165,7 @@ export default function SprintEditModal({
             />
             <Group position="center">
               <Button type="submit" disabled={isSubmitting}>
-                Update
+                {type === SprintEditModalType.START ? 'Start' : 'Update'}
               </Button>
               <Button
                 onClick={() => setOpened(false)}

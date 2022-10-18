@@ -11,7 +11,7 @@ import {
   Title,
 } from '@mantine/core'
 import { FormEvent, SetStateAction, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import {
   useAddSprintMutation,
@@ -51,13 +51,11 @@ const useStyles = createStyles((theme) => ({
 export interface SprintCompletedProps {
   sprintId: string
   setOpened: React.Dispatch<SetStateAction<boolean>>
-  redirectUrl?: string
 }
 
 export default function SprintCompleted({
   sprintId,
   setOpened,
-  redirectUrl = '/',
 }: SprintCompletedProps) {
   const navigate = useNavigate()
   const { data: sprint } = useGetSprintByIdQuery(sprintId ?? '1')
@@ -79,7 +77,7 @@ export default function SprintCompleted({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      navigate(redirectUrl)
+      navigate(-1)
       setOpened(false)
 
       const issuesToCopy = sprint.issues.filter(
@@ -139,7 +137,7 @@ export default function SprintCompleted({
         )
         await updateIssues(issuesForUpdate, updateIssue)
       }
-      // in either case, remove issues from existing sprint and set to not active
+      // in either case, set Sprint to archive
       await updateSprint({
         id: sprint.id,
         active: false,

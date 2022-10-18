@@ -21,14 +21,19 @@ export default function CheckBoxField({
   id,
   label,
   size,
-  form,
 }: CheckBoxProps) {
   // workaround to get meta.  Might be fixed in future of formik
   // const meta = form.getFieldMeta(field.name)
   const { classes } = useStyles()
   return (
     <>
-      <Checkbox id={id} label={label} size={size} {...field} />
+      <Checkbox
+        {...field}
+        id={id}
+        label={label}
+        size={size}
+        checked={field.value}
+      />
       <ErrorMessage
         name={field.name}
         component="div"

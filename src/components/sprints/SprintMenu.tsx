@@ -22,11 +22,6 @@ import SprintDeleteModal from './SprintDeleteModal'
 import SprintEditModal from './SprintEditModal'
 
 const useStyles = createStyles((theme) => ({
-  container: {
-    marginLeft: 'auto',
-    marginRight: '2rem',
-  },
-
   icon: {
     color: theme.colors.red[6],
     marginRight: '1rem',
@@ -43,7 +38,7 @@ export default function SprintMenu({ sprint }: SprintMenuProps) {
   const [editOpened, setEditOpened] = useState(false)
 
   return (
-    <nav className={classes.container}>
+    <nav>
       <Menu width={200} position="bottom-end">
         <Menu.Target>
           <ActionIcon size="sm">

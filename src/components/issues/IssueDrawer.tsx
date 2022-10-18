@@ -6,13 +6,11 @@ import IssueSingle from './IssueSingle'
 export interface IssueDrawerProps {
   issueOpened: boolean
   setIssueOpened: React.Dispatch<SetStateAction<boolean>>
-  redirectUrl?: string
 }
 
 export default function IssueDrawer({
   issueOpened,
   setIssueOpened,
-  redirectUrl = '/',
 }: IssueDrawerProps) {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -20,7 +18,7 @@ export default function IssueDrawer({
 
   const handleClose = () => {
     setIssueOpened(false)
-    navigate(redirectUrl)
+    navigate(-1)
   }
 
   return (
