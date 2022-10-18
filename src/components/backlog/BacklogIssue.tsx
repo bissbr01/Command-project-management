@@ -68,7 +68,7 @@ export default function BacklogIssue({
   useEffect(() => {
     const handleClick = () => {
       setIssueOpened(true)
-      navigate(`/backlog/${issue.id}`)
+      navigate(`issues/${issue.id}`)
     }
     const { current } = ref
     current?.addEventListener('click', handleClick)

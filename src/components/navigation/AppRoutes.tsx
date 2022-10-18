@@ -53,14 +53,16 @@ export default function AppRoutes() {
     <>
       <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={token ? <App /> : <Navigate to="/login" />}>
+          <Route index element={<ProjectList />} />
           <Route path="projects" element={<ProjectList />} />
-          <Route path="projects/:projectId" element={<App />}>
-            <Route index element={<BoardLayout />} />
-            <Route path="issues/:id" element={<BoardLayout />} />
-            <Route path="sprint/:sprintId" element={<BoardLayout />} />
+          <Route path="projects/:projectId">
+            <Route path="board" element={<BoardLayout />}>
+              <Route path="issues/:id" element={<BoardLayout />} />
+              <Route path="sprint/:sprintId" element={<BoardLayout />} />
+            </Route>
             <Route path="backlog" element={<Backlog />}>
+              <Route path="issues/:id" element={<BoardLayout />} />
               <Route path="sprint/:sprintId" element={<Backlog />} />
-              <Route path=":id" element={<Backlog />} />
             </Route>
           </Route>
         </Route>

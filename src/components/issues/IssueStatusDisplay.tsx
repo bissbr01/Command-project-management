@@ -5,11 +5,13 @@ const useStyles = createStyles((theme) => ({
   bug: {
     background: theme.colors.red[4],
   },
-  task: {
-    background: theme.colors.brand[4],
+  todo: {
+    background: theme.colors.gray[3],
+    color: theme.colors.gray[6],
   },
-  userStory: {
-    background: theme.colors.blue[4],
+  done: {
+    background: theme.colors.green[1],
+    color: theme.colors.green[8],
   },
 }))
 
@@ -24,30 +26,23 @@ export default function IssueStatusDisplay({
 
   const getIssueStatus = () => {
     switch (issueStatus) {
-      case IssueStatus.Backlog:
-        return (
-          <Badge radius="sm" color="violet">
-            Backlog
-          </Badge>
-        )
-
       case IssueStatus.Todo:
         return (
-          <Badge radius="sm" color="blue">
-            Todo
+          <Badge radius="sm" className={classes.todo}>
+            To Do
           </Badge>
         )
 
       case IssueStatus.InProgress:
         return (
-          <Badge radius="sm" color="teal">
+          <Badge radius="sm" color="blue">
             In Progress
           </Badge>
         )
 
       case IssueStatus.Done:
         return (
-          <Badge radius="sm" color="green">
+          <Badge radius="sm" className={classes.done}>
             Done
           </Badge>
         )

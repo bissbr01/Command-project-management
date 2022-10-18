@@ -5,6 +5,7 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
+import { useParams } from 'react-router-dom'
 import React, { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import BoardItem from './BoardItem'
@@ -52,7 +53,10 @@ function Board() {
   const theme = useMantineTheme()
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
-  const { data: boardColumnsData, isLoading } = useGetSprintForBoardQuery()
+  const { projectId } = useParams()
+  const { data: boardColumnsData, isLoading } = useGetSprintForBoardQuery({
+    projectId,
+  })
   const [columns, setColumns] = useState<BoardColumns | null>(null)
 
   useEffect(() => {

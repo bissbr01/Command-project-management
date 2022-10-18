@@ -16,7 +16,7 @@ export default function ProjectListItem({ project }: ProjectListItemProps) {
   return (
     <tr key={project.id}>
       <td>
-        <Link to={String(project.id)}>{project.title}</Link>
+        <Link to={`/projects/${project.id}/board`}>{project.title}</Link>
       </td>
       <td>{project.id}</td>
       <td>{project.author.fullName}</td>

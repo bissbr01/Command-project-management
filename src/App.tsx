@@ -49,7 +49,7 @@ function App() {
       <TopNav />
       <Group className={classes.group}>
         <SideNavContainer />
-        <Container className={classes.container}>
+        <Container className={classes.container} size="xl">
           {/* <NavBreadcrumbs /> */}
           <Outlet />
         </Container>

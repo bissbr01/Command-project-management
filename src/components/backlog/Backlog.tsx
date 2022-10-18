@@ -4,7 +4,6 @@ import {
   Loader,
   Paper,
   Text,
-  ThemeIcon,
   Title,
   Tooltip,
   useMantineTheme,
@@ -122,7 +121,7 @@ export default function Backlog() {
       if (destination.droppableId === 'Backlog') {
         movedIssue = {
           ...removedIssue,
-          status: IssueStatus.Backlog,
+          status: IssueStatus.Todo,
           sprintId: null,
         }
       }
@@ -198,7 +197,7 @@ export default function Backlog() {
         onDragEnd={(result) => handleDragEnd(result, lists, setLists)}
       >
         <Title order={1} size="h2" p="sm">
-          Backlog
+          Plan
         </Title>
         {/* iterate each sprint | backlog list */}
         {Object.entries(lists).map(([listKey, list]) => (
@@ -271,7 +270,7 @@ export default function Backlog() {
             </Paper>
             <BacklogCreateIssue
               sprintId={list.sprint?.id ?? null}
-              status={list.sprint ? IssueStatus.Todo : IssueStatus.Backlog}
+              status={IssueStatus.Todo}
             />
           </section>
         ))}

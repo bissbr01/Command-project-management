@@ -8,7 +8,7 @@ import {
   IconStack2,
   IconChalkboard,
 } from '@tabler/icons'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import UserButton from './UserButton'
 import { removeLogin } from '../../reducers/authentication'
 import { useAppDispatch } from '../../hooks/hooks'
@@ -87,13 +87,6 @@ const useStyles = createStyles((theme, _params, getRef) => {
   }
 })
 
-const navData = [
-  { link: '/', label: 'Board', icon: IconChalkboard },
-  { link: '/backlog', label: 'Backlog', icon: IconStack2 },
-  { link: '/notifications', label: 'Notifications', icon: IconBellRinging },
-  { link: '/settings', label: 'Settings', icon: IconSettings },
-]
-
 interface SideNavProps {
   width: number
   close: () => void
@@ -103,8 +96,16 @@ function SideNav({ width, close }: SideNavProps) {
   const { classes } = useStyles()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const { projectId } = useParams()
   const { data: user, isLoading } = useGetUserByTokenQuery()
   const location = useLocation()
+
+  const navData = [
+    { link: 'board', label: 'Board', icon: IconChalkboard },
+    { link: 'backlog', label: 'Backlog', icon: IconStack2 },
+    { link: 'notifications', label: 'Notifications', icon: IconBellRinging },
+    { link: 'settings', label: 'Settings', icon: IconSettings },
+  ]
 
   const handleLogout = () => {
     dispatch(removeLogin())
@@ -116,7 +117,7 @@ function SideNav({ width, close }: SideNavProps) {
       key={item.label}
       component={Link}
       label={item.label}
-      to={item.link}
+      to={`/projects/${projectId}/${item.link}`}
       icon={<item.icon className={classes.linkIcon} stroke={1.5} />}
       active={location.pathname === item.link}
       onClick={() => {
@@ -151,8 +152,7 @@ function SideNav({ width, close }: SideNavProps) {
           </Menu.Dropdown>
         </Menu>
       </Navbar.Section>
-
-      <Navbar.Section grow>{navLinks}</Navbar.Section>
+      {projectId && <Navbar.Section grow>{navLinks}</Navbar.Section>}
     </Navbar>
   )
 }

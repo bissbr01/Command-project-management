@@ -10,7 +10,6 @@ export interface Comment {
 }
 
 export enum IssueStatus {
-  Backlog = 'backlog',
   Todo = 'todo',
   InProgress = 'inProgress',
   Done = 'done',

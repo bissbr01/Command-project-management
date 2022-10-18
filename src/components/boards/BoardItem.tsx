@@ -48,7 +48,7 @@ function BoardItem({
 
   const handleClick = () => {
     setIssueOpened(true)
-    navigate(`/issues/${issue.id}`)
+    navigate(`issues/${issue.id}`)
   }
 
   return (

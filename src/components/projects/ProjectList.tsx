@@ -1,18 +1,31 @@
-import { ActionIcon, Loader, Menu, Table, Title } from '@mantine/core'
-import { IconDots, IconEdit, IconTrash } from '@tabler/icons'
-import { Link } from 'react-router-dom'
+import { Box, createStyles, Group, Loader, Table, Title } from '@mantine/core'
+import { useState } from 'react'
 import { useGetProjectsQuery } from '../../services/projectsEndpoints'
-import ProjectEditModal from './ProjectEditModal'
+import ProjectCreateButton from './ProjectCreateButton'
+import ProjectCreateModal from './ProjectCreateModal'
 import ProjectListItem from './ProjectListItem'
+
+const useStyles = createStyles((theme) => ({
+  createButton: {
+    margin: '0 1rem 0 auto',
+  },
+}))
 
 export default function ProjectList() {
   const { data: projects } = useGetProjectsQuery()
+  const [createOpened, setCreateOpened] = useState(false)
+  const { classes } = useStyles()
 
   if (!projects) return <Loader />
 
   return (
     <main>
-      <Title my="md">Projects</Title>
+      <Group>
+        <Title my="md">Projects</Title>
+        <Box className={classes.createButton}>
+          <ProjectCreateButton setOpened={setCreateOpened} />
+        </Box>
+      </Group>
       <Table highlightOnHover>
         <thead>
           <tr>
@@ -28,6 +41,7 @@ export default function ProjectList() {
           ))}
         </tbody>
       </Table>
+      <ProjectCreateModal opened={createOpened} setOpened={setCreateOpened} />
     </main>
   )
 }

@@ -1,27 +1,16 @@
 import _ from 'lodash'
 import { scrumApi } from './scrumApi'
 import { IssueStatus, Sprint, BoardColumnsData, BacklogLists } from './types'
-
-interface SprintQueryParams {
-  active?: boolean
-  displayOnBoard?: boolean
-  search?: string
-}
+import { buildQueryString, SprintQueryParams } from './util'
 
 const sprintsEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
     getSprints: build.query<Sprint[], SprintQueryParams>({
-      query: (query) => {
-        let queryString = ''
-        Object.entries(query).forEach(([key, value]) => {
-          queryString += `${key}=${value}&`
-        })
-        return `/sprints?${queryString}`
-      },
+      query: (query) => buildQueryString('sprints', query),
       providesTags: ['Sprint', { type: 'Issue', id: 'LIST' }],
     }),
     getSprintsForBacklog: build.query<BacklogLists, SprintQueryParams>({
-      query: (query) => `/sprints?active=${query?.active}`,
+      query: (query) => buildQueryString('sprints', query),
       transformResponse: (sprints: Sprint[]) => {
         const backlogLists: BacklogLists = {}
         sprints.forEach((sprint) => {
@@ -40,8 +29,11 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
       query: (id) => `/sprints/${id}`,
       providesTags: (result, error, id) => [{ type: 'Sprint', id }],
     }),
-    getSprintForBoard: build.query<BoardColumnsData, void>({
-      query: () => 'sprints/board',
+    getSprintForBoard: build.query<
+      BoardColumnsData,
+      Pick<SprintQueryParams, 'projectId'>
+    >({
+      query: (query) => buildQueryString('sprints/board', query),
       transformResponse: (sprint: Sprint) => {
         const sorted = _.orderBy(sprint.issues, ['boardOrder'], ['asc'])
         const issues = _.groupBy(sorted, 'status')
