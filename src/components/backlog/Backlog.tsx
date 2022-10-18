@@ -27,6 +27,7 @@ import {
 import IssueDrawer from '../issues/IssueDrawer'
 import SprintCompletedButton from '../sprints/SprintCompletedButton'
 import SprintCompletedModal from '../sprints/SprintCompletedModal'
+import SprintEditModal from '../sprints/SprintEditModal'
 import SprintMenu from '../sprints/SprintMenu'
 import SprintStartButton from '../sprints/SprintStartButton'
 import BacklogCreateIssue from './BacklogCreateIssue'
@@ -54,6 +55,7 @@ export default function Backlog() {
   const [createSprint] = useAddSprintMutation()
   const [issueOpened, setIssueOpened] = useState(false)
   const [sprintOpened, setSprintOpened] = useState(false)
+  const [sprintEditOpened, setSprintEditOpened] = useState(false)
   const [lists, setLists] = useState<BacklogLists | null>(null)
 
   useEffect(() => {
@@ -216,10 +218,13 @@ export default function Backlog() {
                     ) : (
                       <SprintStartButton
                         sprintId={list.sprint.id}
-                        setOpened={setSprintOpened}
+                        setOpened={setSprintEditOpened}
                       />
                     )}
-                    <SprintMenu sprint={list.sprint} />
+                    <SprintMenu
+                      sprint={list.sprint}
+                      setEditOpened={setSprintEditOpened}
+                    />
                   </Group>
                 </>
               )}
@@ -257,6 +262,10 @@ export default function Backlog() {
           </section>
         ))}
       </DragDropContext>
+      <SprintEditModal
+        opened={sprintEditOpened}
+        setOpened={setSprintEditOpened}
+      />
       <SprintCompletedModal opened={sprintOpened} setOpened={setSprintOpened} />
       <IssueDrawer issueOpened={issueOpened} setIssueOpened={setIssueOpened} />
     </main>

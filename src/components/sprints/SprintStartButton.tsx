@@ -20,7 +20,7 @@ export default function SprintStartButton({
         type: SprintEditModalType.START,
       }).toString(),
     })
-    setOpened(false)
+    setOpened(true)
   }
   return (
     <Button onClick={handleClick} color="blue">

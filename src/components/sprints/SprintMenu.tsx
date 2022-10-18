@@ -1,22 +1,6 @@
-import {
-  ActionIcon,
-  Button,
-  createStyles,
-  Group,
-  Menu,
-  Modal,
-  Text,
-  Title,
-} from '@mantine/core'
-import {
-  IconAlertTriangle,
-  IconDotsVertical,
-  IconEdit,
-  IconTrash,
-} from '@tabler/icons'
+import { ActionIcon, createStyles, Menu } from '@mantine/core'
+import { IconDotsVertical, IconEdit, IconTrash } from '@tabler/icons'
 import { useState } from 'react'
-import { useDeleteIssueMutation } from '../../services/issuesEndpoints'
-import { useDeleteSprintMutation } from '../../services/sprintsEndpoints'
 import { Sprint } from '../../services/types'
 import SprintDeleteModal from './SprintDeleteModal'
 import SprintEditModal from './SprintEditModal'
@@ -30,12 +14,11 @@ const useStyles = createStyles((theme) => ({
 
 interface SprintMenuProps {
   sprint: Sprint
+  setEditOpened: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function SprintMenu({ sprint }: SprintMenuProps) {
-  const { classes } = useStyles()
+export default function SprintMenu({ sprint, setEditOpened }: SprintMenuProps) {
   const [deleteOpened, setDeleteOpened] = useState(false)
-  const [editOpened, setEditOpened] = useState(false)
 
   return (
     <nav>
@@ -61,11 +44,6 @@ export default function SprintMenu({ sprint }: SprintMenuProps) {
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>
-      <SprintEditModal
-        sprint={sprint}
-        opened={editOpened}
-        setOpened={setEditOpened}
-      />
       <SprintDeleteModal
         sprintId={sprint.id}
         opened={deleteOpened}

@@ -2,6 +2,12 @@ import { createStyles, Title, Button, Modal, Text, Group } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
 import * as Yup from 'yup'
 import {
   useLazyGetSprintsQuery,
@@ -11,6 +17,7 @@ import { Sprint } from '../../services/types'
 import CheckBoxField from '../common/forms/CheckboxField'
 import DatePickerField from '../common/forms/DatePickerField'
 import TextAreaField from '../common/forms/TextAreaField'
+import SprintEdit from './SprintEdit'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -46,138 +53,38 @@ export enum SprintEditModalType {
 }
 
 export interface SprintEditModalProps {
-  type?: SprintEditModalType
-  sprint: Sprint
   opened: boolean
   setOpened: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function SprintEditModal({
-  type = SprintEditModalType.EDIT,
-  sprint,
   opened,
   setOpened,
 }: SprintEditModalProps) {
   const { classes, cx } = useStyles()
-  const [updateSprint] = useUpdateSprintMutation()
-  const [fetchSprints] = useLazyGetSprintsQuery()
+  const { sprintId } = useParams()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
-  const SprintEditModalSchema = Yup.object().shape({
-    displayOnBoard: Yup.bool(),
-    goal: Yup.string(),
-    startOn: Yup.date(),
-    endOn: Yup.date(),
-  })
+  const handleClose = () => {
+    navigate(-1)
+    setOpened(false)
+  }
+
+  const type = searchParams.get('type')
 
   return (
     <Modal
       opened={opened}
-      onClose={() => setOpened(false)}
+      onClose={handleClose}
       title={
         <Title order={2}>
           {type === SprintEditModalType.START ? 'Start ' : 'Edit '}Sprint{' '}
-          {sprint.id}
+          {sprintId}
         </Title>
       }
     >
-      <Formik
-        initialValues={{
-          displayOnBoard: sprint.displayOnBoard,
-          goal: sprint.goal ?? '',
-          startOn: sprint.startOn ? new Date(sprint.startOn) : new Date(),
-          endOn: sprint.endOn ? new Date(sprint.endOn) : new Date(),
-        }}
-        validationSchema={SprintEditModalSchema}
-        onSubmit={async (values) => {
-          try {
-            // if setting displayOnBoard, first unset existing
-            if (values.displayOnBoard) {
-              const foundSprints = await fetchSprints({
-                displayOnBoard: true,
-              }).unwrap()
-              const promises = foundSprints.map(({ id }) =>
-                updateSprint({ id, displayOnBoard: false })
-              )
-              await Promise.all(promises)
-            }
-
-            await updateSprint({
-              id: sprint.id,
-              ...values,
-              startOn: values.startOn.toString(),
-            })
-
-            setOpened(false)
-            showNotification({
-              title: 'Success',
-              message: 'Sprint successfully saved.',
-              autoClose: 4000,
-              color: 'green',
-              icon: <IconCheck />,
-            })
-          } catch (e: unknown) {
-            showNotification({
-              title: 'Error',
-              message: 'Sprint could not be updated.',
-              autoClose: 4000,
-              color: 'red',
-              icon: <IconX />,
-            })
-            if (e instanceof Error) {
-              console.log(e.message)
-            }
-          }
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form className={classes.container}>
-            <Field
-              stylesApi={{ input: cx(classes.inputStyles) }}
-              id="displayOnBoard"
-              name="displayOnBoard"
-              label={<Text>Display on Board</Text>}
-              component={CheckBoxField}
-            />
-            <Field
-              stylesApi={{ input: cx(classes.inputStyles) }}
-              id="goal"
-              name="goal"
-              minRows={2}
-              label={<Text>Goal</Text>}
-              component={TextAreaField}
-            />
-
-            <Field
-              stylesApi={{ input: cx(classes.inputStyles) }}
-              id="startOn"
-              name="startOn"
-              placeholder="Pick start date..."
-              label={<Text>Start On</Text>}
-              component={DatePickerField}
-            />
-            <Field
-              stylesApi={{ input: cx(classes.inputStyles) }}
-              id="endOn"
-              name="endOn"
-              placeholder="Pick end date..."
-              label={<Text>End On</Text>}
-              component={DatePickerField}
-            />
-            <Group position="center">
-              <Button type="submit" disabled={isSubmitting}>
-                {type === SprintEditModalType.START ? 'Start' : 'Update'}
-              </Button>
-              <Button
-                onClick={() => setOpened(false)}
-                disabled={isSubmitting}
-                variant="default"
-              >
-                Cancel
-              </Button>
-            </Group>
-          </Form>
-        )}
-      </Formik>
+      {sprintId && <SprintEdit sprintId={sprintId} setOpened={setOpened} />}
     </Modal>
   )
 }
