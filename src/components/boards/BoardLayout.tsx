@@ -1,5 +1,4 @@
-import { Button, createStyles, Loader, Text, Title } from '@mantine/core'
-import { listenerCancelled } from '@reduxjs/toolkit/dist/listenerMiddleware/exceptions'
+import { createStyles, Loader, Text, Title } from '@mantine/core'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useGetSprintForBoardQuery } from '../../services/sprintsEndpoints'
@@ -42,18 +41,21 @@ const useStyles = createStyles((theme) => ({
 
 export default function BoardLayout() {
   const { classes } = useStyles()
-  const { data: { sprint, boardColumns } = {}, isLoading } =
-    useGetSprintForBoardQuery()
+  const {
+    data: { sprint, boardColumns } = {},
+    isLoading,
+    isError,
+  } = useGetSprintForBoardQuery()
   const [opened, setOpened] = useState(false)
 
   if (isLoading) return <Loader />
 
-  if (!sprint || !boardColumns)
+  if (isError || !sprint || !boardColumns)
     return (
       <main>
         <Text>
           There are currently no active sprints to display. Go to the Backlog
-          and start a sprint to see it here.
+          and start or edit a sprint to see it here.
         </Text>
       </main>
     )

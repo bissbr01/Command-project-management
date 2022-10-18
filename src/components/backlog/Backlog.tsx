@@ -4,9 +4,12 @@ import {
   Loader,
   Paper,
   Text,
+  ThemeIcon,
   Title,
+  Tooltip,
   useMantineTheme,
 } from '@mantine/core'
+import { IconChalkboard } from '@tabler/icons'
 import dayjs from 'dayjs'
 import { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
@@ -43,6 +46,10 @@ const useStyles = createStyles((theme) => ({
 
   paper: {
     padding: '12px',
+  },
+
+  icon: {
+    color: theme.colors.blue[3],
   },
 }))
 
@@ -210,6 +217,13 @@ export default function Backlog() {
                     </Text>
                   )}
                   <Group m="0 2rem 0 auto">
+                    {list.sprint.displayOnBoard && (
+                      <Tooltip label="Sprint is displayed on board">
+                        <span className={classes.icon}>
+                          <IconChalkboard stroke={1.5} />
+                        </span>
+                      </Tooltip>
+                    )}
                     {list.sprint.startOn ? (
                       <SprintCompletedButton
                         sprintId={list.sprint.id}
