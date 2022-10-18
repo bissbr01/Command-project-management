@@ -13,7 +13,7 @@ export default function SprintCompletedButton({
   const navigate = useNavigate()
 
   const handleClick = () => {
-    navigate(`?sprintId=${sprintId}`)
+    navigate(`sprint/${sprintId}`)
     setOpened(true)
   }
 

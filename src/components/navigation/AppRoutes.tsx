@@ -54,7 +54,9 @@ export default function AppRoutes() {
         <Route path="/" element={token ? <App /> : <Navigate to="/login" />}>
           <Route index element={<BoardLayout />} />
           <Route path="issues/:id" element={<BoardLayout />} />
+          <Route path="sprint/:sprintId" element={<BoardLayout />} />
           <Route path="backlog" element={<Backlog />}>
+            <Route path="sprint/:sprintId" element={<Backlog />} />
             <Route path=":id" element={<Backlog />} />
           </Route>
         </Route>

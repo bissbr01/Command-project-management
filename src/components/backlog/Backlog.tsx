@@ -232,6 +232,7 @@ export default function Backlog() {
       <SprintCompletedModal
         opened={sprintCompletedOpened}
         setOpened={setSprintCompletedOpened}
+        redirectUrl="/backlog"
       />
       <IssueDrawer
         issueOpened={issueOpened}

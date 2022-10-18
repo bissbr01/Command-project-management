@@ -64,7 +64,11 @@ export default function BoardLayout() {
         </div>
       </div>
       <Board />
-      <SprintCompletedModal opened={opened} setOpened={setOpened} />
+      <SprintCompletedModal
+        opened={opened}
+        setOpened={setOpened}
+        redirectUrl="/"
+      />
     </main>
   )
 }
