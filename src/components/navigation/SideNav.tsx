@@ -119,7 +119,9 @@ function SideNav({ width, close }: SideNavProps) {
       label={item.label}
       to={`/projects/${projectId}/${item.link}`}
       icon={<item.icon className={classes.linkIcon} stroke={1.5} />}
-      active={location.pathname === item.link}
+      active={
+        location.pathname.match(`/projects/${projectId}/${item.link}`) !== null
+      }
       onClick={() => {
         close()
       }}
