@@ -20,6 +20,13 @@ const useStyles = createStyles((theme) => ({
   createButton: {
     margin: '0 1rem 0 auto',
   },
+
+  usersGroup: {
+    // border: '1px solid gray',
+    borderRadius: theme.radius.md,
+    // margin: '1.5rem 0 1.5rem 0',
+    padding: '1rem',
+  },
 }))
 
 export default function TeamList() {
@@ -66,7 +73,7 @@ export default function TeamList() {
               </Menu.Dropdown>
             </Menu>
           </Group>
-          <Group>
+          <Group className={classes.usersGroup}>
             {team.users?.map((nestedUser) => (
               <UserListItem user={nestedUser} key={nestedUser.id} />
             ))}

@@ -135,11 +135,7 @@ function SideNav({ width, close }: SideNavProps) {
         {/* <Logo /> */}
         <Menu position="top" withArrow width={200}>
           <Menu.Target>
-            <UserButton
-              image="default picture"
-              name={user.fullName ?? 'no name'}
-              email={user.email ?? 'no email'}
-            />
+            <UserButton user={user} />
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>

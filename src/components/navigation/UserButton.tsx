@@ -1,17 +1,14 @@
 import { forwardRef } from 'react'
 import { IconChevronRight } from '@tabler/icons'
 import { Group, Avatar, Text, UnstyledButton } from '@mantine/core'
+import { User } from '../../services/types'
 
 interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
-  image: string
-  name: string
-  email: string
-  // eslint-disable-next-line react/require-default-props
-  icon?: React.ReactNode
+  user: User
 }
 
 const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
-  ({ image, name, email, icon, ...others }: UserButtonProps, ref) => (
+  ({ user, ...others }: UserButtonProps, ref) => (
     <UnstyledButton
       ref={ref}
       sx={(theme) => ({
@@ -31,19 +28,27 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
       {...others}
     >
       <Group>
-        <Avatar src={image} radius="xl" />
+        <Avatar
+          src={null}
+          alt={user.fullName}
+          size="md"
+          color="blue"
+          radius="xl"
+        >
+          {user.firstName[0] + user.lastName[0]}
+        </Avatar>
 
         <div style={{ flex: 1 }}>
           <Text size="sm" weight={500}>
-            {name}
+            {user.fullName}
           </Text>
 
           <Text color="dimmed" size="xs">
-            {email}
+            {user.email}
           </Text>
         </div>
 
-        {icon || <IconChevronRight size={16} />}
+        <IconChevronRight size={16} />
       </Group>
     </UnstyledButton>
   )
