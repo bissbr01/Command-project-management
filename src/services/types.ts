@@ -72,6 +72,13 @@ export interface User {
   sprints?: Sprint[]
   authoredIssues?: Issue[]
   assignedIssues?: Issue[]
+  teams?: Team[]
+}
+
+export interface Team {
+  id: number
+  name: string
+  users?: User[]
 }
 
 export interface Token {
