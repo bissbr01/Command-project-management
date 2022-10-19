@@ -2,6 +2,7 @@ import { MantineProvider } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
+import { Auth0Provider } from '@auth0/auth0-react'
 import { Provider } from 'react-redux'
 import { store } from './store'
 import { CustomFonts } from './components/common/CustomFonts'
@@ -44,10 +45,16 @@ if (container) {
             primaryShade: { light: 4, dark: 6 },
           }}
         >
-          <NotificationsProvider position="bottom-left">
-            <CustomFonts />
-            <AppRoutes />
-          </NotificationsProvider>
+          <Auth0Provider
+            domain="dev-w8p6njku.us.auth0.com"
+            clientId="n0IFYEEMmgxhyAmitLokeYGVyHKcrRSZ"
+            redirectUri={window.location.origin}
+          >
+            <NotificationsProvider position="bottom-left">
+              <CustomFonts />
+              <AppRoutes />
+            </NotificationsProvider>
+          </Auth0Provider>
         </MantineProvider>
       </Router>
     </Provider>

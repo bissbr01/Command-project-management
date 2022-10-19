@@ -19,6 +19,9 @@ import { useLoginMutation } from '../../services/loginEndpoints'
 import PasswordField from '../common/forms/PasswordInput'
 import TextField from '../common/forms/TextField'
 import Logo from '../common/Logo'
+import Auth0LoginButton from './Auth0LoginButton'
+import Auth0LogoutButton from './Auth0LogoutButton'
+import Auth0ShowUser from './Auth0ShowUser'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -135,6 +138,12 @@ export default function Login() {
               >
                 Login
               </Button>
+
+              <Group>
+                <Auth0LoginButton />
+                <Auth0LogoutButton />
+              </Group>
+              <Auth0ShowUser />
 
               <Text align="center" mt="md">
                 Don&apos;t have an account?{' '}
