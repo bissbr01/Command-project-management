@@ -40,7 +40,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
 
         <div style={{ flex: 1 }}>
           <Text size="sm" weight={500}>
-            {user.name}
+            {user.nickname}
           </Text>
 
           <Text color="dimmed" size="xs">

@@ -99,7 +99,7 @@ function SideNav({ width, close }: SideNavProps) {
   const dispatch = useAppDispatch()
   const { projectId } = useParams()
   const location = useLocation()
-  const { user, isLoading } = useAuth0()
+  const { user, isLoading, logout } = useAuth0()
 
   const navData = [
     { link: 'board', label: 'Board', icon: IconChalkboard },
@@ -110,7 +110,8 @@ function SideNav({ width, close }: SideNavProps) {
 
   const handleLogout = () => {
     dispatch(removeLogin())
-    navigate('/login')
+    logout()
+    // navigate('/login')
   }
 
   const navLinks = navData.map((item) => (
