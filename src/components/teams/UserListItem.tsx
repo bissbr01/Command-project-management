@@ -13,20 +13,19 @@ interface UserListItemProps {
   user: User
 }
 export default function UserListItem({ user }: UserListItemProps) {
-  const initials = user.firstName[0] + user.lastName[0]
   return (
     <Card withBorder shadow="sm" radius="md">
       <Stack align="center">
         <Avatar
-          src={null}
-          alt={user.fullName}
+          src={user.picture}
+          alt={user.name}
           size="lg"
           color="blue"
           radius="xl"
         >
-          {initials}
+          {user.name}
         </Avatar>
-        <Text size="md">{user.fullName}</Text>
+        <Text size="md">{user.name}</Text>
         <Text size="sm" color="dimmed">
           {user.email}
         </Text>

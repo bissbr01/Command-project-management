@@ -1,5 +1,5 @@
 import { scrumApi } from './scrumApi'
-import { User } from './types'
+import { Token, User } from './types'
 
 const usersEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
@@ -11,14 +11,11 @@ const usersEndpoints = scrumApi.injectEndpoints({
       query: () => '/users/me',
       providesTags: ['User'],
     }),
-    addUser: build.mutation<
-      User,
-      Omit<User, 'id' | 'fullName' | 'createdAt' | 'updatedAt'>
-    >({
-      query: (body) => ({
+    addUser: build.mutation<User, Token>({
+      query: ({ token }) => ({
         url: '/users',
         method: 'POST',
-        body,
+        token,
       }),
       invalidatesTags: ['User'],
     }),

@@ -1,10 +1,7 @@
-import { Button, Container, createStyles, Group, Title } from '@mantine/core'
+import { Container, createStyles, Group } from '@mantine/core'
 import { Outlet } from 'react-router-dom'
-import Board from './components/boards/Board'
-import NavBreadcrumbs from './components/common/Breadcrumbs'
 import SideNavContainer from './components/navigation/SideNavContainer'
 import TopNav from './components/navigation/TopNav'
-import { useGetUserByTokenQuery } from './services/usersEndpoints'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -39,10 +36,6 @@ const useStyles = createStyles((theme) => ({
 
 function App() {
   const { classes } = useStyles()
-  const { data, isLoading, error } = useGetUserByTokenQuery()
-
-  if (isLoading) return <main>Loading </main>
-  if (error) return <main>Error!</main>
 
   return (
     <div>

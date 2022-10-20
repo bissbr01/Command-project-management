@@ -29,18 +29,18 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
     >
       <Group>
         <Avatar
-          src={null}
-          alt={user.fullName}
+          src={user.picture}
+          alt={user.name}
           size="md"
           color="blue"
           radius="xl"
         >
-          {user.firstName[0] + user.lastName[0]}
+          {user.name}
         </Avatar>
 
         <div style={{ flex: 1 }}>
           <Text size="sm" weight={500}>
-            {user.fullName}
+            {user.name}
           </Text>
 
           <Text color="dimmed" size="xs">

@@ -59,13 +59,13 @@ export interface Project {
 
 export interface User {
   id: number
-  firstName: string
-  lastName: string
-  fullName: string
+  name: string
+  nickname: string
+  picture: string
   email: string
+  emailVerified: boolean
   createdAt: string
   updatedAt: string
-  password?: string
   admin?: boolean
   disabled?: boolean
   projects?: Project[]
@@ -79,6 +79,14 @@ export interface Team {
   id: number
   name: string
   users?: User[]
+}
+
+export interface Auth0TokenContainer {
+  access_token: string
+  id_token: string
+  expires_in: number
+  scope: string
+  token_type: string
 }
 
 export interface Token {

@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react'
 import {
   Avatar,
   Button,
@@ -45,7 +46,7 @@ export default function ListComment({ comment }: ListCommentProps) {
   const [deleteComment] = useDeleteCommentMutation()
   const navigate = useNavigate()
   const [opened, setOpened] = useState(false)
-  const { data: me, isLoading } = useGetUserByTokenQuery()
+  const { user } = useAuth0()
 
   const timeCreated = () => {
     const date = new Date(comment.createdAt)
@@ -60,17 +61,17 @@ export default function ListComment({ comment }: ListCommentProps) {
     setOpened(false)
   }
 
-  if (isLoading || !me) return <Loader />
+  if (!user) return <Loader />
 
   return (
     <article className={classes.comment}>
       <Group>
         <Avatar color={theme.colors.brand[1]} radius="xl" />
-        <Text size="sm">{comment.author?.fullName}</Text>
+        <Text size="sm">{comment.author?.name}</Text>
         <Text size="xs" color="dimmed">
           {timeCreated()}
         </Text>
-        {comment.authorId === me.id && (
+        {comment.authorId === user.id && (
           <CommentMenu handleDelete={setOpened} handleEdit={undefined} />
         )}
       </Group>

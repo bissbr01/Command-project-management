@@ -1,13 +1,15 @@
 /* eslint-disable no-param-reassign */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Token } from '../services/types'
+import { scrumApi } from '../services/scrumApi'
+import { Auth0TokenContainer, Token } from '../services/types'
+import usersEndpoints from '../services/usersEndpoints'
 // eslint-disable-next-line import/no-cycle
 import { AppThunk } from '../store'
 
 const initialState = {
   token: '',
-} as Token
+}
 
 const authSlice = createSlice({
   name: 'auth',
@@ -28,11 +30,14 @@ export const { setToken, removeToken } = authSlice.actions
 export default authSlice.reducer
 
 export const setLogin =
-  (token: Token): AppThunk =>
+  (token: Auth0TokenContainer): AppThunk =>
   (dispatch) => {
     console.log('setLogin thunk')
-    window.localStorage.setItem('token', JSON.stringify(token))
-    dispatch(setToken(token))
+    dispatch(
+      usersEndpoints.endpoints.addUser.initiate({ token: token.id_token })
+    )
+    window.localStorage.setItem('token', JSON.stringify(token.access_token))
+    dispatch(setToken({ token: token.access_token }))
   }
 
 export const removeLogin = (): AppThunk => (dispatch) => {

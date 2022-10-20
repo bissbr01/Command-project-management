@@ -75,9 +75,9 @@ export default function Login() {
         validationSchema={LoginSchema}
         onSubmit={async (values) => {
           try {
-            const res = await login(values).unwrap()
-            dispatch(setLogin(res))
-            navigate('/')
+            // const res = await login(values).unwrap()
+            // dispatch(setLogin(res))
+            // navigate('/')
           } catch (e: unknown) {
             showNotification({
               title: 'Error',

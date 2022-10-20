@@ -62,7 +62,7 @@ export default function Register() {
           validationSchema={registerSchema}
           onSubmit={async ({ terms: conditions, ...values }) => {
             try {
-              await addUser(values)
+              // await addUser(values)
               navigate('/login')
               showNotification({
                 title: 'Account Created',
