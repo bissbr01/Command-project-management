@@ -9,10 +9,11 @@ import {
   IconChalkboard,
 } from '@tabler/icons'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
 import UserButton from './UserButton'
 import { removeLogin } from '../../reducers/authentication'
 import { useAppDispatch } from '../../hooks/hooks'
-import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
+import { User } from '../../services/types'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -97,8 +98,8 @@ function SideNav({ width, close }: SideNavProps) {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { projectId } = useParams()
-  const { data: user, isLoading } = useGetUserByTokenQuery()
   const location = useLocation()
+  const { user, isLoading } = useAuth0()
 
   const navData = [
     { link: 'board', label: 'Board', icon: IconChalkboard },
@@ -137,7 +138,7 @@ function SideNav({ width, close }: SideNavProps) {
         {/* <Logo /> */}
         <Menu position="top" withArrow width={200}>
           <Menu.Target>
-            <UserButton user={user} />
+            <UserButton user={user as User} />
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>

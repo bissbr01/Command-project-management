@@ -82,10 +82,7 @@ export default function BacklogCreateIssue({
       validationSchema={CreateIssueSchema}
       onSubmit={async (values, { resetForm }) => {
         try {
-          console.log('values: ', values)
-          console.log('sprintId: ', sprintId)
           const res = await createIssue({ ...values, sprintId }).unwrap()
-          console.log('response: ', res)
           handleFocused(false)
           resetForm()
           showNotification({

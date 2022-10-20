@@ -16,7 +16,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDeleteCommentMutation } from '../../services/commentsEndpoints'
 import { Comment } from '../../services/types'
-import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import CommentMenu from './CommentMenu'
 
 const useStyles = createStyles((theme) => ({

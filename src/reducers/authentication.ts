@@ -32,12 +32,14 @@ export default authSlice.reducer
 export const setLogin =
   (token: Auth0TokenContainer): AppThunk =>
   (dispatch) => {
-    console.log('setLogin thunk')
-    dispatch(
-      usersEndpoints.endpoints.addUser.initiate({ token: token.id_token })
-    )
+    console.log('setLogin thunk: ', token)
     window.localStorage.setItem('token', JSON.stringify(token.access_token))
     dispatch(setToken({ token: token.access_token }))
+    if (token.id_token) {
+      dispatch(
+        usersEndpoints.endpoints.addUser.initiate({ token: token.id_token })
+      )
+    }
   }
 
 export const removeLogin = (): AppThunk => (dispatch) => {

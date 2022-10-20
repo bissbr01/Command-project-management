@@ -11,11 +11,11 @@ const usersEndpoints = scrumApi.injectEndpoints({
       query: () => '/users/me',
       providesTags: ['User'],
     }),
-    addUser: build.mutation<User, Token>({
-      query: ({ token }) => ({
+    addUser: build.mutation<{ user: User; created: boolean }, Token>({
+      query: (body) => ({
         url: '/users',
         method: 'POST',
-        token,
+        body,
       }),
       invalidatesTags: ['User'],
     }),
