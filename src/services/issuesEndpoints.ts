@@ -7,6 +7,7 @@ import {
   IssueStatus,
   Sprint,
 } from './types'
+import { buildQueryString, QueryParams } from './util'
 
 const issuesEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
@@ -14,12 +15,12 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       query: () => '/issues',
       providesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
-    getIssuesByToken: build.query<Issue[], void>({
-      query: () => '/issues/me',
+    getIssuesByToken: build.query<Issue[], QueryParams>({
+      query: (query) => buildQueryString('/issues/me', query),
       providesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
-    getBacklog: build.query<Issue[], void>({
-      query: () => '/issues/backlog',
+    getBacklog: build.query<Issue[], QueryParams>({
+      query: (query) => buildQueryString('/issues/backlog', query),
       providesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
     getIssuesForBoard: build.query<BoardColumns, void>({

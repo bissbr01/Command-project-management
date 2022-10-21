@@ -12,6 +12,7 @@ import { IconChalkboard } from '@tabler/icons'
 import dayjs from 'dayjs'
 import { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
+import { useParams } from 'react-router-dom'
 import {
   useGetBacklogQuery,
   useUpdateIssueMutation,
@@ -53,10 +54,14 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export default function Backlog() {
+  const { projectId } = useParams()
   const { classes } = useStyles()
   const theme = useMantineTheme()
-  const { data: sprints } = useGetSprintsForBacklogQuery({ active: true })
-  const { data: backlog } = useGetBacklogQuery()
+  const { data: sprints } = useGetSprintsForBacklogQuery({
+    active: true,
+    projectId,
+  })
+  const { data: backlog } = useGetBacklogQuery({ projectId })
   const [updateIssue] = useUpdateIssueMutation()
   const [createSprint] = useAddSprintMutation()
   const [issueOpened, setIssueOpened] = useState(false)

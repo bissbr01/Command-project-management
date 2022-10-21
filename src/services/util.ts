@@ -81,19 +81,22 @@ export const updateListIssues = async (
   return res
 }
 
-export interface SprintQueryParams {
+export interface QueryParams {
+  projectId?: string
+}
+
+export interface SprintQueryParams extends QueryParams {
   active?: boolean
   displayOnBoard?: boolean
   search?: string
-  projectId?: string
 }
 
 export const buildQueryString = (baseUrl: string, query: SprintQueryParams) => {
   let queryString = ''
   Object.entries(query).forEach(([key, value]) => {
     const suffix = queryString ? '&' : ''
-    queryString += `${key}=${value}${suffix}`
+    queryString += `${suffix}${key}=${value}`
   })
   if (queryString) queryString = `?${queryString}`
-  return `/${baseUrl}${queryString}`
+  return `${baseUrl}${queryString}`
 }

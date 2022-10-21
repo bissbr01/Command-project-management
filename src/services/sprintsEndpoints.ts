@@ -6,11 +6,11 @@ import { buildQueryString, SprintQueryParams } from './util'
 const sprintsEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
     getSprints: build.query<Sprint[], SprintQueryParams>({
-      query: (query) => buildQueryString('sprints', query),
+      query: (query) => buildQueryString('/sprints', query),
       providesTags: ['Sprint', { type: 'Issue', id: 'LIST' }],
     }),
     getSprintsForBacklog: build.query<BacklogLists, SprintQueryParams>({
-      query: (query) => buildQueryString('sprints', query),
+      query: (query) => buildQueryString('/sprints', query),
       transformResponse: (sprints: Sprint[]) => {
         const backlogLists: BacklogLists = {}
         sprints.forEach((sprint) => {
@@ -33,7 +33,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
       BoardColumnsData,
       Pick<SprintQueryParams, 'projectId'>
     >({
-      query: (query) => buildQueryString('sprints/board', query),
+      query: (query) => buildQueryString('/sprints/board', query),
       transformResponse: (sprint: Sprint) => {
         const sorted = _.orderBy(sprint.issues, ['boardOrder'], ['asc'])
         const issues = _.groupBy(sorted, 'status')

@@ -9,7 +9,7 @@ import {
   NavLink,
 } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import Logo from '../common/Logo'
 import NavSearch from './NavSearch'
 
