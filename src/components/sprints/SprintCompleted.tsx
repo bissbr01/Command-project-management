@@ -56,7 +56,7 @@ export default function SprintCompleted({
   sprintId,
   handleClose,
 }: SprintCompletedProps) {
-  const { data: sprint } = useGetSprintByIdQuery(sprintId ?? '1')
+  const { data: sprint } = useGetSprintByIdQuery(sprintId as string)
   const { data: sprints } = useGetSprintsQuery({ active: true })
   const [fetchSprint] = useLazyGetSprintByIdQuery()
   const [createSprint] = useAddSprintMutation()
@@ -87,6 +87,7 @@ export default function SprintCompleted({
           goal: '',
           active: true,
           displayOnBoard: true,
+          isBacklog: false,
           projectId: sprint.projectId,
         }).unwrap()
 
@@ -102,7 +103,8 @@ export default function SprintCompleted({
         )
         await updateIssues(issuesForUpdate, updateIssue)
       } else if (sprintSelect === SprintSelect.backlog) {
-        // update each issue in sprint to set sprintId to null
+        // get Backlog Sprint Id and set issues to that sprint.
+        // TODO
         const issuesForUpdate = issuesToCopy.reduce<
           (Partial<Issue> & Pick<Issue, 'id'>)[]
         >(

@@ -13,12 +13,10 @@ import dayjs from 'dayjs'
 import { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import { useParams } from 'react-router-dom'
-import {
-  useGetBacklogQuery,
-  useUpdateIssueMutation,
-} from '../../services/issuesEndpoints'
+import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import {
   useAddSprintMutation,
+  useGetBacklogQuery,
   useGetSprintsForBacklogQuery,
 } from '../../services/sprintsEndpoints'
 import { Issue, IssueStatus, BacklogLists } from '../../services/types'
@@ -71,28 +69,21 @@ export default function Backlog() {
 
   useEffect(() => {
     // if only 1 active sprint, create another to have planning space
-    if (sprints && Object.keys(sprints).length <= 1) {
+    if (projectId && sprints && Object.keys(sprints).length <= 1) {
       Object.entries(sprints)
       createSprint({
         goal: '',
         active: true,
         displayOnBoard: false,
-        projectId: 1, // FIX!  refactor away project id hardcode
+        isBacklog: false,
+        projectId: Number(projectId),
       })
     }
-  }, [createSprint, sprints])
+  }, [createSprint, projectId, sprints])
 
   useEffect(() => {
     if (sprints && backlog) {
-      const backlogList = {
-        Backlog: {
-          name: 'backlog',
-          issues: backlog,
-          sprint: null,
-        },
-      }
-
-      setLists({ ...sprints, ...backlogList })
+      setLists({ ...sprints, Backlog: { ...backlog } })
     }
   }, [setLists, sprints, backlog])
 
@@ -117,18 +108,10 @@ export default function Backlog() {
       const destItems = [...destList.issues]
       const [removedIssue] = sourceItems.splice(source.index, 1)
 
-      let movedIssue = {
+      const movedIssue = {
         ...removedIssue,
         status: IssueStatus.Todo,
         sprintId: destList.sprint?.id ?? null,
-      }
-
-      if (destination.droppableId === 'Backlog') {
-        movedIssue = {
-          ...removedIssue,
-          status: IssueStatus.Todo,
-          sprintId: null,
-        }
       }
 
       destItems.splice(destination.index, 0, movedIssue)
@@ -228,21 +211,25 @@ export default function Backlog() {
                         </span>
                       </Tooltip>
                     )}
-                    {list.sprint.startOn ? (
-                      <SprintCompletedButton
-                        sprintId={list.sprint.id}
-                        setOpened={setSprintOpened}
-                      />
-                    ) : (
-                      <SprintStartButton
-                        sprintId={list.sprint.id}
-                        setOpened={setSprintEditOpened}
-                      />
+                    {list.sprint.id !== backlog?.sprint?.id && (
+                      <>
+                        {list.sprint.startOn ? (
+                          <SprintCompletedButton
+                            sprintId={list.sprint.id}
+                            setOpened={setSprintOpened}
+                          />
+                        ) : (
+                          <SprintStartButton
+                            sprintId={list.sprint.id}
+                            setOpened={setSprintEditOpened}
+                          />
+                        )}
+                        <SprintMenu
+                          sprintId={list.sprint.id}
+                          setEditOpened={setSprintEditOpened}
+                        />
+                      </>
                     )}
-                    <SprintMenu
-                      sprintId={list.sprint.id}
-                      setEditOpened={setSprintEditOpened}
-                    />
                   </Group>
                 </>
               )}

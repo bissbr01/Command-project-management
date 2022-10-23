@@ -7,6 +7,10 @@ const teamsEndpoints = scrumApi.injectEndpoints({
       query: () => '/teams',
       providesTags: ['Team'],
     }),
+    getTeamById: build.query<Team[], number>({
+      query: (id) => `/teams/${id}`,
+      providesTags: (res, e, id) => [{ type: 'Team', id }],
+    }),
     addTeam: build.mutation<Team, Omit<Team, 'id' | 'users'>>({
       query: (body) => ({
         url: '/teams',
@@ -41,5 +45,9 @@ const teamsEndpoints = scrumApi.injectEndpoints({
 })
 
 export default teamsEndpoints
-export const { useGetTeamsQuery, useAddTeamMutation, useUpdateTeamMutation } =
-  teamsEndpoints
+export const {
+  useGetTeamsQuery,
+  useGetTeamByIdQuery,
+  useAddTeamMutation,
+  useUpdateTeamMutation,
+} = teamsEndpoints

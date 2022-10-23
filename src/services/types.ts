@@ -45,6 +45,7 @@ export interface Sprint {
   length?: number
   active: boolean
   displayOnBoard: boolean
+  isBacklog: boolean
   projectId: number
   project: Project
   issues: Issue[]

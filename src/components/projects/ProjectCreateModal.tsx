@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { createStyles, Title, Modal, Button, Text, Group } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
@@ -7,9 +7,10 @@ import * as Yup from 'yup'
 import { Project } from '../../services/types'
 import {
   useAddProjectMutation,
-  useUpdateProjectMutation,
+  useGetProjectByIdQuery,
 } from '../../services/projectsEndpoints'
 import TextField from '../common/forms/TextField'
+import { useGetTeamByIdQuery } from '../../services/teamsEndpoints'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -48,7 +49,9 @@ export default function ProjectCreateModal({
   opened,
   setOpened,
 }: ProjectCreateModalProps) {
+  const { projectId } = useParams()
   const [createProject] = useAddProjectMutation()
+  const { data: project } = useGetProjectByIdQuery(projectId as string)
   const { classes, cx } = useStyles()
 
   const ProjectCreateModalSchema = Yup.object().shape({
@@ -106,8 +109,9 @@ export default function ProjectCreateModal({
             />
             <Field
               stylesApi={{ input: cx(classes.inputStyles) }}
-              id="author"
-              name="author"
+              id="lead"
+              name="lead"
+              value="author"
               label={<Text>Lead</Text>}
               component={TextField}
             />

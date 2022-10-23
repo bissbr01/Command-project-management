@@ -1,13 +1,35 @@
 import _ from 'lodash'
 import { scrumApi } from './scrumApi'
-import { IssueStatus, Sprint, BoardColumnsData, BacklogLists } from './types'
-import { buildQueryString, SprintQueryParams } from './util'
+import {
+  IssueStatus,
+  Sprint,
+  BoardColumnsData,
+  BacklogLists,
+  BacklogList,
+} from './types'
+import { buildQueryString, SprintQueryParams, QueryParams } from './util'
 
 const sprintsEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
     getSprints: build.query<Sprint[], SprintQueryParams>({
       query: (query) => buildQueryString('/sprints', query),
       providesTags: ['Sprint', { type: 'Issue', id: 'LIST' }],
+    }),
+    getBacklog: build.query<BacklogList, QueryParams>({
+      query: (query) => buildQueryString('/sprints/backlog', query),
+      transformResponse: (sprint: Sprint) => {
+        const sorted = _.orderBy(sprint.issues, ['boardOrder'], ['asc'])
+        const backlogList = {
+          name: 'backlog',
+          issues: sorted,
+          sprint,
+        }
+        return backlogList
+      },
+      providesTags: (result) => [
+        { type: 'Sprint', id: result?.sprint?.id },
+        { type: 'Issue', id: 'LIST' },
+      ],
     }),
     getSprintsForBacklog: build.query<BacklogLists, SprintQueryParams>({
       query: (query) => buildQueryString('/sprints', query),
@@ -103,6 +125,7 @@ export const {
   useLazyGetSprintsQuery,
   useGetSprintsForBacklogQuery,
   useGetSprintByIdQuery,
+  useGetBacklogQuery,
   useLazyGetSprintByIdQuery,
   useGetSprintForBoardQuery,
   useAddSprintMutation,

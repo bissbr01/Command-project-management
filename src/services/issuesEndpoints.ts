@@ -19,10 +19,6 @@ const issuesEndpoints = scrumApi.injectEndpoints({
       query: (query) => buildQueryString('/issues/me', query),
       providesTags: [{ type: 'Issue', id: 'LIST' }],
     }),
-    getBacklog: build.query<Issue[], QueryParams>({
-      query: (query) => buildQueryString('/issues/backlog', query),
-      providesTags: [{ type: 'Issue', id: 'LIST' }],
-    }),
     getIssuesForBoard: build.query<BoardColumns, void>({
       query: () => '/issues/me',
       transformResponse: (response: Issue[]) => {
@@ -94,7 +90,6 @@ const issuesEndpoints = scrumApi.injectEndpoints({
 export const {
   useGetIssuesQuery,
   useGetIssuesByTokenQuery,
-  useGetBacklogQuery,
   useGetIssuesForBoardQuery,
   useGetIssueByIdQuery,
   useAddIssueMutation,
