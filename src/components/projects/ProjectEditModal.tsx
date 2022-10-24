@@ -64,7 +64,7 @@ export default function ProjectEditModal({
       <Formik
         initialValues={{
           title: project.title,
-          lead: project.author.name,
+          leadId: project.leadId,
         }}
         validationSchema={ProjectEditModalSchema}
         onSubmit={async (values) => {

@@ -29,6 +29,15 @@ export default function SelectField({
       variant={variant}
       data={data}
       {...field}
+      onChange={(value) => {
+        const event = {
+          target: {
+            value: value,
+            name: field.name,
+          },
+        }
+        field.onChange(event)
+      }}
     />
   )
 }

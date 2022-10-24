@@ -1,16 +1,21 @@
-import { useNavigate, useParams } from 'react-router-dom'
-import { createStyles, Title, Modal, Button, Text, Group } from '@mantine/core'
+import {
+  createStyles,
+  Title,
+  Modal,
+  Button,
+  Text,
+  Group,
+  Loader,
+} from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { Project } from '../../services/types'
-import {
-  useAddProjectMutation,
-  useGetProjectByIdQuery,
-} from '../../services/projectsEndpoints'
+import { useAddProjectMutation } from '../../services/projectsEndpoints'
+import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import TextField from '../common/forms/TextField'
-import { useGetTeamByIdQuery } from '../../services/teamsEndpoints'
+import ProjectLeadSelectField from './ProjectLeadSelectField'
+import ProjectTeamSelectField from './ProjectTeamSelectField'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -49,15 +54,18 @@ export default function ProjectCreateModal({
   opened,
   setOpened,
 }: ProjectCreateModalProps) {
-  const { projectId } = useParams()
   const [createProject] = useAddProjectMutation()
-  const { data: project } = useGetProjectByIdQuery(projectId as string)
+  const { data: me } = useGetUserByTokenQuery()
+
   const { classes, cx } = useStyles()
 
   const ProjectCreateModalSchema = Yup.object().shape({
     title: Yup.string().required('Your project must have a title'),
-    lead: Yup.string().required('Your project must have a lead assigned'),
+    teamId: Yup.string(),
+    leadId: Yup.string().required('Your project must have a lead assigned'),
   })
+
+  if (!me) return <Loader />
 
   return (
     <Modal
@@ -68,14 +76,17 @@ export default function ProjectCreateModal({
       <Formik
         initialValues={{
           title: '',
-          lead: '',
+          leadId: '',
+          teamId: '',
         }}
         validationSchema={ProjectCreateModalSchema}
-        onSubmit={async (values) => {
+        onSubmit={async ({ title, leadId, teamId }) => {
           try {
             setOpened(false)
             await createProject({
-              ...values,
+              title,
+              leadId,
+              teamId: teamId ? Number(teamId) : undefined,
             })
             showNotification({
               title: 'Success',
@@ -109,11 +120,17 @@ export default function ProjectCreateModal({
             />
             <Field
               stylesApi={{ input: cx(classes.inputStyles) }}
-              id="lead"
-              name="lead"
-              value="author"
+              id="teamId"
+              name="teamId"
+              label={<Text>Team</Text>}
+              component={ProjectTeamSelectField}
+            />
+            <Field
+              stylesApi={{ input: cx(classes.inputStyles) }}
+              id="leadId"
+              name="leadId"
               label={<Text>Lead</Text>}
-              component={TextField}
+              component={ProjectLeadSelectField}
             />
             <Group position="center">
               <Button type="submit" disabled={isSubmitting}>

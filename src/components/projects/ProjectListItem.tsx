@@ -19,7 +19,7 @@ export default function ProjectListItem({ project }: ProjectListItemProps) {
         <Link to={`/projects/${project.id}/board`}>{project.title}</Link>
       </td>
       <td>{project.id}</td>
-      <td>{project.author.name}</td>
+      <td>{project.lead?.name}</td>
       <td>
         <Menu>
           <Menu.Target>

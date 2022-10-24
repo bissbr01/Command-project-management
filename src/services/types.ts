@@ -55,21 +55,25 @@ export interface Sprint {
 export interface Project {
   id: number
   title: string
-  author: User
+  leadId: string
+  teamId?: number
+  sprints?: Sprint[]
+  team?: Team
+  lead?: User
 }
 
 export interface User {
-  id?: number
+  id: number
   sub: string
   name: string
   nickname: string
   picture: string
   email: string
-  emailVerified?: boolean
+  emailVerified: boolean
   createdAt?: string
   updatedAt?: string
-  admin?: boolean
-  disabled?: boolean
+  admin: boolean
+  disabled: boolean
   projects?: Project[]
   sprints?: Sprint[]
   authoredIssues?: Issue[]
