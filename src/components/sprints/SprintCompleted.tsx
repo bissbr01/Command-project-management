@@ -11,6 +11,7 @@ import {
   Title,
 } from '@mantine/core'
 import { FormEvent, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import {
   useAddSprintMutation,
@@ -56,8 +57,9 @@ export default function SprintCompleted({
   sprintId,
   handleClose,
 }: SprintCompletedProps) {
+  const { projectId } = useParams()
   const { data: sprint } = useGetSprintByIdQuery(sprintId as string)
-  const { data: sprints } = useGetSprintsQuery({ active: true })
+  const { data: sprints } = useGetSprintsQuery({ projectId, active: true })
   const [fetchSprint] = useLazyGetSprintByIdQuery()
   const [createSprint] = useAddSprintMutation()
   const [updateSprint] = useUpdateSprintMutation()
@@ -148,12 +150,11 @@ export default function SprintCompleted({
   }
 
   const newerSprints = sprints
-    .filter((s) => s.id > sprint.id)
-    .map((s) => ({ value: String(s.id), label: `Sprint ${s.id}` }))
+    .filter((s) => s.active === true && s.id !== sprint.id)
+    .map((s) => ({ value: String(s.id), label: s.name }))
 
   const selectData = [
     ...newerSprints,
-    { value: SprintSelect.backlog, label: 'Backlog' },
     { value: SprintSelect.newSprint, label: 'New Sprint' },
   ]
 
@@ -176,7 +177,7 @@ export default function SprintCompleted({
         <Image src={trophyBanner} height={100} alt="trophy" />
       </Card.Section>
       <Title py="lg" order={2}>
-        Complete Sprint {sprint.id}
+        Complete {sprint.name}
       </Title>
       <Text>This Sprint contains:</Text>
       <List withPadding>

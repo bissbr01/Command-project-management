@@ -74,7 +74,7 @@ export default function BoardLayout() {
     <main>
       <div className={classes.sprintItems}>
         <Title className={classes.title} order={1} size="h2">
-          Sprint {sprint?.id}
+          {sprint.name}
         </Title>
         <div className={classes.rightGroup}>
           {sprint?.endOn && (

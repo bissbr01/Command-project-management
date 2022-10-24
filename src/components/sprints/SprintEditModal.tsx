@@ -61,8 +61,7 @@ export default function SprintEditModal({
       onClose={handleClose}
       title={
         <Title order={2}>
-          {type === SprintEditModalType.START ? 'Start ' : 'Edit '}Sprint{' '}
-          {sprintId}
+          {type === SprintEditModalType.START ? 'Start ' : 'Edit '}Sprint
         </Title>
       }
     >
