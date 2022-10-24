@@ -52,7 +52,11 @@ const issuesEndpoints = scrumApi.injectEndpoints({
     }),
     addIssue: build.mutation<
       Issue,
-      Omit<Issue, 'id' | 'createdAt' | 'updatedAt' | 'authorId' | 'storyPoints'>
+      Omit<
+        Issue,
+        'id' | 'createdAt' | 'updatedAt' | 'authorId' | 'storyPoints' | 'name'
+      > &
+        Pick<Sprint, 'projectId'>
     >({
       query: (body) => ({
         url: '/issues',

@@ -23,6 +23,7 @@ export enum IssueType {
 
 export interface Issue {
   id: number
+  name: string
   status: IssueStatus
   attachmentUri?: string
   description?: string
@@ -39,6 +40,7 @@ export interface Issue {
 
 export interface Sprint {
   id: number
+  name: string
   goal: string
   startOn?: string
   endOn?: string

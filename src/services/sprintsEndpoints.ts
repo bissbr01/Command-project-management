@@ -38,7 +38,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
         sprints.forEach((sprint) => {
           const sorted = _.orderBy(sprint.issues, ['boardOrder'], ['asc'])
           backlogLists[`Sprint ${sprint.id}`] = {
-            name: sprint.isBacklog ? 'Backlog' : `Sprint ${sprint.id}`,
+            name: sprint.name,
             issues: sorted,
             sprint,
           }
@@ -85,7 +85,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
     }),
     addSprint: build.mutation<
       Sprint,
-      Omit<Sprint, 'id' | 'author' | 'authorId' | 'project' | 'issues'>
+      Omit<Sprint, 'id' | 'author' | 'authorId' | 'project' | 'issues' | 'name'>
     >({
       query: (body) => ({
         url: '/sprints',

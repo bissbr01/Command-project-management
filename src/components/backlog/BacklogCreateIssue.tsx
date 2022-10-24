@@ -3,6 +3,7 @@ import { Field, Form, Formik } from 'formik'
 import { showNotification } from '@mantine/notifications'
 import { createStyles, Group, Text, UnstyledButton } from '@mantine/core'
 import { IconCheck, IconPlus, IconX } from '@tabler/icons'
+import { useParams } from 'react-router-dom'
 import { FocusEvent } from 'react'
 import { IssueStatus, IssueType } from '../../services/types'
 import { useAddIssueMutation } from '../../services/issuesEndpoints'
@@ -64,6 +65,7 @@ export default function BacklogCreateIssue({
 }: BacklogCreateIssueProps) {
   const { classes, cx } = useStyles()
   const { focused, handleFocused } = useFocused()
+  const { projectId } = useParams()
   const [createIssue] = useAddIssueMutation()
 
   const CreateIssueSchema = Yup.object().shape({
@@ -82,7 +84,11 @@ export default function BacklogCreateIssue({
       validationSchema={CreateIssueSchema}
       onSubmit={async (values, { resetForm }) => {
         try {
-          const res = await createIssue({ ...values, sprintId }).unwrap()
+          await createIssue({
+            ...values,
+            sprintId,
+            projectId: Number(projectId),
+          })
           handleFocused(false)
           resetForm()
           showNotification({

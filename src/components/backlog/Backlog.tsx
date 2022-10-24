@@ -65,19 +65,19 @@ export default function Backlog() {
   const [sprintEditOpened, setSprintEditOpened] = useState(false)
   const [lists, setLists] = useState<BacklogLists>()
 
-  useEffect(() => {
-    // if only 1 active sprint + Backlog, create another to have planning space
-    if (projectId && sprints && Object.keys(sprints).length <= 2) {
-      Object.entries(sprints)
-      createSprint({
-        goal: '',
-        active: true,
-        displayOnBoard: false,
-        isBacklog: false,
-        projectId: Number(projectId),
-      })
-    }
-  }, [createSprint, projectId, sprints])
+  // useEffect(() => {
+  //   // if only 1 active sprint + Backlog, create another to have planning space
+  //   if (projectId && sprints && Object.keys(sprints).length <= 2) {
+  //     Object.entries(sprints)
+  //     createSprint({
+  //       goal: '',
+  //       active: true,
+  //       displayOnBoard: false,
+  //       isBacklog: false,
+  //       projectId: Number(projectId),
+  //     })
+  //   }
+  // }, [createSprint, projectId, sprints])
 
   // drag-n-drop requires local state.  Set when api data arrives
   useEffect(() => {
