@@ -1,9 +1,9 @@
 import { ActionIcon, createStyles, Menu } from '@mantine/core'
-import { IconDotsVertical, IconEdit, IconTrash } from '@tabler/icons'
+import { IconArchive, IconDotsVertical, IconEdit } from '@tabler/icons'
 import { useState } from 'react'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import { Sprint } from '../../services/types'
-import SprintDeleteModal from './SprintDeleteModal'
+import SprintArchiveModal from './SprintArchiveModal'
 import { SprintEditModalType } from './SprintEdit'
 import SprintEditModal from './SprintEditModal'
 
@@ -50,14 +50,14 @@ export default function SprintMenu({
           </Menu.Item>
           <Menu.Item
             onClick={() => setDeleteOpened(true)}
-            color="red"
-            icon={<IconTrash size={16} />}
+            color="orange"
+            icon={<IconArchive size={16} />}
           >
-            Delete
+            Archive
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>
-      <SprintDeleteModal
+      <SprintArchiveModal
         sprintId={sprintId}
         opened={deleteOpened}
         setOpened={setDeleteOpened}
