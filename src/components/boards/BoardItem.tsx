@@ -74,7 +74,7 @@ function BoardItem({
               <ThemeIcon size="sm" variant="light">
                 <IssueTypeIcon issueType={issue.type} />
               </ThemeIcon>
-              <Text>Issue {issue.id}</Text>
+              <Text>{issue.name}</Text>
               <IssueStoryPointsDisplay storyPoints={issue.storyPoints} />
             </Group>
           </UnstyledButton>

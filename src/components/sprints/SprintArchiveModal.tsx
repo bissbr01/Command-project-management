@@ -1,9 +1,6 @@
 import { Button, createStyles, Group, Modal, Text, Title } from '@mantine/core'
 import { IconAlertTriangle } from '@tabler/icons'
-import {
-  useDeleteSprintMutation,
-  useUpdateSprintMutation,
-} from '../../services/sprintsEndpoints'
+import { useUpdateSprintMutation } from '../../services/sprintsEndpoints'
 
 const useStyles = createStyles((theme) => ({
   icon: {
