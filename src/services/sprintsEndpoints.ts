@@ -20,7 +20,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
       transformResponse: (sprint: Sprint) => {
         const sorted = _.orderBy(sprint.issues, ['boardOrder'], ['asc'])
         const backlogList = {
-          name: 'backlog',
+          name: 'Backlog',
           issues: sorted,
           sprint,
         }
@@ -38,7 +38,7 @@ const sprintsEndpoints = scrumApi.injectEndpoints({
         sprints.forEach((sprint) => {
           const sorted = _.orderBy(sprint.issues, ['boardOrder'], ['asc'])
           backlogLists[`Sprint ${sprint.id}`] = {
-            name: `Sprint ${sprint.id}`,
+            name: sprint.isBacklog ? 'Backlog' : `Sprint ${sprint.id}`,
             issues: sorted,
             sprint,
           }

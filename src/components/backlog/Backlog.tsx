@@ -16,7 +16,6 @@ import { useParams } from 'react-router-dom'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import {
   useAddSprintMutation,
-  useGetBacklogQuery,
   useGetSprintsForBacklogQuery,
 } from '../../services/sprintsEndpoints'
 import { Issue, IssueStatus, BacklogLists } from '../../services/types'
@@ -59,17 +58,16 @@ export default function Backlog() {
     active: true,
     projectId,
   })
-  const { data: backlog } = useGetBacklogQuery({ projectId })
   const [updateIssue] = useUpdateIssueMutation()
   const [createSprint] = useAddSprintMutation()
   const [issueOpened, setIssueOpened] = useState(false)
   const [sprintOpened, setSprintOpened] = useState(false)
   const [sprintEditOpened, setSprintEditOpened] = useState(false)
-  const [lists, setLists] = useState<BacklogLists | null>(null)
+  const [lists, setLists] = useState<BacklogLists>()
 
   useEffect(() => {
-    // if only 1 active sprint, create another to have planning space
-    if (projectId && sprints && Object.keys(sprints).length <= 1) {
+    // if only 1 active sprint + Backlog, create another to have planning space
+    if (projectId && sprints && Object.keys(sprints).length <= 2) {
       Object.entries(sprints)
       createSprint({
         goal: '',
@@ -81,11 +79,12 @@ export default function Backlog() {
     }
   }, [createSprint, projectId, sprints])
 
+  // drag-n-drop requires local state.  Set when api data arrives
   useEffect(() => {
-    if (sprints && backlog) {
-      setLists({ ...sprints, Backlog: { ...backlog } })
+    if (sprints) {
+      setLists(sprints)
     }
-  }, [setLists, sprints, backlog])
+  }, [setLists, sprints])
 
   const issuePropertiesToUpdate = (issue: Issue) => ({
     sprintId: issue.sprintId,
@@ -95,7 +94,7 @@ export default function Backlog() {
   const handleDragEnd = async (
     result: DropResult,
     items: BacklogLists,
-    setItems: React.Dispatch<SetStateAction<BacklogLists | null>>
+    setItems: React.Dispatch<SetStateAction<BacklogLists | undefined>>
   ) => {
     if (!result.destination) return
     const { source, destination } = result
@@ -177,7 +176,7 @@ export default function Backlog() {
     }
   }
 
-  if (!sprints || !backlog || !lists) return <Loader />
+  if (!sprints || !lists) return <Loader />
 
   return (
     <main>
@@ -192,47 +191,45 @@ export default function Backlog() {
           <section className={classes.section} key={listKey}>
             <Group>
               <Title order={2} size="h3" p="xs">
-                {listKey}
+                {list.name}
               </Title>
-              {list.sprint && (
-                <>
-                  {list.sprint.startOn && (
-                    <Text color="dimmed">
-                      {`${dayjs(list.sprint.startOn).format('MMM DD')}
+              <>
+                {list.sprint.startOn && (
+                  <Text color="dimmed">
+                    {`${dayjs(list.sprint.startOn).format('MMM DD')}
                     -
                     ${dayjs(list.sprint.endOn).format('MMM DD')}`}
-                    </Text>
+                  </Text>
+                )}
+                <Group m="0 2rem 0 auto">
+                  {list.sprint.displayOnBoard && (
+                    <Tooltip label="Sprint is displayed on board">
+                      <span className={classes.icon}>
+                        <IconChalkboard stroke={1.5} />
+                      </span>
+                    </Tooltip>
                   )}
-                  <Group m="0 2rem 0 auto">
-                    {list.sprint.displayOnBoard && (
-                      <Tooltip label="Sprint is displayed on board">
-                        <span className={classes.icon}>
-                          <IconChalkboard stroke={1.5} />
-                        </span>
-                      </Tooltip>
-                    )}
-                    {list.sprint.id !== backlog?.sprint?.id && (
-                      <>
-                        {list.sprint.startOn ? (
-                          <SprintCompletedButton
-                            sprintId={list.sprint.id}
-                            setOpened={setSprintOpened}
-                          />
-                        ) : (
-                          <SprintStartButton
-                            sprintId={list.sprint.id}
-                            setOpened={setSprintEditOpened}
-                          />
-                        )}
-                        <SprintMenu
+                  {!list.sprint.isBacklog && (
+                    <>
+                      {list.sprint.startOn ? (
+                        <SprintCompletedButton
                           sprintId={list.sprint.id}
-                          setEditOpened={setSprintEditOpened}
+                          setOpened={setSprintOpened}
                         />
-                      </>
-                    )}
-                  </Group>
-                </>
-              )}
+                      ) : (
+                        <SprintStartButton
+                          sprintId={list.sprint.id}
+                          setOpened={setSprintEditOpened}
+                        />
+                      )}
+                      <SprintMenu
+                        sprintId={list.sprint.id}
+                        setEditOpened={setSprintEditOpened}
+                      />
+                    </>
+                  )}
+                </Group>
+              </>
             </Group>
             <Paper className={classes.paper}>
               <Droppable droppableId={listKey}>

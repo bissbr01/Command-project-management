@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { createStyles, Title, Modal, Button, Text, Group } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
@@ -7,6 +6,8 @@ import * as Yup from 'yup'
 import { Project } from '../../services/types'
 import { useUpdateProjectMutation } from '../../services/projectsEndpoints'
 import TextField from '../common/forms/TextField'
+import ProjectTeamSelectField from './ProjectTeamSelectField'
+import ProjectLeadSelectField from './ProjectLeadSelectField'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -64,15 +65,18 @@ export default function ProjectEditModal({
       <Formik
         initialValues={{
           title: project.title,
+          teamId: project.leadId,
           leadId: project.leadId,
         }}
         validationSchema={ProjectEditModalSchema}
-        onSubmit={async (values) => {
+        onSubmit={async ({ title, leadId, teamId }) => {
           try {
             setOpened(false)
             await updateProject({
               id: project.id,
-              ...values,
+              title,
+              leadId,
+              teamId: teamId ? Number(teamId) : undefined,
             })
             showNotification({
               title: 'Success',
@@ -106,10 +110,17 @@ export default function ProjectEditModal({
             />
             <Field
               stylesApi={{ input: cx(classes.inputStyles) }}
-              id="author"
-              name="author"
+              id="teamId"
+              name="teamId"
+              label={<Text>Team</Text>}
+              component={ProjectTeamSelectField}
+            />
+            <Field
+              stylesApi={{ input: cx(classes.inputStyles) }}
+              id="leadId"
+              name="leadId"
               label={<Text>Lead</Text>}
-              component={TextField}
+              component={ProjectLeadSelectField}
             />
             <Group position="center">
               <Button type="submit" disabled={isSubmitting}>

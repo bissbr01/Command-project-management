@@ -11,10 +11,7 @@ const projectsEndpoints = scrumApi.injectEndpoints({
       query: (id) => `/projects/${id}`,
       providesTags: (result, error, id) => [{ type: 'Sprint', id }],
     }),
-    addProject: build.mutation<
-      Project,
-      Omit<Project, 'id' | 'sprints' | 'author'>
-    >({
+    addProject: build.mutation<Project, Omit<Project, 'id' | 'author'>>({
       query: (body) => ({
         url: '/projects',
         method: 'POST',

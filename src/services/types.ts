@@ -113,7 +113,7 @@ export interface IssueList {
 }
 
 export interface BacklogList extends IssueList {
-  sprint: Sprint | null
+  sprint: Sprint
 }
 
 export type BacklogLists = {
