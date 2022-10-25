@@ -1,12 +1,21 @@
-import { Avatar, Card, Stack, Text } from '@mantine/core'
+import { Avatar, Card, createStyles, Stack, Text } from '@mantine/core'
 import { User } from '../../services/types'
+
+const useStyles = createStyles((theme) => ({
+  card: {
+    width: theme.other.cardWidth,
+    height: theme.other.cardHeight,
+  },
+}))
 
 interface UserListItemProps {
   user: User
 }
 export default function UserListItem({ user }: UserListItemProps) {
+  const { classes } = useStyles()
+
   return (
-    <Card withBorder shadow="sm" radius="md">
+    <Card withBorder shadow="sm" radius="md" className={classes.card}>
       <Stack align="center">
         <Avatar
           src={user.picture}

@@ -1,4 +1,4 @@
-import { Loader, Title } from '@mantine/core'
+import { Container, Loader, Title } from '@mantine/core'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import ColleagueList from './ColleagueList'
 import TeamList from './TeamList'
@@ -14,10 +14,12 @@ export default function PeopleLayout() {
     )
 
   return (
-    <main>
-      <Title>People</Title>
-      <ColleagueList colleagues={me.friends} me={me} seed={seed} />
-      <TeamList teams={me.teams} seed={seed} />
-    </main>
+    <Container>
+      <main>
+        <Title py="lg">People</Title>
+        <ColleagueList colleagues={me.friends} me={me} seed={seed} />
+        <TeamList teams={me.teams} seed={seed} />
+      </main>
+    </Container>
   )
 }

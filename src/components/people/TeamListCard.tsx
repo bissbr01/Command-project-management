@@ -1,26 +1,22 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  createStyles,
-  Group,
-  Stack,
-  Text,
-} from '@mantine/core'
+import { Avatar, Button, Card, createStyles, Stack, Text } from '@mantine/core'
 import { Team } from '../../services/types'
-import { buildAvatarString } from '../../services/util'
+import { buildAvatarString, formatPlural } from '../../services/util'
 
 const useStyles = createStyles((theme) => ({
+  card: {
+    width: theme.other.cardWidth,
+    height: theme.other.cardHeight,
+  },
+
   avatarContainer: {
-    display: 'block',
+    width: 100,
   },
 
   avatarGroup: {
     display: 'flex',
     flexDirection: 'row',
-    alignContent: 'flex-end',
-    flex: '0 1 content',
     flexWrap: 'nowrap',
+    // justifyContent: 'center',
   },
 
   avatar: {
@@ -29,10 +25,10 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-interface TeamListCardProps {
-  team: Team
+export interface TeamListCardProps {
+  team?: Team
   seed: number
-  setCreateOpened: React.Dispatch<React.SetStateAction<boolean>>
+  setCreateOpened?: React.Dispatch<React.SetStateAction<boolean>>
 }
 export default function TeamListCard({
   team,
@@ -41,17 +37,20 @@ export default function TeamListCard({
 }: TeamListCardProps) {
   const { classes } = useStyles()
 
-  const getAvatars = (count = 3) => {
+  const getAvatars = (numAvatars = 3) => {
     const avatars = []
-    for (let i = 0; i < count; i += 1) {
+    const aSeed = team ? team.id + seed : seed
+
+    for (let i = 0; i < numAvatars; i += 1) {
+      const style = `calc( 35px * ${-i})`
       avatars.push(
         <Avatar
-          src={buildAvatarString(seed + i)}
+          src={buildAvatarString(aSeed + i * 100)}
           alt="teammate avatar"
           size="lg"
           color="blue"
           radius="xl"
-          sx={{ left: `calc( 35% * ${-i})` }}
+          sx={{ left: style }}
           className={classes.avatar}
           key={i}
         >
@@ -62,21 +61,29 @@ export default function TeamListCard({
     return avatars
   }
 
+  // const count = team ? team.users?.length : 3
+  const count = 3
+
   return (
-    <Card withBorder shadow="sm" radius="md">
+    <Card withBorder shadow="sm" radius="md" className={classes.card}>
       <Stack align="center" justify="center">
         <div className={classes.avatarContainer}>
           <div className={classes.avatarGroup}>
-            {getAvatars().map((avatar) => avatar)}
+            {getAvatars(count).map((avatar) => avatar)}
           </div>
         </div>
-        <Text size="md">{team.name}</Text>
-        <Text size="sm" color="dimmed">
-          {team.users?.length}
-        </Text>
-        <Button onClick={() => setCreateOpened(true)} color="blue">
-          Create Team
-        </Button>
+        {team && team.users && (
+          <>
+            <Text size="md">{team.name}</Text>
+            <Text size="sm" color="dimmed">
+              {team.users?.length}
+              {formatPlural(team.users.length, ' Member')}
+            </Text>
+          </>
+        )}
+        {setCreateOpened && (
+          <Button onClick={() => setCreateOpened(true)}>Create Team</Button>
+        )}
       </Stack>
     </Card>
   )

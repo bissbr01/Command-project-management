@@ -31,6 +31,18 @@ const useStyles = createStyles((theme) => ({
     // margin: '1.5rem 0 1.5rem 0',
     padding: '1rem',
   },
+
+  group: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: '1rem',
+    [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+    },
+  },
 }))
 
 interface TeamListProps {
@@ -47,23 +59,17 @@ export default function TeamList({ teams, seed }: TeamListProps) {
   if (!teams) return <Text>There are no teams to display</Text>
 
   return (
-    <>
-      <Group>
-        <Title my="md" order={2}>
-          Teams
-        </Title>
-      </Group>
-      <Group>
+    <section>
+      <Title my="md" order={2}>
+        Teams
+      </Title>
+      <div className={classes.group}>
+        <TeamListCard seed={seed} setCreateOpened={setCreateOpened} />
         {teams.map((team) => (
-          <TeamListCard
-            team={team}
-            seed={seed}
-            key={team.id}
-            setCreateOpened={setCreateOpened}
-          />
+          <TeamListCard team={team} seed={seed} key={team.id} />
         ))}
-      </Group>
+      </div>
       <TeamCreateModal opened={createOpened} setOpened={setCreateOpened} />
-    </>
+    </section>
   )
 }

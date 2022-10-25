@@ -117,9 +117,10 @@ export const buildAvatarString = (seed: number) => {
   const query = {
     accessoriesChance: '0',
     mouth: 'default',
-    clothes: 'shirt',
+    clothes: 'shirtCrewNeck',
     eyes: 'default',
     eyebrow: 'default',
+    facialHairChance: '0',
     top: ['shortHair', 'longHair', 'turban', 'hijab', 'straight01'],
   }
 
@@ -127,4 +128,10 @@ export const buildAvatarString = (seed: number) => {
     `https://avatars.dicebear.com/api/avataaars/${seed}.svg`,
     query
   )
+}
+
+export const formatPlural = (count: number, base: string) => {
+  let s = `${base}`
+  if (count !== 1) s += 's'
+  return s
 }

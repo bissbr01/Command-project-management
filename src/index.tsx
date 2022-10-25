@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { Auth0Provider } from '@auth0/auth0-react'
 import { Provider } from 'react-redux'
 import { store } from './store'
-import { CustomFonts } from './components/common/CustomFonts'
+import { CustomFonts } from './components/common/GlobalStyles'
 import reportWebVitals from './reportWebVitals'
 import AppRoutes from './components/navigation/AppRoutes'
 
@@ -50,6 +50,10 @@ if (container) {
               },
               primaryColor: 'brand',
               primaryShade: { light: 4, dark: 6 },
+              other: {
+                cardWidth: '200px',
+                cardHeight: '200px',
+              },
             }}
           >
             <NotificationsProvider position="bottom-left">

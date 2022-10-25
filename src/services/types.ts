@@ -135,3 +135,10 @@ export interface BoardColumnsData {
   boardColumns: BoardColumns
   sprint: Sprint
 }
+
+declare module '@mantine/core' {
+  export interface MantineThemeOther {
+    cardWidth: string
+    cardHeight: string
+  }
+}
