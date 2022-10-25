@@ -94,11 +94,13 @@ function TopNav(): JSX.Element {
                 size="sm"
                 aria-label="Open Top Navigation"
               />
-              <Modal opened={opened} onClose={close} title="Navigation">
-                <Box>
-                  {navLinks.map((item) => item)}
-                  <NavSearch />
-                </Box>
+              <Modal
+                opened={opened}
+                onClick={close}
+                onClose={close}
+                title="Navigation"
+              >
+                <Box>{navLinks.map((item) => item)}</Box>
               </Modal>
             </>
           )}

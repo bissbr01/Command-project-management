@@ -1,6 +1,7 @@
 import {
   ActionIcon,
   Box,
+  Button,
   Card,
   createStyles,
   Group,
@@ -14,6 +15,7 @@ import { IconDots, IconEdit, IconTrash } from '@tabler/icons'
 import { useState } from 'react'
 import { useGetProjectsQuery } from '../../services/projectsEndpoints'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
+import TeamCreateModal from './TeamCreateModal'
 import UserListItem from './UserListItem'
 
 const useStyles = createStyles((theme) => ({
@@ -43,14 +45,16 @@ export default function TeamList() {
       <Group>
         <Title my="md">Teams</Title>
         <Box className={classes.createButton}>
-          {/* <ProjectCreateButton setOpened={setCreateOpened} /> */}
+          <Button onClick={() => setCreateOpened(true)} color="blue">
+            Create Team
+          </Button>
         </Box>
       </Group>
       {user.teams.map((team) => (
         <section key={team.id}>
           <Group>
             <Title order={2}>{team.name}</Title>
-            <Menu withinPortal position="bottom-end" shadow="sm">
+            <Menu withinPortal position="right-end" shadow="sm">
               <Menu.Target>
                 <ActionIcon>
                   <IconDots />
@@ -80,7 +84,7 @@ export default function TeamList() {
           </Group>
         </section>
       ))}
-      {/* <ProjectCreateModal opened={createOpened} setOpened={setCreateOpened} /> */}
+      <TeamCreateModal opened={createOpened} setOpened={setCreateOpened} />
     </main>
   )
 }

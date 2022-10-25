@@ -1,12 +1,4 @@
-import {
-  Avatar,
-  Card,
-  Group,
-  Stack,
-  Text,
-  Title,
-  useMantineTheme,
-} from '@mantine/core'
+import { Avatar, Card, Stack, Text } from '@mantine/core'
 import { User } from '../../services/types'
 
 interface UserListItemProps {
