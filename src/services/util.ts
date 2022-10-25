@@ -6,7 +6,6 @@ import {
   MutationDefinition,
 } from '@reduxjs/toolkit/dist/query'
 import { MutationActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
-import { delimiter } from 'path'
 import { BacklogList, BoardColumn, Issue, IssueForUpdate } from './types'
 
 type UpdateIssueMutation = (
@@ -103,8 +102,8 @@ export const buildQueryString = (
     let stringVal = value
     if (Array.isArray(value)) {
       stringVal = value.reduce((prev, cur) => {
-        const separator = prev ? ',' : ''
-        return prev + separator + cur
+        const delimiter = prev ? ',' : ''
+        return prev + delimiter + cur
       }, '')
     }
     queryString += `${suffix}${key}=${stringVal}`
@@ -118,7 +117,7 @@ export const buildAvatarString = (seed: number) => {
   const query = {
     accessoriesChance: '0',
     mouth: 'default',
-    clothes: 'blazer',
+    clothes: 'shirt',
     eyes: 'default',
     eyebrow: 'default',
     top: ['shortHair', 'longHair', 'turban', 'hijab', 'straight01'],

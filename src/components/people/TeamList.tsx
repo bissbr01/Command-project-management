@@ -52,41 +52,17 @@ export default function TeamList({ teams, seed }: TeamListProps) {
         <Title my="md" order={2}>
           Teams
         </Title>
-        <Box className={classes.createButton}>
-          <Button onClick={() => setCreateOpened(true)} color="blue">
-            Create Team
-          </Button>
-        </Box>
       </Group>
-      {teams.map((team) => (
-        <section key={team.id}>
-          <Group>
-            <TeamListCard team={team} seed={seed} />
-            <Menu withinPortal position="right-end" shadow="sm">
-              <Menu.Target>
-                <ActionIcon>
-                  <IconDots />
-                </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item
-                  onClick={() => setEditOpened(true)}
-                  icon={<IconEdit size={16} />}
-                >
-                  Edit
-                </Menu.Item>
-                <Menu.Item
-                  onClick={() => setDeleteOpened(true)}
-                  color="red"
-                  icon={<IconTrash size={16} />}
-                >
-                  Delete
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Group>
-        </section>
-      ))}
+      <Group>
+        {teams.map((team) => (
+          <TeamListCard
+            team={team}
+            seed={seed}
+            key={team.id}
+            setCreateOpened={setCreateOpened}
+          />
+        ))}
+      </Group>
       <TeamCreateModal opened={createOpened} setOpened={setCreateOpened} />
     </>
   )
