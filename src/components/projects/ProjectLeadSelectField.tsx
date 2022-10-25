@@ -11,7 +11,7 @@ import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 
 const useStyles = createStyles((theme) => ({
   root: {
-    width: 140,
+    // width: 140,
   },
 
   dropdown: {
@@ -78,7 +78,6 @@ export default function ProjectLeadSelectField({
         )
       } else {
         setLeadOptions([{ label: me?.name, value: me?.id.toString() }])
-        // setFieldValue('leadId', [{ label: me?.name, value: me?.id }])
       }
     }
   }, [me, me?.teams, setFieldValue, teamId, touched.teamId])

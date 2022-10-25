@@ -1,13 +1,10 @@
 import {
   createStyles,
   InputVariant,
-  Loader,
-  Select,
+  MultiSelect,
   SelectItem,
 } from '@mantine/core'
 import { FieldProps } from 'formik'
-import { useEffect, useState } from 'react'
-import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -25,18 +22,17 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export interface SelectFieldProps extends FieldProps {
+export interface MultiSelectFieldProps extends FieldProps {
   label?: string
   placeholder?: string
   variant?: InputVariant
   required?: boolean
   data: SelectItem[]
-  icon: JSX.Element
+  // icon?: JSX.Element
   disabled: boolean
-  updateOnChange: boolean
 }
 
-export default function ProjectTeamSelectField({
+export default function MultiSelectField({
   label,
   placeholder,
   variant,
@@ -45,42 +41,25 @@ export default function ProjectTeamSelectField({
   disabled = false,
   field,
   form,
-}: SelectFieldProps) {
+}: MultiSelectFieldProps) {
   // workaround to get meta.  Might be fixed in future of formik
-  const meta = form.getFieldMeta(field.name)
   const { classes } = useStyles()
-  const { data: me } = useGetUserByTokenQuery()
-  const [teamOptions, setTeamOptions] = useState<
-    { value: string; label: string }[]
-  >([])
-
-  // set team options from user->teams list
-  useEffect(() => {
-    if (me && me.teams) {
-      setTeamOptions([
-        ...me.teams.map(({ name, id }) => ({
-          label: name,
-          value: id.toString(),
-        })),
-      ])
-    }
-  }, [me])
-
-  if (!me) return <Loader />
+  const meta = form.getFieldMeta(field.name)
 
   return (
-    <Select
+    <MultiSelect
       label={label}
       placeholder={placeholder}
       withAsterisk={required}
       error={meta.touched && meta.error}
       variant={variant}
-      data={teamOptions}
+      data={data}
       name={field.name}
       value={field.value}
       disabled={disabled}
       classNames={{ item: classes.dropdown, root: classes.root }}
       onChange={(value) => {
+        console.log('multiselect val: ', value)
         const event = {
           target: {
             value: value,

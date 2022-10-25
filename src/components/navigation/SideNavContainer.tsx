@@ -5,12 +5,20 @@ import {
   ActionIcon,
   Affix,
   Transition,
+  Box,
+  Navbar,
+  Text,
 } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons'
+import { useParams } from 'react-router-dom'
 import SideNav from './SideNav'
 
 const useStyles = createStyles((theme) => ({
+  container: {
+    backgroundColor: theme.colors.gray[0],
+    marginRight: 0,
+  },
   drawer: {
     background: theme.colors.gray[0],
   },
@@ -30,9 +38,23 @@ function SideNavContainer() {
   const theme = useMantineTheme()
   const minScreenLarge = useMediaQuery(`(min-width: ${theme.breakpoints.lg}px)`)
   const { classes } = useStyles()
+  const { projectId } = useParams()
   const AFFIX_HEIGHT = 160
   const SIDE_NAV_WIDTH = 250
 
+  if (!projectId)
+    return (
+      <Box />
+      // <Navbar
+      //   width={{ sm: SIDE_NAV_WIDTH }}
+      //   p="md"
+      //   className={classes.container}
+      // >
+      //   <Navbar.Section>
+      //     <Text>Project Menu</Text>
+      //   </Navbar.Section>
+      // </Navbar>
+    )
   if (minScreenLarge) return <SideNav width={SIDE_NAV_WIDTH} close={close} />
 
   return (
@@ -49,7 +71,7 @@ function SideNavContainer() {
         classNames={{ drawer: classes.drawer }}
         shadow="md"
       >
-        <SideNav width={SIDE_NAV_WIDTH} close={close} />
+        {projectId && <SideNav width={SIDE_NAV_WIDTH} close={close} />}
       </Drawer>
       <Affix position={{ left: 0, top: AFFIX_HEIGHT }}>
         <Transition transition="slide-left" mounted={!opened}>

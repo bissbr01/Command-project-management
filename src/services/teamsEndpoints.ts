@@ -11,13 +11,13 @@ const teamsEndpoints = scrumApi.injectEndpoints({
       query: (id) => `/teams/${id}`,
       providesTags: (res, e, id) => [{ type: 'Team', id }],
     }),
-    addTeam: build.mutation<Team, Omit<Team, 'id' | 'users'>>({
+    addTeam: build.mutation<Team, { name: string; userIds: string[] }>({
       query: (body) => ({
         url: '/teams',
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Team'],
+      invalidatesTags: ['Team', { type: 'Team', id: 'LIST' }],
     }),
     updateTeam: build.mutation<Team, Partial<Team> & Pick<Team, 'id'>>({
       query: ({ id, ...body }) => ({

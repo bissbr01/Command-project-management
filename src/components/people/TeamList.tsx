@@ -38,6 +38,7 @@ const useStyles = createStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-start',
     gap: '1rem',
+    flexWrap: 'wrap',
     [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
       flexDirection: 'row',
       alignItems: 'flex-start',

@@ -30,7 +30,8 @@ export default function ProjectList() {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Key</th>
+            <th>Sprints</th>
+            <th>Team</th>
             <th>Lead</th>
             <th> </th>
           </tr>

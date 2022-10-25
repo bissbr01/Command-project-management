@@ -60,12 +60,12 @@ export default function ProjectEditModal({
     <Modal
       opened={opened}
       onClose={() => setOpened(false)}
-      title={<Title order={2}>Edit Project {project.id}</Title>}
+      title={<Title order={2}>Edit {project.title}</Title>}
     >
       <Formik
         initialValues={{
           title: project.title,
-          teamId: project.leadId,
+          teamId: String(project.teamId),
           leadId: project.leadId,
         }}
         validationSchema={ProjectEditModalSchema}

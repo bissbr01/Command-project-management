@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, createStyles, Stack } from '@mantine/core'
+import { Avatar, Button, Card, createStyles, Space, Stack } from '@mantine/core'
 import { buildAvatarString } from '../../services/util'
 
 const useStyles = createStyles((theme) => ({
@@ -31,6 +31,7 @@ export default function ColleagueAddCard({
         >
           Invite Colleague
         </Avatar>
+        <Space />
         <Button onClick={() => setOpened(true)}>Invite Colleague</Button>
       </Stack>
     </Card>

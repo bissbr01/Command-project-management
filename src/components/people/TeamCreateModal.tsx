@@ -1,9 +1,20 @@
-import { createStyles, Title, Modal, Button, Text, Group } from '@mantine/core'
+import {
+  createStyles,
+  Title,
+  Modal,
+  Button,
+  Text,
+  Group,
+  MultiSelect,
+  Loader,
+} from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { useAddTeamMutation } from '../../services/teamsEndpoints'
+import { User } from '../../services/types'
+import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import TextField from '../common/forms/TextField'
 
 const useStyles = createStyles((theme) => ({
@@ -45,10 +56,14 @@ export default function TeamCreateModal({
 }: TeamCreateModalProps) {
   const [createTeam] = useAddTeamMutation()
   const { classes, cx } = useStyles()
+  const { data: me } = useGetUserByTokenQuery()
 
   const TeamCreateModalSchema = Yup.object().shape({
     name: Yup.string().required('Team must be named.'),
+    userIds: Yup.array().of(Yup.string()),
   })
+
+  if (!me) return <Loader />
 
   return (
     <Modal
@@ -59,13 +74,15 @@ export default function TeamCreateModal({
       <Formik
         initialValues={{
           name: '',
+          userIds: [],
         }}
         validationSchema={TeamCreateModalSchema}
-        onSubmit={async ({ name }) => {
+        onSubmit={async ({ name, userIds }) => {
           try {
             setOpened(false)
             await createTeam({
               name,
+              userIds,
             })
             showNotification({
               title: 'Success',
@@ -96,6 +113,16 @@ export default function TeamCreateModal({
               name="name"
               label={<Text>Name</Text>}
               component={TextField}
+            />
+            <Field
+              id="userIds"
+              name="userIds"
+              label={<Text>Teammates</Text>}
+              data={me.friends?.map((friend) => ({
+                value: friend.id.toString(),
+                label: friend.name,
+              }))}
+              component={MultiSelect}
             />
             <Group position="center">
               <Button type="submit" disabled={isSubmitting}>

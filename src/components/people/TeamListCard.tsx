@@ -1,4 +1,12 @@
-import { Avatar, Button, Card, createStyles, Stack, Text } from '@mantine/core'
+import {
+  Avatar,
+  Button,
+  Card,
+  createStyles,
+  Space,
+  Stack,
+  Text,
+} from '@mantine/core'
 import { Team } from '../../services/types'
 import { buildAvatarString, formatPlural } from '../../services/util'
 
@@ -8,20 +16,9 @@ const useStyles = createStyles((theme) => ({
     height: theme.other.cardHeight,
   },
 
-  avatarContainer: {
-    width: 100,
-  },
-
-  avatarGroup: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-    // justifyContent: 'center',
-  },
-
   avatar: {
-    position: 'relative',
-    top: 0,
+    background: 'transparent',
+    border: 'none',
   },
 }))
 
@@ -42,17 +39,19 @@ export default function TeamListCard({
     const aSeed = team ? team.id + seed : seed
 
     for (let i = 0; i < numAvatars; i += 1) {
-      const style = `calc( 35px * ${-i})`
       avatars.push(
         <Avatar
-          src={buildAvatarString(aSeed + i * 100)}
+          src={
+            team && team.users
+              ? team.users[i].picture
+              : buildAvatarString(aSeed * 100 + i)
+          }
           alt="teammate avatar"
           size="lg"
           color="blue"
           radius="xl"
-          sx={{ left: style }}
-          className={classes.avatar}
           key={i}
+          className={classes.avatar}
         >
           Teammate Avatar
         </Avatar>
@@ -61,17 +60,14 @@ export default function TeamListCard({
     return avatars
   }
 
-  // const count = team ? team.users?.length : 3
-  const count = 3
+  const count = team ? team.users?.length : 3
 
   return (
     <Card withBorder shadow="sm" radius="md" className={classes.card}>
       <Stack align="center" justify="center">
-        <div className={classes.avatarContainer}>
-          <div className={classes.avatarGroup}>
-            {getAvatars(count).map((avatar) => avatar)}
-          </div>
-        </div>
+        <Avatar.Group spacing="xl">
+          {getAvatars(count).map((avatar) => avatar)}
+        </Avatar.Group>
         {team && team.users && (
           <>
             <Text size="md">{team.name}</Text>
@@ -82,7 +78,10 @@ export default function TeamListCard({
           </>
         )}
         {setCreateOpened && (
-          <Button onClick={() => setCreateOpened(true)}>Create Team</Button>
+          <>
+            <Space />
+            <Button onClick={() => setCreateOpened(true)}>Create Team</Button>
+          </>
         )}
       </Stack>
     </Card>

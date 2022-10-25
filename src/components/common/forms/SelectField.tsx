@@ -1,12 +1,30 @@
-import { InputVariant, Select, SelectItem } from '@mantine/core'
+import { createStyles, InputVariant, Select, SelectItem } from '@mantine/core'
 import { FieldProps } from 'formik'
+
+const useStyles = createStyles((theme) => ({
+  root: {
+    // width: 140,
+  },
+
+  dropdown: {
+    '&[data-selected]': {
+      backgroundColor: theme.colors.brand[1],
+      color: theme.black,
+      '&:hover': {
+        backgroundColor: theme.colors.brand[2],
+      },
+    },
+  },
+}))
 
 export interface SelectFieldProps extends FieldProps {
   label?: string
   placeholder?: string
   variant?: InputVariant
   required?: boolean
-  data: (string | SelectItem)[]
+  data: SelectItem[]
+  // icon?: JSX.Element
+  disabled: boolean
 }
 
 export default function SelectField({
@@ -14,12 +32,15 @@ export default function SelectField({
   placeholder,
   variant,
   required = false,
-  data,
+  data = [],
+  disabled = false,
   field,
   form,
 }: SelectFieldProps) {
   // workaround to get meta.  Might be fixed in future of formik
+  const { classes } = useStyles()
   const meta = form.getFieldMeta(field.name)
+
   return (
     <Select
       label={label}
@@ -28,7 +49,10 @@ export default function SelectField({
       error={meta.touched && meta.error}
       variant={variant}
       data={data}
-      {...field}
+      name={field.name}
+      value={field.value}
+      disabled={disabled}
+      classNames={{ item: classes.dropdown, root: classes.root }}
       onChange={(value) => {
         const event = {
           target: {

@@ -1,5 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { createStyles, Navbar, Menu, Loader, NavLink } from '@mantine/core'
+import {
+  createStyles,
+  Navbar,
+  Menu,
+  Loader,
+  NavLink,
+  LoadingOverlay,
+  Title,
+} from '@mantine/core'
 import {
   IconBellRinging,
   IconSettings,
@@ -14,6 +22,7 @@ import UserButton from './UserButton'
 import { removeLogin } from '../../reducers/authentication'
 import { useAppDispatch } from '../../hooks/hooks'
 import { User } from '../../services/types'
+import { useGetProjectByIdQuery } from '../../services/projectsEndpoints'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -99,7 +108,7 @@ function SideNav({ width, close }: SideNavProps) {
   const dispatch = useAppDispatch()
   const { projectId } = useParams()
   const location = useLocation()
-  const { user, isLoading, logout } = useAuth0()
+  const { data: project } = useGetProjectByIdQuery(projectId as string)
 
   const navData = [
     { link: 'board', label: 'Board', icon: IconChalkboard },
@@ -107,12 +116,6 @@ function SideNav({ width, close }: SideNavProps) {
     { link: 'notifications', label: 'Notifications', icon: IconBellRinging },
     { link: 'settings', label: 'Settings', icon: IconSettings },
   ]
-
-  const handleLogout = () => {
-    dispatch(removeLogin())
-    logout()
-    // navigate('/login')
-  }
 
   const navLinks = navData.map((item) => (
     <NavLink
@@ -130,29 +133,18 @@ function SideNav({ width, close }: SideNavProps) {
     />
   ))
 
-  if (isLoading) return <Loader />
-  if (!user) return <div>No user found</div>
+  if (!project) return <Loader />
 
   return (
     <Navbar width={{ sm: width }} p="md" className={classes.container}>
-      <Navbar.Section className={classes.header}>
-        {/* <Logo /> */}
-        <Menu position="top" withArrow width={200}>
-          <Menu.Target>
-            <UserButton user={user as User} />
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Item icon={<IconUserCircle size={14} />}>Profile</Menu.Item>
-            <Menu.Item
-              icon={<IconLogout size={14} />}
-              onClick={() => handleLogout()}
-            >
-              Logout
-            </Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
-      </Navbar.Section>
-      {projectId && <Navbar.Section grow>{navLinks}</Navbar.Section>}
+      {projectId && (
+        <>
+          <Navbar.Section className={classes.header}>
+            <Title order={3}>{project.title}</Title>
+          </Navbar.Section>
+          <Navbar.Section grow>{navLinks}</Navbar.Section>
+        </>
+      )}
     </Navbar>
   )
 }

@@ -9,7 +9,11 @@ const usersEndpoints = scrumApi.injectEndpoints({
     }),
     getUserByToken: build.query<User, void>({
       query: () => '/users/me',
-      providesTags: ['User'],
+      providesTags: [
+        'User',
+        { type: 'User', id: 'COLLEAGUES' },
+        { type: 'Team', id: 'LIST' },
+      ],
     }),
     addUser: build.mutation<{ user: User; created: boolean }, Token>({
       query: (body) => ({
