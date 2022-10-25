@@ -81,6 +81,7 @@ export interface User {
   authoredIssues?: Issue[]
   assignedIssues?: Issue[]
   teams?: Team[]
+  friends?: User[]
 }
 
 export interface Team {

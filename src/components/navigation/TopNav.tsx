@@ -64,7 +64,7 @@ function TopNav(): JSX.Element {
 
   const links = [
     { link: '/projects', label: 'Projects' },
-    { link: '/teams', label: 'Teams' },
+    { link: '/people', label: 'People' },
   ]
 
   const minMediumScreen = useMediaQuery(

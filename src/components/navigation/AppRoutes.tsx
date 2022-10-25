@@ -19,8 +19,9 @@ import Login from '../login/Login'
 import Register from '../login/Register'
 import Backlog from '../backlog/Backlog'
 import ProjectList from '../projects/ProjectList'
-import TeamList from '../teams/TeamList'
+import TeamList from '../people/TeamList'
 import CheckAuth from './CheckAuth'
+import PeopleLayout from '../people/PeopleLayout'
 
 export default function AppRoutes() {
   const navigate = useNavigate()
@@ -39,7 +40,7 @@ export default function AppRoutes() {
       <Routes location={state?.backgroundLocation || location}>
         <Route path="/" element={token ? <App /> : <CheckAuth />}>
           <Route index element={<ProjectList />} />
-          <Route path="teams" element={<TeamList />} />
+          <Route path="people" element={<PeopleLayout />} />
           <Route path="projects" element={<ProjectList />} />
           <Route path="projects/:projectId">
             <Route path="board" element={<BoardLayout />}>

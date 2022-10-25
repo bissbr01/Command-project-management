@@ -14,8 +14,10 @@ import {
 import { IconDots, IconEdit, IconTrash } from '@tabler/icons'
 import { useState } from 'react'
 import { useGetProjectsQuery } from '../../services/projectsEndpoints'
+import { Team } from '../../services/types'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import TeamCreateModal from './TeamCreateModal'
+import TeamListCard from './TeamListCard'
 import UserListItem from './UserListItem'
 
 const useStyles = createStyles((theme) => ({
@@ -31,29 +33,35 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export default function TeamList() {
-  const { data: user } = useGetUserByTokenQuery()
+interface TeamListProps {
+  teams: Team[] | undefined
+  seed: number
+}
+
+export default function TeamList({ teams, seed }: TeamListProps) {
   const [createOpened, setCreateOpened] = useState(false)
   const [editOpened, setEditOpened] = useState(false)
   const [deleteOpened, setDeleteOpened] = useState(false)
   const { classes } = useStyles()
 
-  if (!user || !user.teams) return <Loader />
+  if (!teams) return <Text>There are no teams to display</Text>
 
   return (
-    <main>
+    <>
       <Group>
-        <Title my="md">Teams</Title>
+        <Title my="md" order={2}>
+          Teams
+        </Title>
         <Box className={classes.createButton}>
           <Button onClick={() => setCreateOpened(true)} color="blue">
             Create Team
           </Button>
         </Box>
       </Group>
-      {user.teams.map((team) => (
+      {teams.map((team) => (
         <section key={team.id}>
           <Group>
-            <Title order={2}>{team.name}</Title>
+            <TeamListCard team={team} seed={seed} />
             <Menu withinPortal position="right-end" shadow="sm">
               <Menu.Target>
                 <ActionIcon>
@@ -77,14 +85,9 @@ export default function TeamList() {
               </Menu.Dropdown>
             </Menu>
           </Group>
-          <Group className={classes.usersGroup}>
-            {team.users?.map((nestedUser) => (
-              <UserListItem user={nestedUser} key={nestedUser.id} />
-            ))}
-          </Group>
         </section>
       ))}
       <TeamCreateModal opened={createOpened} setOpened={setCreateOpened} />
-    </main>
+    </>
   )
 }

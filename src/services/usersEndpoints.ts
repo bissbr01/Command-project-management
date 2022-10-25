@@ -19,6 +19,14 @@ const usersEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: ['User'],
     }),
+    addColleague: build.mutation<{ result: User }, { email: string }>({
+      query: (body) => ({
+        url: '/users/me/colleagues',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [{ type: 'User', id: 'COLLEAGUES' }],
+    }),
     updateUser: build.mutation<User, Partial<User>>({
       query: ({ id, ...body }) => ({
         url: `/users/${id}`,
@@ -36,5 +44,6 @@ export const {
   useGetUsersQuery,
   useGetUserByTokenQuery,
   useAddUserMutation,
+  useAddColleagueMutation,
   useUpdateUserMutation,
 } = usersEndpoints

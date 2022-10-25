@@ -6,6 +6,7 @@ import {
   MutationDefinition,
 } from '@reduxjs/toolkit/dist/query'
 import { MutationActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
+import { delimiter } from 'path'
 import { BacklogList, BoardColumn, Issue, IssueForUpdate } from './types'
 
 type UpdateIssueMutation = (
@@ -91,12 +92,40 @@ export interface SprintQueryParams extends QueryParams {
   search?: string
 }
 
-export const buildQueryString = (baseUrl: string, query: SprintQueryParams) => {
+export const buildQueryString = (
+  baseUrl: string,
+  query: SprintQueryParams | any
+) => {
   let queryString = ''
   Object.entries(query).forEach(([key, value]) => {
     const suffix = queryString ? '&' : ''
-    queryString += `${suffix}${key}=${value}`
+
+    let stringVal = value
+    if (Array.isArray(value)) {
+      stringVal = value.reduce((prev, cur) => {
+        const separator = prev ? ',' : ''
+        return prev + separator + cur
+      }, '')
+    }
+    queryString += `${suffix}${key}=${stringVal}`
   })
+
   if (queryString) queryString = `?${queryString}`
   return `${baseUrl}${queryString}`
+}
+
+export const buildAvatarString = (seed: number) => {
+  const query = {
+    accessoriesChance: '0',
+    mouth: 'default',
+    clothes: 'blazer',
+    eyes: 'default',
+    eyebrow: 'default',
+    top: ['shortHair', 'longHair', 'turban', 'hijab', 'straight01'],
+  }
+
+  return buildQueryString(
+    `https://avatars.dicebear.com/api/avataaars/${seed}.svg`,
+    query
+  )
 }
