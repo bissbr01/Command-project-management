@@ -5,7 +5,7 @@ const projectsEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
     getProjects: build.query<Project[], void>({
       query: () => '/projects',
-      providesTags: ['Project'],
+      providesTags: ['Project', { type: 'Team', id: 'LIST' }],
     }),
     getProjectById: build.query<Project, string>({
       query: (id) => `/projects/${id}`,

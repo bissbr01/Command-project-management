@@ -30,13 +30,14 @@ const teamsEndpoints = scrumApi.injectEndpoints({
         { type: 'Team', id: arg.id },
       ],
     }),
-    deleteProject: build.mutation<{ success: boolean; id: number }, number>({
+    deleteTeam: build.mutation<{ success: boolean; id: number }, number>({
       query: (id) => ({
         url: `/teams/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: (result, error, arg) => [
         { type: 'Team', id: arg },
+        { type: 'Team', id: 'LIST' },
         'Team',
       ],
     }),
@@ -50,4 +51,5 @@ export const {
   useGetTeamByIdQuery,
   useAddTeamMutation,
   useUpdateTeamMutation,
+  useDeleteTeamMutation,
 } = teamsEndpoints

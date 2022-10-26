@@ -1,5 +1,5 @@
 import { ActionIcon, Menu } from '@mantine/core'
-import { IconDots, IconEdit, IconTrash } from '@tabler/icons'
+import { IconDots, IconDotsVertical, IconEdit, IconTrash } from '@tabler/icons'
 
 interface DotMenuProps {
   setEditOpened: React.Dispatch<React.SetStateAction<boolean>>
@@ -14,7 +14,7 @@ export default function DotMenu({
     <Menu withinPortal position="right-end" shadow="sm">
       <Menu.Target>
         <ActionIcon>
-          <IconDots />
+          <IconDotsVertical />
         </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown>

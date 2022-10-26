@@ -7,8 +7,11 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
+import { useState } from 'react'
 import { Team } from '../../services/types'
 import { buildAvatarString, formatPlural } from '../../services/util'
+import DotMenu from '../common/DotMenu'
+import TeamDeleteModal from './TeamDeleteModal'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -19,6 +22,12 @@ const useStyles = createStyles((theme) => ({
   avatar: {
     background: 'transparent',
     border: 'none',
+  },
+
+  dotMenu: {
+    position: 'absolute',
+    top: 15,
+    right: 5,
   },
 }))
 
@@ -33,6 +42,8 @@ export default function TeamListCard({
   setCreateOpened,
 }: TeamListCardProps) {
   const { classes } = useStyles()
+  const [editOpened, setEditOpened] = useState(false)
+  const [deleteOpened, setDeleteOpened] = useState(false)
 
   const getAvatars = (numAvatars = 3) => {
     const avatars = []
@@ -63,27 +74,42 @@ export default function TeamListCard({
   const count = team ? team.users?.length : 3
 
   return (
-    <Card withBorder shadow="sm" radius="md" className={classes.card}>
-      <Stack align="center" justify="center">
-        <Avatar.Group spacing="xl">
-          {getAvatars(count).map((avatar) => avatar)}
-        </Avatar.Group>
-        {team && team.users && (
-          <>
-            <Text size="md">{team.name}</Text>
-            <Text size="sm" color="dimmed">
-              {team.users?.length}
-              {formatPlural(team.users.length, ' Member')}
-            </Text>
-          </>
-        )}
-        {setCreateOpened && (
-          <>
-            <Space />
-            <Button onClick={() => setCreateOpened(true)}>Create Team</Button>
-          </>
-        )}
-      </Stack>
-    </Card>
+    <>
+      <Card withBorder shadow="sm" radius="md" className={classes.card}>
+        <div className={classes.dotMenu}>
+          <DotMenu
+            setEditOpened={setEditOpened}
+            setDeleteOpened={setDeleteOpened}
+          />
+        </div>
+        <Stack align="center" justify="center">
+          <Avatar.Group spacing="xl">
+            {getAvatars(count).map((avatar) => avatar)}
+          </Avatar.Group>
+          {team && team.users && (
+            <>
+              <Text size="md">{team.name}</Text>
+              <Text size="sm" color="dimmed">
+                {team.users?.length}
+                {formatPlural(team.users.length, ' Member')}
+              </Text>
+            </>
+          )}
+          {setCreateOpened && (
+            <>
+              <Space />
+              <Button onClick={() => setCreateOpened(true)}>Create Team</Button>
+            </>
+          )}
+        </Stack>
+      </Card>
+      {team && (
+        <TeamDeleteModal
+          teamId={team.id}
+          opened={deleteOpened}
+          setOpened={setDeleteOpened}
+        />
+      )}
+    </>
   )
 }
