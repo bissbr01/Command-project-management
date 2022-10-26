@@ -59,7 +59,6 @@ export default function MultiSelectField({
       disabled={disabled}
       classNames={{ item: classes.dropdown, root: classes.root }}
       onChange={(value) => {
-        console.log('multiselect val: ', value)
         const event = {
           target: {
             value: value,

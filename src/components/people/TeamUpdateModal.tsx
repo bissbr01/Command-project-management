@@ -11,7 +11,11 @@ import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { useAddTeamMutation } from '../../services/teamsEndpoints'
+import {
+  useAddTeamMutation,
+  useGetTeamByIdQuery,
+  useUpdateTeamMutation,
+} from '../../services/teamsEndpoints'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import MultiSelectField from '../common/forms/MultiSelectField'
 import TextField from '../common/forms/TextField'
@@ -44,25 +48,35 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export interface TeamCreateModalProps {
+export interface TeamUpdateModalProps {
+  teamId: number
   opened: boolean
   setOpened: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function TeamCreateModal({
+export default function TeamUpdateModal({
+  teamId,
   opened,
   setOpened,
-}: TeamCreateModalProps) {
-  const [createTeam] = useAddTeamMutation()
+}: TeamUpdateModalProps) {
+  const [updateTeam] = useUpdateTeamMutation()
   const { classes, cx } = useStyles()
   const { data: me } = useGetUserByTokenQuery()
+  const { data: team } = useGetTeamByIdQuery(teamId)
 
-  const TeamCreateModalSchema = Yup.object().shape({
+  const TeamUpdateModalSchema = Yup.object().shape({
     name: Yup.string().required('Team must be named.'),
     userIds: Yup.array().of(Yup.string()),
   })
 
-  if (!me) return <Loader />
+  if (!team || !team.users || !me) return <Loader />
+
+  const selectData = me.friends?.map((friend) => ({
+    value: friend.id.toString(),
+    label: friend.name,
+  }))
+
+  selectData?.push({ value: me.id.toString(), label: me.name })
 
   return (
     <Modal
@@ -72,14 +86,15 @@ export default function TeamCreateModal({
     >
       <Formik
         initialValues={{
-          name: '',
-          userIds: [],
+          name: team.name,
+          userIds: [...team.users.map((user) => user.id.toString())],
         }}
-        validationSchema={TeamCreateModalSchema}
+        validationSchema={TeamUpdateModalSchema}
         onSubmit={async ({ name, userIds }) => {
           try {
             setOpened(false)
-            await createTeam({
+            await updateTeam({
+              id: teamId,
               name,
               userIds,
             })
@@ -117,10 +132,7 @@ export default function TeamCreateModal({
               id="userIds"
               name="userIds"
               label={<Text>Teammates</Text>}
-              data={me.friends?.map((friend) => ({
-                value: friend.id.toString(),
-                label: friend.name,
-              }))}
+              data={selectData}
               component={MultiSelectField}
             />
             <Group position="center">

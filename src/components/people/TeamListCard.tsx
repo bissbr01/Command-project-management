@@ -12,6 +12,7 @@ import { Team } from '../../services/types'
 import { buildAvatarString, formatPlural } from '../../services/util'
 import DotMenu from '../common/DotMenu'
 import TeamDeleteModal from './TeamDeleteModal'
+import TeamUpdateModal from './TeamUpdateModal'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -104,11 +105,18 @@ export default function TeamListCard({
         </Stack>
       </Card>
       {team && (
-        <TeamDeleteModal
-          teamId={team.id}
-          opened={deleteOpened}
-          setOpened={setDeleteOpened}
-        />
+        <>
+          <TeamUpdateModal
+            teamId={team.id}
+            opened={editOpened}
+            setOpened={setEditOpened}
+          />
+          <TeamDeleteModal
+            teamId={team.id}
+            opened={deleteOpened}
+            setOpened={setDeleteOpened}
+          />
+        </>
       )}
     </>
   )

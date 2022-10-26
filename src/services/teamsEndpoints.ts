@@ -7,7 +7,7 @@ const teamsEndpoints = scrumApi.injectEndpoints({
       query: () => '/teams',
       providesTags: ['Team'],
     }),
-    getTeamById: build.query<Team[], number>({
+    getTeamById: build.query<Team, number>({
       query: (id) => `/teams/${id}`,
       providesTags: (res, e, id) => [{ type: 'Team', id }],
     }),
@@ -19,7 +19,10 @@ const teamsEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: ['Team', { type: 'Team', id: 'LIST' }],
     }),
-    updateTeam: build.mutation<Team, Partial<Team> & Pick<Team, 'id'>>({
+    updateTeam: build.mutation<
+      Team,
+      { id: number; name: string; userIds: string[] }
+    >({
       query: ({ id, ...body }) => ({
         url: `/teams/${id}`,
         method: 'PATCH',

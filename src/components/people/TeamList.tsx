@@ -7,6 +7,7 @@ import {
   Group,
   Loader,
   Menu,
+  Space,
   Table,
   Text,
   Title,
@@ -23,6 +24,10 @@ import UserListItem from './UserListItem'
 const useStyles = createStyles((theme) => ({
   createButton: {
     margin: '0 1rem 0 auto',
+  },
+
+  section: {
+    marginBottom: '2rem',
   },
 
   usersGroup: {
@@ -60,7 +65,7 @@ export default function TeamList({ teams, seed }: TeamListProps) {
   if (!teams) return <Text>There are no teams to display</Text>
 
   return (
-    <section>
+    <section className={classes.section}>
       <Title my="md" order={2}>
         Teams
       </Title>
