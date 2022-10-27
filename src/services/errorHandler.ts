@@ -9,7 +9,13 @@ export const rtkQueryErrorLogger: Middleware =
   (api: MiddlewareAPI) => (next) => (action) => {
     // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
     if (isRejectedWithValue(action)) {
-      const { message } = action.payload.data.errors[0]
+      let message
+      if ('error' in action.payload.data) {
+        console.log(action)
+        message = action.payload.data.error
+      } else {
+        message = action.payload.data.errors[0].message
+      }
       showNotification({
         title: 'Error',
         message,
