@@ -88,7 +88,7 @@ export default function BacklogCreateIssue({
             ...values,
             sprintId,
             projectId: Number(projectId),
-          })
+          }).unwrap()
           handleFocused(false)
           resetForm()
           showNotification({

@@ -12,6 +12,7 @@ import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { useAddTeamMutation } from '../../services/teamsEndpoints'
+import { ErrorRes } from '../../services/types'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import MultiSelectField from '../common/forms/MultiSelectField'
 import TextField from '../common/forms/TextField'
@@ -82,7 +83,7 @@ export default function TeamCreateModal({
             await createTeam({
               name,
               userIds,
-            })
+            }).unwrap()
             showNotification({
               title: 'Success',
               message: 'Team successfully saved.',
@@ -98,9 +99,15 @@ export default function TeamCreateModal({
               color: 'red',
               icon: <IconX />,
             })
-            if (e instanceof Error) {
-              console.log(e.message)
-            }
+            // if (e instanceof Error) {
+            //   showNotification({
+            //     title: 'Error',
+            //     message: e.message,
+            //     autoClose: 4000,
+            //     color: 'red',
+            //     icon: <IconX />,
+            //   })
+            // }
           }
         }}
       >

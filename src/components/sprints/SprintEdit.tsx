@@ -95,7 +95,7 @@ export default function SprintEdit({ sprintId, handleClose }: SprintEditProps) {
             id: sprint.id,
             ...values,
             startOn: values.startOn.toString(),
-          })
+          }).unwrap()
 
           handleClose()
           showNotification({

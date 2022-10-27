@@ -8,11 +8,13 @@ import {
   Text,
   Title,
 } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
 import {
   IconAlertTriangle,
   IconDotsVertical,
   IconEdit,
   IconTrash,
+  IconX,
 } from '@tabler/icons'
 import { useState } from 'react'
 import { useDeleteIssueMutation } from '../../services/issuesEndpoints'
@@ -40,9 +42,19 @@ export default function IssueMenu({ issueId, onClose }: IssueMenuProps) {
   const [opened, setOpened] = useState(false)
 
   const handleDelete = async () => {
-    onClose()
-    await deleteIssue(issueId)
-    setOpened(false)
+    try {
+      onClose()
+      await deleteIssue(issueId).unwrap()
+      setOpened(false)
+    } catch (error) {
+      showNotification({
+        title: 'Error',
+        message: 'Issue could not be deleted.',
+        autoClose: 4000,
+        color: 'red',
+        icon: <IconX />,
+      })
+    }
   }
 
   return (

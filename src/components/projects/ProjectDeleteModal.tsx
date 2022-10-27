@@ -1,5 +1,6 @@
 import { Button, createStyles, Group, Modal, Text, Title } from '@mantine/core'
-import { IconAlertTriangle } from '@tabler/icons'
+import { showNotification } from '@mantine/notifications'
+import { IconAlertTriangle, IconX } from '@tabler/icons'
 import { useDeleteProjectMutation } from '../../services/projectsEndpoints'
 
 const useStyles = createStyles((theme) => ({
@@ -24,8 +25,18 @@ export default function ProjectDeleteModal({
   const [deleteProject] = useDeleteProjectMutation()
 
   const handleDelete = async () => {
-    setOpened(false)
-    await deleteProject(projectId)
+    try {
+      setOpened(false)
+      await deleteProject(projectId).unwrap()
+    } catch (e: unknown) {
+      showNotification({
+        title: 'Error',
+        message: 'Project could not be deleted.',
+        autoClose: 4000,
+        color: 'red',
+        icon: <IconX />,
+      })
+    }
   }
 
   return (

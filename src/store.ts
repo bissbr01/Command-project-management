@@ -3,6 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { scrumApi } from './services/scrumApi'
 // eslint-disable-next-line import/no-cycle
 import authReducer from './reducers/authentication'
+import { rtkQueryErrorLogger } from './services/errorHandler'
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +13,9 @@ export const store = configureStore({
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(scrumApi.middleware),
+    getDefaultMiddleware()
+      .concat(scrumApi.middleware)
+      .concat(rtkQueryErrorLogger),
 })
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors

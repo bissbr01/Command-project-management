@@ -136,6 +136,11 @@ export interface BoardColumnsData {
   sprint: Sprint
 }
 
+export interface ErrorRes {
+  errors: { message: string }[]
+  name: string
+}
+
 declare module '@mantine/core' {
   export interface MantineThemeOther {
     cardWidth: string

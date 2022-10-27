@@ -68,7 +68,7 @@ export default function ColleagueAddModal({
             setOpened(false)
             await addColleague({
               email,
-            })
+            }).unwrap()
             showNotification({
               title: 'Success',
               message: 'Invitation sent',
@@ -101,7 +101,7 @@ export default function ColleagueAddModal({
             />
             <Group position="center">
               <Button type="submit" disabled={isSubmitting}>
-                Create
+                Invite
               </Button>
               <Button
                 onClick={() => setOpened(false)}

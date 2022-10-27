@@ -1,5 +1,5 @@
 import { scrumApi } from './scrumApi'
-import { Team } from './types'
+import { ErrorRes, Team } from './types'
 
 const teamsEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
@@ -11,7 +11,10 @@ const teamsEndpoints = scrumApi.injectEndpoints({
       query: (id) => `/teams/${id}`,
       providesTags: (res, e, id) => [{ type: 'Team', id }],
     }),
-    addTeam: build.mutation<Team, { name: string; userIds: string[] }>({
+    addTeam: build.mutation<
+      Team | ErrorRes,
+      { name: string; userIds: string[] }
+    >({
       query: (body) => ({
         url: '/teams',
         method: 'POST',
@@ -20,7 +23,7 @@ const teamsEndpoints = scrumApi.injectEndpoints({
       invalidatesTags: ['Team', { type: 'Team', id: 'LIST' }],
     }),
     updateTeam: build.mutation<
-      Team,
+      Team | ErrorRes,
       { id: number; name: string; userIds: string[] }
     >({
       query: ({ id, ...body }) => ({

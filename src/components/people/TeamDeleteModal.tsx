@@ -1,5 +1,5 @@
 import { Button, createStyles, Group, Modal, Text, Title } from '@mantine/core'
-import { IconAlertTriangle } from '@tabler/icons'
+import { IconAlertTriangle, IconX } from '@tabler/icons'
 import { useDeleteProjectMutation } from '../../services/projectsEndpoints'
 import { useDeleteTeamMutation } from '../../services/teamsEndpoints'
 
@@ -25,8 +25,18 @@ export default function TeamDeleteModal({
   const [deleteTeam] = useDeleteTeamMutation()
 
   const handleDelete = async () => {
-    setOpened(false)
-    await deleteTeam(teamId)
+    try {
+      setOpened(false)
+      await deleteTeam(teamId).unwrap()
+    } catch (e: unknown) {
+      showNotification({
+        title: 'Error',
+        message: 'Team could not be deleted.',
+        autoClose: 4000,
+        color: 'red',
+        icon: <IconX />,
+      })
+    }
   }
 
   return (

@@ -13,57 +13,57 @@ const container = document.getElementById('root')
 if (container) {
   const root = createRoot(container)
   root.render(
-    <Auth0Provider
-      domain="dev-w8p6njku.us.auth0.com"
-      clientId="n0IFYEEMmgxhyAmitLokeYGVyHKcrRSZ"
-      redirectUri={window.location.origin}
-      audience="https://scrum-management-backend.onrender.com"
-      scope="read:current_user update:current_user_metadata"
-    >
-      <Provider store={store}>
-        <Router>
-          <MantineProvider
-            withNormalizeCSS
-            withGlobalStyles
-            theme={{
-              // headings: { fontFamily: 'Greycliff CF, sans-serif' },
-              // fontFamily: 'Open Sans, sans serif',
-              colorScheme: 'light',
-              fontFamily: 'Mitr, sans-serif',
-              headings: {
+    <NotificationsProvider position="bottom-left">
+      <Auth0Provider
+        domain="dev-w8p6njku.us.auth0.com"
+        clientId="n0IFYEEMmgxhyAmitLokeYGVyHKcrRSZ"
+        redirectUri={window.location.origin}
+        audience="https://scrum-management-backend.onrender.com"
+        scope="read:current_user update:current_user_metadata"
+      >
+        <Provider store={store}>
+          <Router>
+            <MantineProvider
+              withNormalizeCSS
+              withGlobalStyles
+              theme={{
+                // headings: { fontFamily: 'Greycliff CF, sans-serif' },
+                // fontFamily: 'Open Sans, sans serif',
+                colorScheme: 'light',
                 fontFamily: 'Mitr, sans-serif',
-                fontWeight: 300,
-              },
-              colors: {
-                brand: [
-                  '#ECF8F2',
-                  '#CAECDA',
-                  '#A8E0C3',
-                  '#86D4AB',
-                  '#64C894',
-                  '#43BC7C',
-                  '#359763',
-                  '#28714B',
-                  '#1B4B32',
-                  '#0D2619',
-                ],
-              },
-              primaryColor: 'brand',
-              primaryShade: { light: 4, dark: 6 },
-              other: {
-                cardWidth: '200px',
-                cardHeight: '200px',
-              },
-            }}
-          >
-            <NotificationsProvider position="bottom-left">
+                headings: {
+                  fontFamily: 'Mitr, sans-serif',
+                  fontWeight: 300,
+                },
+                colors: {
+                  brand: [
+                    '#ECF8F2',
+                    '#CAECDA',
+                    '#A8E0C3',
+                    '#86D4AB',
+                    '#64C894',
+                    '#43BC7C',
+                    '#359763',
+                    '#28714B',
+                    '#1B4B32',
+                    '#0D2619',
+                  ],
+                },
+                primaryColor: 'brand',
+                primaryShade: { light: 4, dark: 6 },
+                other: {
+                  cardWidth: '200px',
+                  cardHeight: '200px',
+                },
+              }}
+            >
               <CustomFonts />
               <AppRoutes />
-            </NotificationsProvider>
-          </MantineProvider>
-        </Router>
-      </Provider>
-    </Auth0Provider>
+            </MantineProvider>
+          </Router>
+        </Provider>
+      </Auth0Provider>
+    </NotificationsProvider>
   )
 }
 

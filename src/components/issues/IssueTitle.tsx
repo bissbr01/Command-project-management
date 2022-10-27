@@ -55,7 +55,7 @@ export default function IssueTitle({ issue }: IssueTitleProps) {
       validationSchema={TitleSchema}
       onSubmit={async (values) => {
         try {
-          await update({ id: issue.id, ...values })
+          await update({ id: issue.id, ...values }).unwrap()
           handleFocused(false)
           showNotification({
             title: 'Success',

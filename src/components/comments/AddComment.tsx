@@ -65,7 +65,6 @@ export default function AddComment({ issueId }: AddCommentProps) {
             issueId,
             text,
           }).unwrap()
-          console.log('update res: ', res)
           showNotification({
             title: 'Success',
             message: 'Comment successfully added.',

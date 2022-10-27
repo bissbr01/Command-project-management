@@ -58,7 +58,7 @@ export default function IssueStoryPoints({ issue }: IssueStoryPointsProps) {
       validationSchema={TitleSchema}
       onSubmit={async (values) => {
         try {
-          await update({ id: issue.id, ...values })
+          await update({ id: issue.id, ...values }).unwrap()
           showNotification({
             title: 'Success',
             message: 'Issue successfully saved.',

@@ -72,7 +72,7 @@ export default function IssueDescription({ issue }: IssueDescriptionProps) {
       validationSchema={TitleSchema}
       onSubmit={async (values) => {
         try {
-          await update({ id: issue.id, ...values })
+          await update({ id: issue.id, ...values }).unwrap()
           showNotification({
             title: 'Success',
             message: 'Issue successfully saved.',

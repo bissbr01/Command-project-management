@@ -87,7 +87,7 @@ export default function ProjectCreateModal({
               title,
               leadId,
               teamId: teamId ? Number(teamId) : undefined,
-            })
+            }).unwrap()
             showNotification({
               title: 'Success',
               message: 'Project successfully saved.',
@@ -98,7 +98,7 @@ export default function ProjectCreateModal({
           } catch (e: unknown) {
             showNotification({
               title: 'Error',
-              message: 'Project could not be updated.',
+              message: 'Project could not be created.',
               autoClose: 4000,
               color: 'red',
               icon: <IconX />,

@@ -77,7 +77,7 @@ export default function ProjectEditModal({
               title,
               leadId,
               teamId: teamId ? Number(teamId) : undefined,
-            })
+            }).unwrap()
             showNotification({
               title: 'Success',
               message: 'Project successfully saved.',

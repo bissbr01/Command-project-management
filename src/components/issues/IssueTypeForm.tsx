@@ -65,7 +65,7 @@ export default function IssueTypeForm({ issue }: IssueTypeFormProps) {
       validationSchema={IssueTypeFormSchema}
       onSubmit={async (values) => {
         try {
-          await update({ id: issue.id, ...values })
+          await update({ id: issue.id, ...values }).unwrap()
           showNotification({
             title: 'Success',
             message: 'Issue successfully saved.',

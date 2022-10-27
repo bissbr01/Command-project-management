@@ -82,7 +82,7 @@ export default function TeamUpdateModal({
     <Modal
       opened={opened}
       onClose={() => setOpened(false)}
-      title={<Title order={2}>Create Team</Title>}
+      title={<Title order={2}>Update Team</Title>}
     >
       <Formik
         initialValues={{
@@ -97,7 +97,7 @@ export default function TeamUpdateModal({
               id: teamId,
               name,
               userIds,
-            })
+            }).unwrap()
             showNotification({
               title: 'Success',
               message: 'Team successfully saved.',
@@ -137,7 +137,7 @@ export default function TeamUpdateModal({
             />
             <Group position="center">
               <Button type="submit" disabled={isSubmitting}>
-                Create
+                Update
               </Button>
               <Button
                 onClick={() => setOpened(false)}

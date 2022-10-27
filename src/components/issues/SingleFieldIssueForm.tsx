@@ -73,11 +73,10 @@ export default function SingleFieldIssueForm({
       validationSchema={CommentSchema}
       onSubmit={async ({ text }) => {
         try {
-          const res = await addComment({
+          await addComment({
             issueId: issueId,
             text,
           }).unwrap()
-          console.log('update res: ', res)
           showNotification({
             title: 'Success',
             message: 'Comment successfully added.',
