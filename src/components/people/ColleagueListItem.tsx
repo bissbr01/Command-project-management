@@ -35,14 +35,14 @@ export default function UserListItem({ user }: UserListItemProps) {
         <Stack align="center">
           <Avatar
             src={user.picture}
-            alt={user.name}
+            alt={user.nickname}
             size="lg"
             color="blue"
             radius="xl"
           >
-            {user.name}
+            {user.nickname}
           </Avatar>
-          <Text size="md">{user.name}</Text>
+          <Text size="md">{user.nickname}</Text>
           <Text size="sm" color="dimmed">
             {user.email}
           </Text>

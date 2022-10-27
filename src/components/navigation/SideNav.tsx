@@ -143,8 +143,10 @@ function SideNav({ width, close }: SideNavProps) {
         <>
           <Navbar.Section className={classes.header}>
             <Group>
-              <ProjectAvatar project={project} />
-              <Title order={3}>{project.title}</Title>
+              <ProjectAvatar project={project} size={30} />
+              <Title order={3} size="h4">
+                {project.title}
+              </Title>
             </Group>
           </Navbar.Section>
           <Navbar.Section grow>{navLinks}</Navbar.Section>

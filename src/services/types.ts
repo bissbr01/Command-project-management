@@ -92,7 +92,7 @@ export interface Team {
 
 export interface Auth0TokenContainer {
   access_token: string
-  id_token?: string
+  id_token: string
 }
 
 export interface Token {

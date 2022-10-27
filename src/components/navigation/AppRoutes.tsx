@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Navigate,
   Route,
@@ -7,11 +7,9 @@ import {
   useNavigate,
 } from 'react-router-dom'
 import { Loader } from '@mantine/core'
-import jwt_decode, { JwtPayload } from 'jwt-decode'
 import { useAuth0 } from '@auth0/auth0-react'
 import App from '../../App'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
-import { removeLogin, setLogin, setToken } from '../../reducers/authentication'
 import { RootState } from '../../store'
 import BoardLayout from '../boards/BoardLayout'
 import NotFound from '../common/NotFound'
@@ -19,7 +17,6 @@ import Login from '../login/Login'
 import Register from '../login/Register'
 import Backlog from '../backlog/Backlog'
 import ProjectList from '../projects/ProjectList'
-import TeamList from '../people/TeamList'
 import CheckAuth from './CheckAuth'
 import PeopleLayout from '../people/PeopleLayout'
 
@@ -29,16 +26,29 @@ export default function AppRoutes() {
   const tokenSelector = (state: RootState) => state.auth.token
   const token = useAppSelector(tokenSelector)
   const location = useLocation()
+  const [isUser, setIsUser] = useState(false)
+  const { isLoading, isAuthenticated } = useAuth0()
 
   // The `backgroundLocation` state is the location that we were at when one of
   // the Issue links was clicked. If it's there, use it as the location for
   // the <Routes> so we show the boards in the background, behind the modal.
   const state = location.state as { backgroundLocation?: Location }
 
+  if (isLoading) return <Loader />
+
   return (
     <>
       <Routes location={state?.backgroundLocation || location}>
-        <Route path="/" element={token ? <App /> : <CheckAuth />}>
+        <Route
+          path="/"
+          element={
+            token && isAuthenticated && isUser ? (
+              <App />
+            ) : (
+              <CheckAuth setIsUser={setIsUser} />
+            )
+          }
+        >
           <Route index element={<ProjectList />} />
           <Route path="people" element={<PeopleLayout />} />
           <Route path="projects" element={<ProjectList />} />

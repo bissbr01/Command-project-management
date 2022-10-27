@@ -74,7 +74,9 @@ export default function TeamListCard({
           {setCreateOpened && (
             <>
               <Space />
-              <Button onClick={() => setCreateOpened(true)}>Create Team</Button>
+              <Button onClick={() => setCreateOpened(true)} color="blue">
+                Create Team
+              </Button>
             </>
           )}
         </Stack>

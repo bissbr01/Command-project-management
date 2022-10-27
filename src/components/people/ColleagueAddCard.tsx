@@ -32,7 +32,9 @@ export default function ColleagueAddCard({
           Invite Colleague
         </Avatar>
         <Space />
-        <Button onClick={() => setOpened(true)}>Invite Colleague</Button>
+        <Button onClick={() => setOpened(true)} color="blue">
+          Invite Colleague
+        </Button>
       </Stack>
     </Card>
   )

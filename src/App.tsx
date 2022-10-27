@@ -1,5 +1,4 @@
-import { useAuth0 } from '@auth0/auth0-react'
-import { Container, createStyles, Group, Loader } from '@mantine/core'
+import { Container, createStyles, Group } from '@mantine/core'
 import { Outlet } from 'react-router-dom'
 import SideNavContainer from './components/navigation/SideNavContainer'
 import TopNav from './components/navigation/TopNav'
@@ -36,10 +35,7 @@ const useStyles = createStyles((theme) => ({
 }))
 
 function App() {
-  const { isLoading, isAuthenticated } = useAuth0()
   const { classes } = useStyles()
-
-  if (isLoading || !isAuthenticated) return <Loader />
 
   return (
     <div>

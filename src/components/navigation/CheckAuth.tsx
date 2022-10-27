@@ -3,58 +3,63 @@ import { Loader } from '@mantine/core'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
-import { setLogin, setToken } from '../../reducers/authentication'
+import { setLogin } from '../../reducers/authentication'
+import { useAddUserMutation } from '../../services/usersEndpoints'
 import { RootState } from '../../store'
 
-export default function CheckAuth() {
+interface CheckAuthProps {
+  setIsUser: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function CheckAuth({ setIsUser }: CheckAuthProps) {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const tokenSelector = (state: RootState) => state.auth.token
   const token = useAppSelector(tokenSelector)
-  const location = useLocation()
+  const [addUser, { isLoading: userLoading }] = useAddUserMutation()
+
   const {
     loginWithRedirect,
     isAuthenticated,
     isLoading,
     error,
-    logout,
     getAccessTokenSilently,
     getIdTokenClaims,
   } = useAuth0()
 
   useEffect(() => {
     // check if access token available in Redux store. if not, set token
-    if (!isLoading) {
-      const getToken = async () => {
-        if (!isAuthenticated) {
-          await loginWithRedirect()
-        }
+    try {
+      if (!isLoading) {
+        const getToken = async () => {
+          if (!isAuthenticated) {
+            await loginWithRedirect()
+          }
 
-        if (!token) {
-          const accessToken = await getAccessTokenSilently()
-          const idToken = await getIdTokenClaims()
-          dispatch(
-            // eslint-disable-next-line no-underscore-dangle
-            setLogin({ access_token: accessToken, id_token: idToken?.__raw })
-          )
+          if (!token) {
+            const accessToken = await getAccessTokenSilently()
+            const idToken = await getIdTokenClaims()
+            // set access token as bearer in backend api requests:
+            if (idToken) {
+              dispatch(
+                setLogin({
+                  // eslint-disable-next-line no-underscore-dangle
+                  id_token: idToken.__raw,
+                  access_token: accessToken,
+                })
+              )
+              // find or create user from auth0 in local database
+              // eslint-disable-next-line no-underscore-dangle
+              await addUser({ token: idToken.__raw }).unwrap()
+              setIsUser(true)
+              navigate('/projects')
+            }
+          }
         }
-
-        navigate('/')
+        getToken()
       }
-      getToken()
-
-      // old login when authorization handled by bakend instead of auth0
-      // const cachedTokenJSON = window.localStorage.getItem('token')
-      // if (cachedTokenJSON) {
-      //   const cachedToken = JSON.parse(cachedTokenJSON)
-      //   dispatch(setToken(cachedToken))
-      //   navigate('/')
-      // }
-      // check if token is expired, and if so logout
-      // const decoded = jwt_decode<JwtPayload>(token)
-      // if (decoded.exp && decoded.exp < Date.now() / 1000) {
-      //   dispatch(removeLogin())
-      // }
+    } catch (e) {
+      console.log(e)
     }
   }, [
     dispatch,
@@ -65,8 +70,10 @@ export default function CheckAuth() {
     token,
     isLoading,
     loginWithRedirect,
+    addUser,
+    setIsUser,
   ])
-  if (isLoading) return <Loader />
+  if (isLoading || userLoading) return <Loader />
   if (error) return <div>{error.message}</div>
   return <Loader />
 }
