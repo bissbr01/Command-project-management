@@ -121,7 +121,18 @@ export const buildAvatarString = (seed: number) => {
     eyes: 'default',
     eyebrow: 'default',
     facialHairChance: '0',
-    top: ['shortHair', 'longHair', 'turban', 'hijab', 'straight01'],
+    top: [
+      'bob',
+      'bun',
+      'curly',
+      'curvy',
+      'straight01',
+      'straight02',
+      'shortCurly',
+      'shortFlat',
+      'shortRound',
+      'shortWaved',
+    ],
   }
 
   return buildQueryString(

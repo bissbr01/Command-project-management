@@ -7,6 +7,7 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { IconBus } from '@tabler/icons'
 import { Link, useNavigate } from 'react-router-dom'
 import commandLogoOnly from '../../logo-only.png'
@@ -19,8 +20,10 @@ const useStyles = createStyles((theme) => ({
 
 function Logo() {
   const theme = useMantineTheme()
-  const navigate = useNavigate()
   const { classes } = useStyles()
+  const minMediumScreen = useMediaQuery(
+    `(min-width: ${theme.breakpoints.sm}px)`
+  )
 
   return (
     <Link to="/" className={classes.logoLink}>
@@ -31,9 +34,11 @@ function Logo() {
         <Title order={1} size="h2" color={theme.colors.brand[7]}>
           Command
         </Title>
-        <Text color="dimmed" size="sm">
-          Project Management
-        </Text>
+        {minMediumScreen && (
+          <Text color="dimmed" size="sm">
+            Project Management
+          </Text>
+        )}
       </Group>
     </Link>
   )

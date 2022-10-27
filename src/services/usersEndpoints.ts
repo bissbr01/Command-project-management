@@ -23,6 +23,14 @@ const usersEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: ['User'],
     }),
+    updateUser: build.mutation<User, Partial<User>>({
+      query: ({ id, ...body }) => ({
+        url: `/users/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['User'],
+    }),
     addColleague: build.mutation<{ result: User }, { email: string }>({
       query: (body) => ({
         url: '/users/me/colleagues',
@@ -31,13 +39,12 @@ const usersEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'User', id: 'COLLEAGUES' }],
     }),
-    updateUser: build.mutation<User, Partial<User>>({
-      query: ({ id, ...body }) => ({
-        url: `/users/${id}`,
-        method: 'PUT',
-        body,
+    removeColleague: build.mutation<{ result: User }, Pick<User, 'id'>>({
+      query: ({ id }) => ({
+        url: `/users/me/colleagues/${id}`,
+        method: 'DELETE',
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: [{ type: 'User', id: 'COLLEAGUES' }],
     }),
   }),
   overrideExisting: false,
@@ -50,4 +57,5 @@ export const {
   useAddUserMutation,
   useAddColleagueMutation,
   useUpdateUserMutation,
+  useRemoveColleagueMutation,
 } = usersEndpoints

@@ -1,4 +1,5 @@
-import { Container, Loader, Title } from '@mantine/core'
+import { Container, Loader, Tabs, Title } from '@mantine/core'
+import { IconUser, IconUserCircle, IconUsers } from '@tabler/icons'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import ColleagueList from './ColleagueList'
 import TeamList from './TeamList'
@@ -17,8 +18,26 @@ export default function PeopleLayout() {
     <Container>
       <main>
         <Title py="lg">People</Title>
-        <ColleagueList colleagues={me.friends} me={me} seed={seed} />
-        <TeamList teams={me.teams} seed={seed} />
+        <Tabs defaultValue="colleagues">
+          <Tabs.List>
+            <Tabs.Tab value="colleagues" icon={<IconUserCircle size={16} />}>
+              <Title order={2} size="h5">
+                Colleagues
+              </Title>
+            </Tabs.Tab>
+            <Tabs.Tab value="teams" icon={<IconUsers size={16} />}>
+              <Title order={2} size="h5">
+                Teams
+              </Title>
+            </Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel value="colleagues" pt="xs">
+            <ColleagueList colleagues={me.friends} me={me} seed={seed} />
+          </Tabs.Panel>
+          <Tabs.Panel value="teams" pt="xs">
+            <TeamList teams={me.teams} seed={seed} />
+          </Tabs.Panel>
+        </Tabs>
       </main>
     </Container>
   )

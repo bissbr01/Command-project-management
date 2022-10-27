@@ -32,7 +32,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   links: {
-    [theme.fn.smallerThan('md')]: {
+    [theme.fn.smallerThan('sm')]: {
       display: 'none',
     },
     flexWrap: 'nowrap',
@@ -74,7 +74,7 @@ function TopNav(): JSX.Element {
   ]
 
   const minMediumScreen = useMediaQuery(
-    `(min-width: ${theme.breakpoints.md}px)`
+    `(min-width: ${theme.breakpoints.sm}px)`
   )
 
   const navLinks = links.map((item) => (

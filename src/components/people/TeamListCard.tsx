@@ -12,17 +12,13 @@ import { Team } from '../../services/types'
 import { buildAvatarString, formatPlural } from '../../services/util'
 import DotMenu from '../common/DotMenu'
 import TeamDeleteModal from './TeamDeleteModal'
+import TeamGetAvatars from './TeamGetAvatars'
 import TeamUpdateModal from './TeamUpdateModal'
 
 const useStyles = createStyles((theme) => ({
   card: {
     width: theme.other.cardWidth,
     height: theme.other.cardHeight,
-  },
-
-  avatar: {
-    background: 'transparent',
-    border: 'none',
   },
 
   dotMenu: {
@@ -46,47 +42,26 @@ export default function TeamListCard({
   const [editOpened, setEditOpened] = useState(false)
   const [deleteOpened, setDeleteOpened] = useState(false)
 
-  const getAvatars = (numAvatars = 3) => {
-    const avatars = []
-    const aSeed = team ? team.id + seed : seed
-
-    for (let i = 0; i < numAvatars; i += 1) {
-      avatars.push(
-        <Avatar
-          src={
-            team && team.users
-              ? team.users[i].picture
-              : buildAvatarString(aSeed * 100 + i)
-          }
-          alt="teammate avatar"
-          size="lg"
-          color="blue"
-          radius="xl"
-          key={i}
-          className={classes.avatar}
-        >
-          Teammate Avatar
-        </Avatar>
-      )
-    }
-    return avatars
-  }
-
   const count = team ? team.users?.length : 3
 
   return (
     <>
       <Card withBorder shadow="sm" radius="md" className={classes.card}>
-        <div className={classes.dotMenu}>
-          <DotMenu
-            setEditOpened={setEditOpened}
-            setDeleteOpened={setDeleteOpened}
-          />
-        </div>
+        {team && (
+          <div className={classes.dotMenu}>
+            <DotMenu
+              setEditOpened={setEditOpened}
+              setDeleteOpened={setDeleteOpened}
+            />
+          </div>
+        )}
         <Stack align="center" justify="center">
-          <Avatar.Group spacing="xl">
-            {getAvatars(count).map((avatar) => avatar)}
-          </Avatar.Group>
+          <TeamGetAvatars
+            numAvatars={count}
+            team={team}
+            seed={seed}
+            avatarSize="lg"
+          />
           {team && team.users && (
             <>
               <Text size="md">{team.name}</Text>

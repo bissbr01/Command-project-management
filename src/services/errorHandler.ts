@@ -1,7 +1,6 @@
 import { isRejectedWithValue } from '@reduxjs/toolkit'
 import type { MiddlewareAPI, Middleware } from '@reduxjs/toolkit'
 import { showNotification } from '@mantine/notifications'
-import { IconX } from '@tabler/icons'
 
 /**
  * Log a warning and show a toast!

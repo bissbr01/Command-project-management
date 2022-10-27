@@ -1,8 +1,7 @@
 import { Button, createStyles, Group, Modal, Text, Title } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconAlertTriangle, IconCheck, IconX } from '@tabler/icons'
-import { useDeleteProjectMutation } from '../../services/projectsEndpoints'
-import { useDeleteTeamMutation } from '../../services/teamsEndpoints'
+import { useRemoveColleagueMutation } from '../../services/usersEndpoints'
 
 const useStyles = createStyles((theme) => ({
   icon: {
@@ -11,27 +10,27 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-interface TeamDeleteModalProps {
-  teamId: number
+interface ColleagueDeleteModalProps {
+  colleagueId: number
   opened: boolean
   setOpened: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function TeamDeleteModal({
-  teamId,
+export default function ColleagueDeleteModal({
+  colleagueId,
   opened,
   setOpened,
-}: TeamDeleteModalProps) {
+}: ColleagueDeleteModalProps) {
   const { classes } = useStyles()
-  const [deleteTeam] = useDeleteTeamMutation()
+  const [removeColleague] = useRemoveColleagueMutation()
 
   const handleDelete = async () => {
     try {
       setOpened(false)
-      await deleteTeam(teamId).unwrap()
+      await removeColleague({ id: colleagueId }).unwrap()
       showNotification({
         title: 'Success',
-        message: 'Team was successfully deleted.',
+        message: 'Colleague Removed',
         autoClose: 4000,
         color: 'green',
         icon: <IconCheck />,
@@ -39,7 +38,7 @@ export default function TeamDeleteModal({
     } catch (e: unknown) {
       showNotification({
         title: 'Error',
-        message: 'Team could not be deleted.',
+        message: 'Colleague could not be Removed.',
         autoClose: 4000,
         color: 'red',
         icon: <IconX />,
@@ -54,17 +53,17 @@ export default function TeamDeleteModal({
       title={
         <Title order={3}>
           <IconAlertTriangle className={classes.icon} />
-          Delete Team?
+          Remove Colleague?
         </Title>
       }
     >
       <Text component="p">
-        You are about to permanently delete this team. If you are not sure, you
-        can close this window instead.
+        You are about to remove this colleague from your network. If you are not
+        sure, you can close this window instead.
       </Text>
       <Group position="right">
         <Button onClick={handleDelete} color="red">
-          Delete
+          Remove
         </Button>
         <Button onClick={() => setOpened(false)} variant="default">
           Cancel

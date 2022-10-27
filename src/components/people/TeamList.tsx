@@ -19,7 +19,7 @@ import { Team } from '../../services/types'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import TeamCreateModal from './TeamCreateModal'
 import TeamListCard from './TeamListCard'
-import UserListItem from './UserListItem'
+import UserListItem from './ColleagueListItem'
 
 const useStyles = createStyles((theme) => ({
   createButton: {

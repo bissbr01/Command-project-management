@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { User } from '../../services/types'
 import ColleagueAddCard from './ColleagueAddCard'
 import ColleagueAddModal from './ColleagueAddModal'
-import UserListItem from './UserListItem'
+import UserListItem from './ColleagueListItem'
 
 const useStyles = createStyles((theme) => ({
   group: {

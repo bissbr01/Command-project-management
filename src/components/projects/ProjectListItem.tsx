@@ -1,8 +1,9 @@
-import { ActionIcon, Menu } from '@mantine/core'
+import { ActionIcon, Avatar, Group, Menu, Text } from '@mantine/core'
 import { IconDots, IconEdit, IconTrash } from '@tabler/icons'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Project } from '../../services/types'
+import TeamGetAvatars from '../people/TeamGetAvatars'
 import ProjectDeleteModal from './ProjectDeleteModal'
 import ProjectEditModal from './ProjectEditModal'
 
@@ -18,9 +19,34 @@ export default function ProjectListItem({ project }: ProjectListItemProps) {
       <td>
         <Link to={`/projects/${project.id}/board`}>{project.title}</Link>
       </td>
-      <td>{project.sprints?.length}</td>
-      <td>{project.team?.name}</td>
-      <td>{project.lead?.nickname}</td>
+      <td>
+        <Text>{project.sprints?.length}</Text>
+      </td>
+      <td>
+        <Group>
+          <TeamGetAvatars
+            numAvatars={project.team?.users?.length}
+            team={project.team}
+            seed={15}
+            avatarSize="md"
+          />
+          <Text>{project.team?.name}</Text>
+        </Group>
+      </td>
+      <td>
+        <Group>
+          <Avatar
+            src={project.lead?.picture}
+            alt={project.lead?.nickname}
+            size="md"
+            color="blue"
+            radius="xl"
+          >
+            <Text>{project.lead?.nickname}</Text>
+          </Avatar>
+          <Text>{project.lead?.nickname}</Text>
+        </Group>
+      </td>
       <td>
         <Menu>
           <Menu.Target>
