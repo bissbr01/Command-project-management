@@ -61,8 +61,8 @@ export default function ProjectCreateModal({
 
   const ProjectCreateModalSchema = Yup.object().shape({
     title: Yup.string().required('Your project must have a title'),
-    teamId: Yup.string(),
-    leadId: Yup.string().required('Your project must have a lead assigned'),
+    teamId: Yup.string().nullable(),
+    leadId: Yup.string().nullable().required('You must provide a project lead'),
   })
 
   if (!me) return <Loader />

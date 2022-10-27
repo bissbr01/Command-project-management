@@ -78,6 +78,8 @@ export default function ProjectTeamSelectField({
       data={teamOptions}
       name={field.name}
       value={field.value}
+      clearable
+      allowDeselect
       disabled={disabled}
       classNames={{ item: classes.dropdown, root: classes.root }}
       onChange={(value) => {

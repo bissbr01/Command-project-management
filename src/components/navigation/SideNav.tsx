@@ -7,6 +7,7 @@ import {
   NavLink,
   LoadingOverlay,
   Title,
+  Group,
 } from '@mantine/core'
 import {
   IconBellRinging,
@@ -23,6 +24,7 @@ import { removeLogin } from '../../reducers/authentication'
 import { useAppDispatch } from '../../hooks/hooks'
 import { User } from '../../services/types'
 import { useGetProjectByIdQuery } from '../../services/projectsEndpoints'
+import ProjectAvatar from '../projects/ProjectAvatar'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -140,7 +142,10 @@ function SideNav({ width, close }: SideNavProps) {
       {projectId && (
         <>
           <Navbar.Section className={classes.header}>
-            <Title order={3}>{project.title}</Title>
+            <Group>
+              <ProjectAvatar project={project} />
+              <Title order={3}>{project.title}</Title>
+            </Group>
           </Navbar.Section>
           <Navbar.Section grow>{navLinks}</Navbar.Section>
         </>

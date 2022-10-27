@@ -1,9 +1,11 @@
 import { ActionIcon, Avatar, Group, Menu, Text } from '@mantine/core'
 import { IconDots, IconEdit, IconTrash } from '@tabler/icons'
+import BoringAvatar from 'boring-avatars'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Project } from '../../services/types'
 import TeamGetAvatars from '../people/TeamGetAvatars'
+import ProjectAvatar from './ProjectAvatar'
 import ProjectDeleteModal from './ProjectDeleteModal'
 import ProjectEditModal from './ProjectEditModal'
 
@@ -17,20 +19,25 @@ export default function ProjectListItem({ project }: ProjectListItemProps) {
   return (
     <tr key={project.id}>
       <td>
-        <Link to={`/projects/${project.id}/board`}>{project.title}</Link>
+        <Group>
+          <ProjectAvatar project={project} />
+          <Link to={`/projects/${project.id}/board`}>{project.title}</Link>
+        </Group>
       </td>
       <td>
         <Text>{project.sprints?.length}</Text>
       </td>
       <td>
         <Group>
-          <TeamGetAvatars
-            numAvatars={project.team?.users?.length}
-            team={project.team}
-            seed={15}
-            avatarSize="md"
-          />
-          <Text>{project.team?.name}</Text>
+          {project.team && (
+            <TeamGetAvatars
+              numAvatars={project.team?.users?.length}
+              team={project.team}
+              seed={15}
+              avatarSize="md"
+            />
+          )}
+          <Text>{project.team?.name ?? 'Individual Project'}</Text>
         </Group>
       </td>
       <td>

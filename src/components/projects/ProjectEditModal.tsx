@@ -53,7 +53,8 @@ export default function ProjectEditModal({
 
   const ProjectEditModalSchema = Yup.object().shape({
     title: Yup.string().required('Your project must have a title'),
-    lead: Yup.string(),
+    teamId: Yup.string().nullable(),
+    leadId: Yup.string().nullable().required('You must provide a project lead'),
   })
 
   return (
@@ -76,7 +77,7 @@ export default function ProjectEditModal({
               id: project.id,
               title,
               leadId,
-              teamId: teamId ? Number(teamId) : undefined,
+              teamId: teamId ? Number(teamId) : null,
             }).unwrap()
             showNotification({
               title: 'Success',

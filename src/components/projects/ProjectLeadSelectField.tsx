@@ -67,17 +67,26 @@ export default function ProjectLeadSelectField({
 
   // when team is selected, propigate lead options with teammates
   useEffect(() => {
-    if (me && me.teams) {
-      if (teamId.trim() !== '' && touched.teamId) {
+    if (me) {
+      if (me && me.teams && teamId) {
         const selectedTeam = me.teams.filter(({ id }) => id === Number(teamId))
-        setLeadOptions(
-          selectedTeam.map(({ name, id }) => ({
-            label: name,
-            value: id.toString(),
-          }))
-        )
+        if (
+          selectedTeam &&
+          Array.isArray(selectedTeam) &&
+          selectedTeam.length !== 0 &&
+          selectedTeam[0].users
+        ) {
+          setLeadOptions(
+            selectedTeam[0].users.map(({ name, id }) => ({
+              label: name,
+              value: id.toString(),
+            }))
+          )
+        } else {
+          setLeadOptions([{ label: me.name, value: me.id.toString() }])
+        }
       } else {
-        setLeadOptions([{ label: me?.name, value: me?.id.toString() }])
+        setLeadOptions([{ label: me.name, value: me.id.toString() }])
       }
     }
   }, [me, me?.teams, setFieldValue, teamId, touched.teamId])
@@ -92,6 +101,7 @@ export default function ProjectLeadSelectField({
       error={meta.touched && meta.error}
       variant={variant}
       data={leadOptions}
+      allowDeselect
       name={field.name}
       value={field.value}
       disabled={disabled}

@@ -28,6 +28,7 @@
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "@types/uuid": "^8.3.4",
+    "boring-avatars": "^1.7.0",
     "dayjs": "^1.11.5",
     "formik": "^2.2.9",
     "jwt-decode": "^3.1.2",

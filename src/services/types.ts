@@ -58,7 +58,7 @@ export interface Project {
   id: number
   title: string
   leadId: string
-  teamId?: number
+  teamId?: number | null
   sprints?: Sprint[]
   team?: Team
   lead?: User
