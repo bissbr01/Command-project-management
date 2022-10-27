@@ -1,4 +1,5 @@
 import { Button, createStyles, Group, Modal, Text, Title } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
 import { IconAlertTriangle, IconX } from '@tabler/icons'
 import { useDeleteProjectMutation } from '../../services/projectsEndpoints'
 import { useDeleteTeamMutation } from '../../services/teamsEndpoints'
