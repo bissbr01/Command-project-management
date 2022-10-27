@@ -93,9 +93,6 @@ export default function ProjectEditModal({
               color: 'red',
               icon: <IconX />,
             })
-            if (e instanceof Error) {
-              console.log(e.message)
-            }
           }
         }}
       >

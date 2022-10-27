@@ -72,9 +72,6 @@ export default function IssueTitle({ issue }: IssueTitleProps) {
             color: 'red',
             icon: <IconX />,
           })
-          if (e instanceof Error) {
-            console.log(e.message)
-          }
         }
       }}
     >

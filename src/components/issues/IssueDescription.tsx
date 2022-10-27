@@ -89,9 +89,6 @@ export default function IssueDescription({ issue }: IssueDescriptionProps) {
             color: 'red',
             icon: <IconX />,
           })
-          if (e instanceof Error) {
-            console.log(e.message)
-          }
         }
       }}
     >

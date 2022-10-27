@@ -86,9 +86,6 @@ export default function Login() {
               color: 'red',
               icon: <IconX />,
             })
-            if (e instanceof Error) {
-              console.log(e.message)
-            }
           }
         }}
       >

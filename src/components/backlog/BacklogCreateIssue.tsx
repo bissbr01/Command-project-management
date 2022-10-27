@@ -106,9 +106,6 @@ export default function BacklogCreateIssue({
             color: 'red',
             icon: <IconX />,
           })
-          if (e instanceof Error) {
-            console.log(e.message)
-          }
         }
       }}
     >

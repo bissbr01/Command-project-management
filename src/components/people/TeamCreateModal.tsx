@@ -99,15 +99,6 @@ export default function TeamCreateModal({
               color: 'red',
               icon: <IconX />,
             })
-            // if (e instanceof Error) {
-            //   showNotification({
-            //     title: 'Error',
-            //     message: e.message,
-            //     autoClose: 4000,
-            //     color: 'red',
-            //     icon: <IconX />,
-            //   })
-            // }
           }
         }}
       >

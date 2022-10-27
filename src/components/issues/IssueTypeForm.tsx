@@ -81,9 +81,6 @@ export default function IssueTypeForm({ issue }: IssueTypeFormProps) {
             color: 'red',
             icon: <IconX />,
           })
-          if (e instanceof Error) {
-            console.log(e.message)
-          }
         }
       }}
     >

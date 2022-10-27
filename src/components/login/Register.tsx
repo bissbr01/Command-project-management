@@ -79,9 +79,6 @@ export default function Register() {
                 color: 'red',
                 icon: <IconX />,
               })
-              if (e instanceof Error) {
-                console.log(e.message)
-              }
             }
           }}
         >

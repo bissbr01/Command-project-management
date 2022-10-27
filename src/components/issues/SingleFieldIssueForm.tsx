@@ -92,9 +92,6 @@ export default function SingleFieldIssueForm({
             color: 'red',
             icon: <IconX />,
           })
-          if (e instanceof Error) {
-            console.log(e.message)
-          }
         }
       }}
     >
