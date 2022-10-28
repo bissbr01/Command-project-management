@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react'
 import {
   ActionIcon,
   Avatar,
@@ -5,6 +6,7 @@ import {
   CloseButton,
   createStyles,
   Group,
+  Loader,
   Stack,
   useMantineTheme,
 } from '@mantine/core'
@@ -50,6 +52,9 @@ export default function AddComment({ issueId }: AddCommentProps) {
   const theme = useMantineTheme()
   const { focused, handleFocused } = useFocused()
   const [addComment] = useAddCommentMutation()
+  const { user } = useAuth0()
+
+  if (!user) return <Loader />
 
   return (
     <Formik
@@ -89,7 +94,11 @@ export default function AddComment({ issueId }: AddCommentProps) {
         <Form>
           <div className={classes.container}>
             <Group>
-              <Avatar color={theme.colors.brand[1]} radius="xl" />
+              <Avatar
+                src={user.picture}
+                color={theme.colors.brand[1]}
+                radius="xl"
+              />
               <Field
                 stylesApi={{ root: classes.field }}
                 id="text"

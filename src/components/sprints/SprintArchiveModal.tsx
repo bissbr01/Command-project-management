@@ -35,7 +35,7 @@ export default function SprintArchiveModal({
       title={
         <Title order={3}>
           <IconAlertTriangle className={classes.icon} />
-          Archive Sprint {sprintId}?
+          Archive Sprint?
         </Title>
       }
     >

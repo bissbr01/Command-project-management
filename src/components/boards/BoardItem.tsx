@@ -6,6 +6,7 @@ import {
   UnstyledButton,
   useMantineTheme,
 } from '@mantine/core'
+import { IconMessageCircle2 } from '@tabler/icons'
 import { SetStateAction } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
@@ -68,13 +69,19 @@ function BoardItem({
             ...provided.draggableProps.style,
           }}
         >
-          <UnstyledButton onClick={handleClick}>
-            <Text>{issue.title}</Text>
+          <UnstyledButton onClick={handleClick} sx={{ width: '100%' }}>
+            <Text pb="md">{issue.title}</Text>
             <Group className={classes.issueStatus}>
               <ThemeIcon size="sm" variant="light">
                 <IssueTypeIcon issueType={issue.type} />
               </ThemeIcon>
               <Text>{issue.name}</Text>
+              {issue.comments && issue.comments.length !== 0 && (
+                <Group>
+                  <IconMessageCircle2 size={16} />
+                  <Text sx={{ marginLeft: -13 }}>{issue.comments.length}</Text>
+                </Group>
+              )}
               <IssueStoryPointsDisplay storyPoints={issue.storyPoints} />
             </Group>
           </UnstyledButton>

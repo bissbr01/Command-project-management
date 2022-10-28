@@ -1,19 +1,15 @@
 import { createStyles, Loader, ScrollArea, Title } from '@mantine/core'
-import {
-  useGetCommentsByIssueQuery,
-  useGetCommentsQuery,
-} from '../../services/commentsEndpoints'
-import { Issue } from '../../services/types'
+import { useGetCommentsByIssueQuery } from '../../services/commentsEndpoints'
 import AddComment from './AddComment'
 import ListComment from './ListComment'
 
 const useStyles = createStyles(() => ({
   container: {
-    marginTop: '2rem',
+    // marginTop: '2rem',
     // display: 'flex',
     // flexDirection: 'column',
     // rowGap: 10,
-    height: '45vh',
+    height: '50vh',
     // overflowY: 'scroll',
   },
 }))
@@ -30,9 +26,9 @@ export default function CommentsList({ issueId }: CommentsListProps) {
 
   return (
     <section>
-      {/* <Title order={3} size="h5">
+      <Title order={3} size="h5" mb="xs" mt="md">
         Comments
-      </Title> */}
+      </Title>
       <ScrollArea className={classes.container}>
         <AddComment issueId={issueId} />
         {comments.map((comment) => (

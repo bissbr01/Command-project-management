@@ -24,7 +24,7 @@ const commentsEndpoints = scrumApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Comment'],
+      invalidatesTags: ['Comment', { type: 'Issue', id: 'LIST' }],
     }),
     updateComment: build.mutation<Comment, Partial<Comment>>({
       query: ({ id, ...body }) => ({
