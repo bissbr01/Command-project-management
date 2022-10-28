@@ -1,4 +1,5 @@
 # Command Project Management
+![image](https://user-images.githubusercontent.com/13155120/198679320-a302772a-a627-4d96-950a-a1f981deb64e.png)
 
 You can see the live demo here:
 <https://scrum-management-frontend.onrender.com/>
