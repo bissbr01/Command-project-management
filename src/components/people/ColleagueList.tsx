@@ -41,10 +41,10 @@ export default function ColleagueList({
       </Title>
       <div className={classes.group}>
         <ColleagueAddCard setOpened={setAddOpened} seed={seed} />
-        <UserListItem user={me} />
+        <UserListItem user={me} me={me} />
         {colleagues &&
           colleagues.map((colleague) => (
-            <UserListItem user={colleague} key={colleague.id} />
+            <UserListItem user={colleague} me={me} key={colleague.id} />
           ))}
       </div>
       <ColleagueAddModal opened={addOpened} setOpened={setAddOpened} />

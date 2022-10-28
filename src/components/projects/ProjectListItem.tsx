@@ -24,9 +24,7 @@ export default function ProjectListItem({ project }: ProjectListItemProps) {
           <Link to={`/projects/${project.id}/board`}>{project.title}</Link>
         </Group>
       </td>
-      <td>
-        <Text>{project.sprints?.length}</Text>
-      </td>
+      <td>{project.sprints && <Text>{project.sprints.length - 1}</Text>}</td>
       <td>
         <Group>
           {project.team && (

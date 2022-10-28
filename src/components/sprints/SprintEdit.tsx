@@ -2,7 +2,7 @@ import { createStyles, Button, Text, Group, Loader } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
-import { useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import * as Yup from 'yup'
 import {
   useGetSprintByIdQuery,
@@ -53,6 +53,7 @@ export interface SprintEditProps {
 
 export default function SprintEdit({ sprintId, handleClose }: SprintEditProps) {
   const { classes, cx } = useStyles()
+  const { projectId } = useParams()
   const { data: sprint } = useGetSprintByIdQuery(sprintId)
   const [searchParams] = useSearchParams()
   const [updateSprint] = useUpdateSprintMutation()
@@ -84,6 +85,7 @@ export default function SprintEdit({ sprintId, handleClose }: SprintEditProps) {
           if (values.displayOnBoard) {
             const foundSprints = await fetchSprints({
               displayOnBoard: true,
+              projectId,
             }).unwrap()
             const promises = foundSprints.map(({ id }) =>
               updateSprint({ id, displayOnBoard: false })
