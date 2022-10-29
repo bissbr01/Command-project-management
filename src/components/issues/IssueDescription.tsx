@@ -105,7 +105,6 @@ export default function IssueDescription({ issue }: IssueDescriptionProps) {
               </Title>
             }
             minRows={2}
-            maxRows={4}
             component={TextAreaField}
             onFocus={() => handleFocused(true)}
             onBlur={(e: FocusEvent) => {
