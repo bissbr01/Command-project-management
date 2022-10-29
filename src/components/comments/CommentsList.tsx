@@ -29,12 +29,10 @@ export default function CommentsList({ issueId }: CommentsListProps) {
       <Title order={3} size="h5" mb="xs" mt="md">
         Comments
       </Title>
-      <ScrollArea className={classes.container}>
-        <AddComment issueId={issueId} />
-        {comments.map((comment) => (
-          <ListComment key={comment.id} comment={comment} />
-        ))}
-      </ScrollArea>
+      <AddComment issueId={issueId} />
+      {comments.map((comment) => (
+        <ListComment key={comment.id} comment={comment} />
+      ))}
     </section>
   )
 }

@@ -26,7 +26,7 @@ export default function IssueDrawer({
       position="right"
       opened={issueOpened}
       onClose={handleClose}
-      padding="xl"
+      padding="md"
       size="xl"
       overlayOpacity={0.2}
       overlayColor={

@@ -1,4 +1,11 @@
-import { createStyles, Group, LoadingOverlay, Paper, Text } from '@mantine/core'
+import {
+  createStyles,
+  Group,
+  LoadingOverlay,
+  Paper,
+  ScrollArea,
+  Text,
+} from '@mantine/core'
 import { useGetIssueByIdQuery } from '../../services/issuesEndpoints'
 import CommentsList from '../comments/CommentsList'
 import IssueTitle from './IssueTitle'
@@ -55,6 +62,12 @@ const useStyles = createStyles((theme) => ({
     fontSize: '.8em',
     paddingTop: '.5em',
     marginTop: -50,
+    height: '5vh',
+  },
+
+  scroll: {
+    // marginRight: '-10px',
+    height: '90vh',
   },
 }))
 
@@ -71,16 +84,18 @@ export default function IssueSingle({ issueId, onClose }: IssueSingleProps) {
   if (!issue) return <div>error: no issue</div>
 
   return (
-    <Paper className={classes.container}>
+    <Paper className={classes.container} mr="0">
       <Group className={classes.header}>
         <IssueTypeForm issue={issue} />
         <Text>Issue: {issue.name}</Text>
         <IssueMenu issueId={issue.id} onClose={onClose} />
       </Group>
-      <IssueTitle issue={issue} />
-      <IssueDescription issue={issue} />
-      <IssueStoryPoints issue={issue} />
-      <CommentsList issueId={issue.id} />
+      <ScrollArea offsetScrollbars className={classes.scroll}>
+        <IssueTitle issue={issue} />
+        <IssueDescription issue={issue} />
+        <IssueStoryPoints issue={issue} />
+        <CommentsList issueId={issue.id} />
+      </ScrollArea>
     </Paper>
   )
 }
