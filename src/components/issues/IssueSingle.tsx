@@ -6,13 +6,19 @@ import {
   ScrollArea,
   Text,
 } from '@mantine/core'
-import { useGetIssueByIdQuery } from '../../services/issuesEndpoints'
+import { useState } from 'react'
+import {
+  useDeleteIssueMutation,
+  useGetIssueByIdQuery,
+} from '../../services/issuesEndpoints'
 import CommentsList from '../comments/CommentsList'
 import IssueTitle from './IssueTitle'
 import IssueDescription from './IssueDescription'
 import IssueTypeForm from './IssueTypeForm'
 import IssueStoryPoints from './IssueStoryPoints'
 import IssueMenu from './IssueMenu'
+import DotMenu from '../common/DotMenu'
+import DeleteModal from '../common/modals/DeleteModal'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -79,23 +85,36 @@ export interface IssueSingleProps {
 export default function IssueSingle({ issueId, onClose }: IssueSingleProps) {
   const { classes } = useStyles()
   const { data: issue, isLoading } = useGetIssueByIdQuery(issueId)
+  const [deleteOpened, setDeleteOpened] = useState(false)
+  const [deleteIssue] = useDeleteIssueMutation()
 
   if (isLoading) return <LoadingOverlay visible={isLoading} />
   if (!issue) return <div>error: no issue</div>
 
   return (
-    <Paper className={classes.container} mr="0">
-      <Group className={classes.header}>
-        <IssueTypeForm issue={issue} />
-        <Text>Issue: {issue.name}</Text>
-        <IssueMenu issueId={issue.id} onClose={onClose} />
-      </Group>
-      <ScrollArea offsetScrollbars className={classes.scroll}>
-        <IssueTitle issue={issue} />
-        <IssueDescription issue={issue} />
-        <IssueStoryPoints issue={issue} />
-        <CommentsList issueId={issue.id} />
-      </ScrollArea>
-    </Paper>
+    <>
+      <Paper className={classes.container} mr="0">
+        <Group className={classes.header}>
+          <IssueTypeForm issue={issue} />
+          <Text>Issue: {issue.name}</Text>
+          <DotMenu setDeleteOpened={setDeleteOpened} margin="0 2rem 0 auto" />
+        </Group>
+        <ScrollArea offsetScrollbars className={classes.scroll}>
+          <IssueTitle issue={issue} />
+          <IssueDescription issue={issue} />
+          <IssueStoryPoints issue={issue} />
+          <CommentsList issueId={issue.id} />
+        </ScrollArea>
+      </Paper>
+      <DeleteModal
+        item={issue}
+        deleteMutation={deleteIssue}
+        opened={deleteOpened}
+        setOpened={setDeleteOpened}
+        prompt="You are about to permanently delete this issue, its comments and
+        attachments, and all of its data. If you are not sure, you can close
+        this issue instead."
+      />
+    </>
   )
 }

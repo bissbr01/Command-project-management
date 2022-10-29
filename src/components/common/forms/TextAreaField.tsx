@@ -27,7 +27,7 @@ export default function TextAreaField({
   variant,
   stylesApi,
   minRows = 1,
-  maxRows = 4,
+  maxRows,
   size = 'md',
   onFocus,
   onBlur,

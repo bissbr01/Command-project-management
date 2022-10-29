@@ -124,13 +124,23 @@ export default function SingleFieldIssueForm({
                 >
                   <IconCheck />
                 </ActionIcon>
-                <CloseButton
+                <ActionIcon
+                  type="reset"
+                  aria-label="close"
+                  size="sm"
+                  color={theme.colors.brand[7]}
+
+                  // variant="default"
+                >
+                  <IconX />
+                </ActionIcon>
+                {/* <CloseButton
                   type="reset"
                   aria-label="close"
                   size="sm"
                   variant="default"
-                  onClick={() => handleFocus(false)}
-                />
+                  // onClick={() => handleFocus(false)}
+                /> */}
               </Group>
             )}
           </div>

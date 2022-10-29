@@ -1,4 +1,17 @@
-export interface Comment {
+import {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+  FetchBaseQueryMeta,
+  MutationDefinition,
+} from '@reduxjs/toolkit/dist/query'
+import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks'
+
+export interface BaseModel {
+  identifier: string
+}
+
+export interface Comment extends BaseModel {
   id: number
   text: string
   authorId: number
@@ -21,7 +34,7 @@ export enum IssueType {
   Task = 'task',
 }
 
-export interface Issue {
+export interface Issue extends BaseModel {
   id: number
   name: string
   status: IssueStatus
@@ -38,7 +51,7 @@ export interface Issue {
   comments?: Comment[]
 }
 
-export interface Sprint {
+export interface Sprint extends BaseModel {
   id: number
   name: string
   goal: string
@@ -54,7 +67,7 @@ export interface Sprint {
   author: User
 }
 
-export interface Project {
+export interface Project extends BaseModel {
   id: number
   title: string
   leadId: string
@@ -64,7 +77,7 @@ export interface Project {
   lead?: User
 }
 
-export interface User {
+export interface User extends BaseModel {
   id: number
   sub: string
   name: string
@@ -84,7 +97,7 @@ export interface User {
   friends?: User[]
 }
 
-export interface Team {
+export interface Team extends BaseModel {
   id: number
   name: string
   users?: User[]
@@ -147,3 +160,19 @@ declare module '@mantine/core' {
     cardHeight: string
   }
 }
+
+export type ApiMutationTrigger = MutationTrigger<
+  MutationDefinition<
+    number,
+    BaseQueryFn<
+      string | FetchArgs,
+      unknown,
+      FetchBaseQueryError,
+      Record<string, unknown>,
+      FetchBaseQueryMeta
+    >,
+    'Comment' | 'Issue' | 'Sprint' | 'Project' | 'User' | 'Team',
+    Record<string, unknown>,
+    'scrumApi'
+  >
+>

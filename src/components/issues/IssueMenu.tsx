@@ -18,6 +18,8 @@ import {
 } from '@tabler/icons'
 import { useState } from 'react'
 import { useDeleteIssueMutation } from '../../services/issuesEndpoints'
+import DotMenu from '../common/DotMenu'
+import DeleteModal from '../common/modals/DeleteModal'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -39,13 +41,13 @@ interface IssueMenuProps {
 export default function IssueMenu({ issueId, onClose }: IssueMenuProps) {
   const { classes } = useStyles()
   const [deleteIssue] = useDeleteIssueMutation()
-  const [opened, setOpened] = useState(false)
+  const [deleteOpened, setDeleteOpened] = useState(false)
 
   const handleDelete = async () => {
     try {
       onClose()
       await deleteIssue(issueId).unwrap()
-      setOpened(false)
+      setDeleteOpened(false)
     } catch (error) {
       showNotification({
         title: 'Error',
@@ -59,46 +61,13 @@ export default function IssueMenu({ issueId, onClose }: IssueMenuProps) {
 
   return (
     <nav className={classes.container}>
-      <Menu width={200} position="bottom-end">
-        <Menu.Target>
-          <ActionIcon size="sm">
-            <IconDotsVertical />
-          </ActionIcon>
-        </Menu.Target>
-        <Menu.Dropdown>
-          <Menu.Item
-            onClick={() => setOpened(true)}
-            color="red"
-            icon={<IconTrash size={16} />}
-          >
-            Delete
-          </Menu.Item>
-        </Menu.Dropdown>
-      </Menu>
-      <Modal
-        opened={opened}
-        onClose={() => setOpened(false)}
-        title={
-          <Title order={3}>
-            <IconAlertTriangle className={classes.icon} />
-            Delete Issue {issueId}?
-          </Title>
-        }
-      >
-        <Text component="p">
-          You are about to permanently delete this issue, its comments and
-          attachments, and all of its data. If you are not sure, you can close
-          this issue instead.
-        </Text>
-        <Group position="right">
-          <Button onClick={handleDelete} color="red">
-            Delete
-          </Button>
-          <Button onClick={() => setOpened(false)} variant="default">
-            Cancel
-          </Button>
-        </Group>
-      </Modal>
+      <DotMenu setDeleteOpened={setDeleteOpened} />
+      {/* <DeleteModal
+        item={issue}
+        deleteMutation={deleteIssue}
+        opened={deleteOpened}
+        setOpened={setDeleteOpened}
+      /> */}
     </nav>
   )
 }

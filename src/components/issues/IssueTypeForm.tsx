@@ -9,39 +9,11 @@ import FormikSubmitOnChange from '../common/forms/FormikSubmitOnChange'
 import IssueTypeSelectField from '../common/forms/IssueTypeSelectField'
 
 const useStyles = createStyles((theme) => ({
-  container: {
-    margin: '1em',
-    height: '100%',
-  },
-
-  form: {},
-
-  inputStyles: {
-    padding: 10,
-    '&:hover': {
-      backgroundColor: theme.colors.gray[1],
+  form: {
+    '&:hover, &:active': {
+      background: theme.colors.gray[1],
+      borderRadius: theme.radius.md,
     },
-    '&:focus': {
-      border: `2px solid ${theme.colors.brand[1]}`,
-      borderRadius: 5,
-      '&:hover': {
-        backgroundColor: theme.white,
-      },
-    },
-  },
-
-  title: {
-    fontSize: theme.fontSizes.xl,
-    marginBottom: '.5em',
-  },
-
-  description: {
-    fontSize: theme.fontSizes.md,
-  },
-
-  save: {
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 }))
 
@@ -85,7 +57,7 @@ export default function IssueTypeForm({ issue }: IssueTypeFormProps) {
       }}
     >
       {({ isSubmitting }) => (
-        <Form>
+        <Form className={classes.form}>
           <FormikSubmitOnChange />
           <Field
             id="type"

@@ -1,7 +1,7 @@
 import { createStyles, Loader, ScrollArea, Title } from '@mantine/core'
 import { useGetCommentsByIssueQuery } from '../../services/commentsEndpoints'
 import AddComment from './AddComment'
-import ListComment from './ListComment'
+import CommentListItem from './CommentListItem'
 
 const useStyles = createStyles(() => ({
   container: {
@@ -31,7 +31,7 @@ export default function CommentsList({ issueId }: CommentsListProps) {
       </Title>
       <AddComment issueId={issueId} />
       {comments.map((comment) => (
-        <ListComment key={comment.id} comment={comment} />
+        <CommentListItem key={comment.id} comment={comment} />
       ))}
     </section>
   )
