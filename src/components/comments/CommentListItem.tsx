@@ -17,6 +17,7 @@ import { useDeleteCommentMutation } from '../../services/commentsEndpoints'
 import { Comment } from '../../services/types'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import DotMenu from '../common/DotMenu'
+import LoadingCircle from '../common/LoadingCircle'
 import DeleteModal from '../common/modals/DeleteModal'
 import CommentMenu from './CommentMenu'
 
@@ -54,7 +55,7 @@ export default function CommentListItem({ comment }: CommentListItemProps) {
     return date
   }
 
-  if (!me) return <Loader />
+  if (!me) return <LoadingCircle />
 
   return (
     <>

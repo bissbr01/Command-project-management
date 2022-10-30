@@ -1,6 +1,7 @@
 import { Container, Loader, Tabs, Title } from '@mantine/core'
 import { IconUser, IconUserCircle, IconUsers } from '@tabler/icons'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
+import LoadingCircle from '../common/LoadingCircle'
 import ColleagueList from './ColleagueList'
 import TeamList from './TeamList'
 
@@ -8,7 +9,7 @@ export default function PeopleLayout() {
   const { data: me, error } = useGetUserByTokenQuery()
   const seed = Math.random()
 
-  if (!me) return <Loader />
+  if (!me) return <LoadingCircle />
   if (error)
     return (
       <p>Sorry, there was a problem fetching your data. Please try again.</p>

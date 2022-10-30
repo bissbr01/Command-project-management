@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetSprintForBoardQuery } from '../../services/sprintsEndpoints'
+import LoadingCircle from '../common/LoadingCircle'
 import SprintCompletedButton from '../sprints/SprintCompletedButton'
 import SprintCompletedModal from '../sprints/SprintCompletedModal'
 import Board from './Board'
@@ -50,7 +51,7 @@ export default function BoardLayout() {
   } = useGetSprintForBoardQuery({ projectId })
   const [opened, setOpened] = useState(false)
 
-  if (isLoading) return <Loader />
+  if (isLoading) return <LoadingCircle />
 
   if (isError || !sprint || !boardColumns)
     return (

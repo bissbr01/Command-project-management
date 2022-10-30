@@ -16,6 +16,7 @@ import { ErrorRes } from '../../services/types'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import MultiSelectField from '../common/forms/MultiSelectField'
 import TextField from '../common/forms/TextField'
+import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -63,7 +64,7 @@ export default function TeamCreateModal({
     userIds: Yup.array().of(Yup.string()),
   })
 
-  if (!me) return <Loader />
+  if (!me) return <LoadingCircle />
 
   return (
     <Modal

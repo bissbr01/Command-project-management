@@ -12,6 +12,7 @@ import {
 import CheckBoxField from '../common/forms/CheckboxField'
 import DatePickerField from '../common/forms/DatePickerField'
 import TextAreaField from '../common/forms/TextAreaField'
+import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -68,7 +69,7 @@ export default function SprintEdit({ sprintId, handleClose }: SprintEditProps) {
 
   const type = searchParams.get('type')
 
-  if (!sprint) return <Loader />
+  if (!sprint) return <LoadingCircle />
 
   return (
     <Formik

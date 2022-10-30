@@ -25,6 +25,7 @@ import { useAppDispatch } from '../../hooks/hooks'
 import { User } from '../../services/types'
 import { useGetProjectByIdQuery } from '../../services/projectsEndpoints'
 import ProjectAvatar from '../projects/ProjectAvatar'
+import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -135,7 +136,7 @@ function SideNav({ width, close }: SideNavProps) {
     />
   ))
 
-  if (!project) return <Loader />
+  if (!project) return <LoadingCircle />
 
   return (
     <Navbar width={{ sm: width }} p="md" className={classes.container}>

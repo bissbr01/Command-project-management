@@ -19,6 +19,7 @@ import Backlog from '../backlog/Backlog'
 import ProjectList from '../projects/ProjectList'
 import CheckAuth from './CheckAuth'
 import PeopleLayout from '../people/PeopleLayout'
+import LoadingCircle from '../common/LoadingCircle'
 
 export default function AppRoutes() {
   const navigate = useNavigate()
@@ -34,7 +35,7 @@ export default function AppRoutes() {
   // the <Routes> so we show the boards in the background, behind the modal.
   const state = location.state as { backgroundLocation?: Location }
 
-  if (isLoading) return <Loader />
+  if (isLoading) return <LoadingCircle />
 
   return (
     <>

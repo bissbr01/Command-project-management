@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { setLogin } from '../../reducers/authentication'
 import { useAddUserMutation } from '../../services/usersEndpoints'
 import { RootState } from '../../store'
+import LoadingCircle from '../common/LoadingCircle'
 
 interface CheckAuthProps {
   setIsUser: React.Dispatch<React.SetStateAction<boolean>>
@@ -73,7 +74,7 @@ export default function CheckAuth({ setIsUser }: CheckAuthProps) {
     addUser,
     setIsUser,
   ])
-  if (isLoading || userLoading) return <Loader />
+  if (isLoading || userLoading) return <LoadingCircle />
   if (error) return <div>{error.message}</div>
-  return <Loader />
+  return <LoadingCircle />
 }

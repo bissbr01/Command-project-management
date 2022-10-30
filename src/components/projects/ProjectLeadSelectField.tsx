@@ -8,6 +8,7 @@ import {
 import { FieldProps, useFormikContext } from 'formik'
 import { useEffect, useState } from 'react'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
+import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -91,7 +92,7 @@ export default function ProjectLeadSelectField({
     }
   }, [me, me?.teams, setFieldValue, teamId, touched.teamId])
 
-  if (!me) return <Loader />
+  if (!me) return <LoadingCircle />
 
   return (
     <Select

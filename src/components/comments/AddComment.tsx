@@ -19,6 +19,7 @@ import { useFocused } from '../../hooks/useFocused'
 import { useAddCommentMutation } from '../../services/commentsEndpoints'
 import FieldFocusedButtons from '../common/forms/FieldFocusedButtons'
 import TextAreaField from '../common/forms/TextAreaField'
+import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
   field: {
@@ -54,7 +55,7 @@ export default function AddComment({ issueId }: AddCommentProps) {
   const [addComment] = useAddCommentMutation()
   const { user } = useAuth0()
 
-  if (!user) return <Loader />
+  if (!user) return <LoadingCircle />
 
   return (
     <Formik

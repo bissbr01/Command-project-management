@@ -24,6 +24,7 @@ import {
   updateIssues,
   updateListIssues,
 } from '../../services/util'
+import LoadingCircle from '../common/LoadingCircle'
 import IssueDrawer from '../issues/IssueDrawer'
 import SprintCompletedButton from '../sprints/SprintCompletedButton'
 import SprintCompletedModal from '../sprints/SprintCompletedModal'
@@ -176,7 +177,7 @@ export default function Backlog() {
     }
   }
 
-  if (!sprints || !lists) return <Loader />
+  if (!sprints || !lists) return <LoadingCircle />
 
   return (
     <main>

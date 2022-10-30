@@ -14,6 +14,7 @@ import * as Yup from 'yup'
 import { useAddProjectMutation } from '../../services/projectsEndpoints'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import TextField from '../common/forms/TextField'
+import LoadingCircle from '../common/LoadingCircle'
 import ProjectLeadSelectField from './ProjectLeadSelectField'
 import ProjectTeamSelectField from './ProjectTeamSelectField'
 
@@ -65,7 +66,7 @@ export default function ProjectCreateModal({
     leadId: Yup.string().nullable().required('You must provide a project lead'),
   })
 
-  if (!me) return <Loader />
+  if (!me) return <LoadingCircle />
 
   return (
     <Modal

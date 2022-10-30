@@ -19,6 +19,7 @@ import {
   updateIssues,
   updateListIssues,
 } from '../../services/util'
+import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
   boards: {
@@ -140,7 +141,7 @@ function Board() {
     }
   }
 
-  if (isLoading || !columns) return <Loader />
+  if (isLoading || !columns) return <LoadingCircle />
 
   return (
     <div className={classes.boards}>

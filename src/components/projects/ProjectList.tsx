@@ -1,6 +1,7 @@
 import { Box, createStyles, Group, Loader, Table, Title } from '@mantine/core'
 import { useState } from 'react'
 import { useGetProjectsQuery } from '../../services/projectsEndpoints'
+import LoadingCircle from '../common/LoadingCircle'
 import ProjectCreateButton from './ProjectCreateButton'
 import ProjectCreateModal from './ProjectCreateModal'
 import ProjectListItem from './ProjectListItem'
@@ -16,7 +17,7 @@ export default function ProjectList() {
   const [createOpened, setCreateOpened] = useState(false)
   const { classes } = useStyles()
 
-  if (!projects) return <Loader />
+  if (!projects) return <LoadingCircle />
 
   return (
     <main>

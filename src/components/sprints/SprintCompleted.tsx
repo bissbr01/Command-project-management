@@ -22,6 +22,7 @@ import {
 } from '../../services/sprintsEndpoints'
 import { Issue, IssueStatus } from '../../services/types'
 import { updateIssues } from '../../services/util'
+import LoadingCircle from '../common/LoadingCircle'
 import trophyBanner from './trophy-banner.svg'
 
 const useStyles = createStyles((theme) => ({
@@ -72,7 +73,7 @@ export default function SprintCompleted({
     backlog = 'backlog',
   }
 
-  if (!sprint || !sprints) return <Loader />
+  if (!sprint || !sprints) return <LoadingCircle />
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

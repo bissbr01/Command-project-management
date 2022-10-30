@@ -12,6 +12,7 @@ import {
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { Link, Navigate, useLocation } from 'react-router-dom'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
+import LoadingCircle from '../common/LoadingCircle'
 import Logo from '../common/Logo'
 import NavSearch from './NavSearch'
 import NavUserAvatar from './NavUserAvatar'
@@ -88,7 +89,7 @@ function TopNav(): JSX.Element {
     />
   ))
 
-  if (!me) return <Loader />
+  if (!me) return <LoadingCircle />
 
   return (
     <Header height={56} className={classes.header}>

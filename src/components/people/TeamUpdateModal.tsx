@@ -19,6 +19,7 @@ import {
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import MultiSelectField from '../common/forms/MultiSelectField'
 import TextField from '../common/forms/TextField'
+import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -69,7 +70,7 @@ export default function TeamUpdateModal({
     userIds: Yup.array().of(Yup.string()),
   })
 
-  if (!team || !team.users || !me) return <Loader />
+  if (!team || !team.users || !me) return <LoadingCircle />
 
   const selectData = me.friends?.map((friend) => ({
     value: friend.id.toString(),
