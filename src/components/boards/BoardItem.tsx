@@ -1,4 +1,5 @@
 import {
+  Avatar,
   createStyles,
   Group,
   Text,
@@ -83,6 +84,17 @@ function BoardItem({
                 </Group>
               )}
               <IssueStoryPointsDisplay storyPoints={issue.storyPoints} />
+              {issue.assignee && (
+                <Avatar
+                  src={issue.assignee.picture}
+                  alt={issue.assignee.nickname}
+                  size="sm"
+                  color="blue"
+                  radius="xl"
+                >
+                  {issue.assignee.nickname}
+                </Avatar>
+              )}
             </Group>
           </UnstyledButton>
         </div>

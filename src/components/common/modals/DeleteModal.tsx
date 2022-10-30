@@ -23,6 +23,7 @@ export interface DeleteModalProps {
   opened: boolean
   setOpened: React.Dispatch<React.SetStateAction<boolean>>
   prompt?: string
+  beforeSubmit?: () => void
 }
 
 export default function DeleteModal({
@@ -31,11 +32,13 @@ export default function DeleteModal({
   opened,
   setOpened,
   prompt = 'Once you delete it, it is gone for good.',
+  beforeSubmit,
 }: DeleteModalProps) {
   const { classes } = useStyles()
 
   const handleDelete = async () => {
     try {
+      if (beforeSubmit) beforeSubmit()
       setOpened(false)
       await deleteMutation(item.id).unwrap()
       showNotification({

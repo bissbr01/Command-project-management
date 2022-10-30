@@ -116,7 +116,6 @@ export default function ProjectLeadSelectField({
         }
         field.onChange(event)
       }}
-      // {...field}
     />
   )
 }

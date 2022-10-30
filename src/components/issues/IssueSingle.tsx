@@ -1,4 +1,5 @@
 import {
+  CloseButton,
   createStyles,
   Group,
   LoadingOverlay,
@@ -16,9 +17,10 @@ import IssueTitle from './IssueTitle'
 import IssueDescription from './IssueDescription'
 import IssueTypeForm from './IssueTypeForm'
 import IssueStoryPoints from './IssueStoryPoints'
-import IssueMenu from './IssueMenu'
 import DotMenu from '../common/DotMenu'
 import DeleteModal from '../common/modals/DeleteModal'
+import IssueAssignForm from './IssueAssignForm'
+import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -55,7 +57,6 @@ const useStyles = createStyles((theme) => ({
     color: theme.colors.gray[6],
     fontSize: '.8em',
     paddingTop: '.5em',
-    marginTop: -50,
   },
 
   save: {
@@ -67,13 +68,12 @@ const useStyles = createStyles((theme) => ({
     color: theme.colors.gray[6],
     fontSize: '.8em',
     paddingTop: '.5em',
-    marginTop: -50,
     height: '5vh',
   },
 
   scroll: {
     // marginRight: '-10px',
-    height: '90vh',
+    height: '100vh',
   },
 }))
 
@@ -84,33 +84,37 @@ export interface IssueSingleProps {
 
 export default function IssueSingle({ issueId, onClose }: IssueSingleProps) {
   const { classes } = useStyles()
-  const { data: issue, isLoading } = useGetIssueByIdQuery(issueId)
+  const { data: issue } = useGetIssueByIdQuery(issueId)
   const [deleteOpened, setDeleteOpened] = useState(false)
   const [deleteIssue] = useDeleteIssueMutation()
 
-  if (isLoading) return <LoadingOverlay visible={isLoading} />
-  if (!issue) return <div>error: no issue</div>
+  if (!issue) return <LoadingCircle />
 
   return (
     <>
-      <Paper className={classes.container} mr="0">
-        <Group className={classes.header}>
-          <IssueTypeForm issue={issue} />
-          <Text>Issue: {issue.name}</Text>
-          <DotMenu setDeleteOpened={setDeleteOpened} margin="0 2rem 0 auto" />
-        </Group>
-        <ScrollArea offsetScrollbars className={classes.scroll}>
+      <ScrollArea offsetScrollbars className={classes.scroll}>
+        <Paper className={classes.container} m="0 0 0 .5rem">
+          <Group className={classes.header}>
+            <IssueTypeForm issue={issue} />
+            <Text>Issue: {issue.name}</Text>
+            <DotMenu setDeleteOpened={setDeleteOpened} />
+            <CloseButton onClick={onClose} />
+          </Group>
           <IssueTitle issue={issue} />
           <IssueDescription issue={issue} />
-          <IssueStoryPoints issue={issue} />
+          <Group align="flex-start" noWrap>
+            <IssueStoryPoints issue={issue} />
+            <IssueAssignForm issue={issue} />
+          </Group>
           <CommentsList issueId={issue.id} />
-        </ScrollArea>
-      </Paper>
+        </Paper>
+      </ScrollArea>
       <DeleteModal
         item={issue}
         deleteMutation={deleteIssue}
         opened={deleteOpened}
         setOpened={setDeleteOpened}
+        beforeSubmit={onClose}
         prompt="You are about to permanently delete this issue, its comments and
         attachments, and all of its data. If you are not sure, you can close
         this issue instead."

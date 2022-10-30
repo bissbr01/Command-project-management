@@ -1,4 +1,10 @@
-import { createStyles, InputVariant, Select, SelectItem } from '@mantine/core'
+import {
+  createStyles,
+  InputVariant,
+  MantineSize,
+  Select,
+  SelectItem,
+} from '@mantine/core'
 import { FieldProps } from 'formik'
 
 const useStyles = createStyles((theme) => ({
@@ -23,8 +29,10 @@ export interface SelectFieldProps extends FieldProps {
   variant?: InputVariant
   required?: boolean
   data: SelectItem[]
-  // icon?: JSX.Element
+  icon?: JSX.Element
   disabled: boolean
+  itemComponent: React.FC<any>
+  size: MantineSize
 }
 
 export default function SelectField({
@@ -34,8 +42,11 @@ export default function SelectField({
   required = false,
   data = [],
   disabled = false,
+  size,
   field,
+  icon,
   form,
+  itemComponent,
 }: SelectFieldProps) {
   // workaround to get meta.  Might be fixed in future of formik
   const { classes } = useStyles()
@@ -49,6 +60,10 @@ export default function SelectField({
       error={meta.touched && meta.error}
       variant={variant}
       data={data}
+      itemComponent={itemComponent}
+      icon={icon}
+      allowDeselect
+      size={size}
       name={field.name}
       value={field.value}
       disabled={disabled}

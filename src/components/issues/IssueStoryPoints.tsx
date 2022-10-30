@@ -9,6 +9,7 @@ import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import { Issue } from '../../services/types'
 import FieldFocusedButtons from '../common/forms/FieldFocusedButtons'
 import NumberField from '../common/forms/NumberField'
+import FormikSubmitOnChange from '../common/forms/FormikSubmitOnChange'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -18,17 +19,17 @@ const useStyles = createStyles((theme) => ({
   form: {},
 
   inputStyles: {
-    padding: 10,
-    '&:hover': {
-      backgroundColor: theme.colors.gray[1],
-    },
-    '&:focus': {
-      border: `2px solid ${theme.colors.brand[1]}`,
-      borderRadius: 5,
-      '&:hover': {
-        backgroundColor: theme.white,
-      },
-    },
+    // padding: 10,
+    // '&:hover': {
+    //   backgroundColor: theme.colors.gray[1],
+    // },
+    // '&:focus': {
+    //   border: `2px solid ${theme.colors.brand[1]}`,
+    //   borderRadius: 5,
+    //   '&:hover': {
+    //     backgroundColor: theme.white,
+    //   },
+    // },
   },
 
   save: {
@@ -43,7 +44,6 @@ interface IssueStoryPointsProps {
 
 export default function IssueStoryPoints({ issue }: IssueStoryPointsProps) {
   const { classes, cx } = useStyles()
-  const { focused, handleFocused } = useFocused()
   const [update] = useUpdateIssueMutation()
 
   const TitleSchema = Yup.object().shape({
@@ -66,7 +66,6 @@ export default function IssueStoryPoints({ issue }: IssueStoryPointsProps) {
             color: 'green',
             icon: <IconCheck />,
           })
-          handleFocused(false)
         } catch (e: unknown) {
           showNotification({
             title: 'Error',
@@ -78,39 +77,18 @@ export default function IssueStoryPoints({ issue }: IssueStoryPointsProps) {
         }
       }}
     >
-      {({ isSubmitting, handleBlur }) => (
-        <Form className={classes.container}>
-          <Field
-            stylesApi={{ input: cx(classes.inputStyles) }}
-            id="storyPoints"
-            name="storyPoints"
-            // variant="unstyled"
-            label={
-              <Title order={3} size="h5">
-                Story Points
-              </Title>
-            }
-            component={NumberField}
-            onFocus={() => handleFocused(true)}
-            onBlur={(e: FocusEvent) => {
-              handleBlur(e)
-              // if not clicking a form button, unfocus
-              if (
-                !(e.relatedTarget?.id === 'save') &&
-                !(e.relatedTarget?.id === 'reset')
-              ) {
-                handleFocused(false)
-              }
-            }}
-          />
-          {focused && (
-            <FieldFocusedButtons
-              isSubmitting={isSubmitting}
-              handleFocused={handleFocused}
-            />
-          )}
-        </Form>
-      )}
+      <Form className={classes.container}>
+        <FormikSubmitOnChange />
+        <Field
+          stylesApi={{ input: cx(classes.inputStyles) }}
+          id="storyPoints"
+          name="storyPoints"
+          // variant="unstyled"
+          label="Story Points"
+          formatter={(value: number) => `${value} points`}
+          component={NumberField}
+        />
+      </Form>
     </Formik>
   )
 }

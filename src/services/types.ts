@@ -45,7 +45,9 @@ export interface Issue extends BaseModel {
   boardOrder?: number
   storyPoints: number
   assignee?: User
+  assigneeId: number
   author?: User
+  authorId: number
   sprint?: Sprint
   sprintId: number | null
   comments?: Comment[]
