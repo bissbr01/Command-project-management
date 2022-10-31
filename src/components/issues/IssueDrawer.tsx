@@ -29,7 +29,7 @@ export default function IssueDrawer({
       withCloseButton={false}
       padding="xs"
       size="xl"
-      overlayOpacity={0.2}
+      overlayOpacity={0.0}
       overlayColor={
         theme.colorScheme === 'dark' ? theme.colors.dark[9] : 'white'
       }
