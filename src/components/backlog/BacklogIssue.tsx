@@ -1,5 +1,4 @@
 import {
-  ActionIcon,
   Avatar,
   createStyles,
   Group,
@@ -7,8 +6,7 @@ import {
   UnstyledButton,
   useMantineTheme,
 } from '@mantine/core'
-import { IconEdit } from '@tabler/icons'
-import { SetStateAction, useEffect, useRef } from 'react'
+import { SetStateAction } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
 import { Issue, IssueStatus } from '../../services/types'
@@ -65,19 +63,11 @@ export default function BacklogIssue({
   const { classes } = useStyles()
   const theme = useMantineTheme()
   const navigate = useNavigate()
-  const ref = useRef<HTMLDivElement>(null)
 
   const handleClick = () => {
     setIssueOpened(true)
     navigate(`issues/${issue.id}`)
   }
-  // useEffect(() => {
-  //   const { current } = ref
-  //   current?.addEventListener('click', handleClick)
-  //   return () => {
-  //     current?.removeEventListener('click', handleClick)
-  //   }
-  // }, [issue.id, navigate, setIssueOpened])
 
   return (
     <Draggable
