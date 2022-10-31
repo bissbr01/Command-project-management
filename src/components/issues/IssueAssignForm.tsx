@@ -37,9 +37,6 @@ export default function IssueAssignForm({ issue }: IssueAssignFormProps) {
 
   if (!project) return <LoadingCircle />
 
-  console.log('issue: ', issue)
-  console.log('assignee: ', issue.assignee)
-
   return (
     <Formik
       initialValues={{
@@ -47,7 +44,6 @@ export default function IssueAssignForm({ issue }: IssueAssignFormProps) {
       }}
       validationSchema={IssueAssignFormSchema}
       onSubmit={async ({ assigneeId }) => {
-        console.log('assigneeId: ', assigneeId)
         try {
           await update({
             id: issue.id,

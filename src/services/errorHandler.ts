@@ -11,7 +11,6 @@ export const rtkQueryErrorLogger: Middleware =
     if (isRejectedWithValue(action)) {
       let message
       if ('error' in action.payload.data) {
-        console.log(action)
         message = action.payload.data.error
       } else {
         message = action.payload.data.errors[0].message
