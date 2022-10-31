@@ -10,7 +10,7 @@ import { Issue } from '../../services/types'
 import FormikSubmitOnChange from '../common/forms/FormikSubmitOnChange'
 import SelectField from '../common/forms/SelectField'
 import LoadingCircle from '../common/LoadingCircle'
-import IssueAssignSelectItem from './IssueAssignSelectItem'
+import UserAssignSelectItem from '../common/forms/UserSelectItem'
 
 const useStyles = createStyles((theme) => ({
   form: {
@@ -80,7 +80,7 @@ export default function IssueAssignForm({ issue }: IssueAssignFormProps) {
             label="Assigned to:"
             // variant="unstyled"
             placeholder="Assign to Teammate"
-            itemComponent={IssueAssignSelectItem}
+            itemComponent={UserAssignSelectItem}
             size="sm"
             icon={
               <Avatar
@@ -96,7 +96,7 @@ export default function IssueAssignForm({ issue }: IssueAssignFormProps) {
             data={project.team?.users?.map((user) => ({
               value: user.id,
               label: user.nickname,
-              avatar: user.picture,
+              picture: user.picture,
             }))}
             component={SelectField}
             disabled={isSubmitting}

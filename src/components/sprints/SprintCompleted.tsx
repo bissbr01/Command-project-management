@@ -125,6 +125,7 @@ export default function SprintCompleted({
         await updateSprint({
           id: Number(sprintSelect),
           active: true,
+          displayOnBoard: true,
         })
 
         const issuesForUpdate = issuesToCopy.reduce<

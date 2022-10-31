@@ -1,4 +1,5 @@
 import {
+  Avatar,
   createStyles,
   InputVariant,
   Loader,
@@ -8,6 +9,7 @@ import {
 import { FieldProps, useFormikContext } from 'formik'
 import { useEffect, useState } from 'react'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
+import UserAssignSelectItem from '../common/forms/UserSelectItem'
 import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
@@ -63,7 +65,7 @@ export default function ProjectLeadSelectField({
     setFieldValue,
   } = useFormikContext<ProjectCreateFields>()
   const [leadOptions, setLeadOptions] = useState<
-    { value: string; label: string }[]
+    { value: string; label: string; picture: string }[]
   >([])
 
   // when team is selected, propigate lead options with teammates
@@ -78,16 +80,21 @@ export default function ProjectLeadSelectField({
           selectedTeam[0].users
         ) {
           setLeadOptions(
-            selectedTeam[0].users.map(({ name, id }) => ({
+            selectedTeam[0].users.map(({ name, id, picture }) => ({
               label: name,
               value: id.toString(),
+              picture: picture,
             }))
           )
         } else {
-          setLeadOptions([{ label: me.name, value: me.id.toString() }])
+          setLeadOptions([
+            { label: me.name, value: me.id.toString(), picture: me.picture },
+          ])
         }
       } else {
-        setLeadOptions([{ label: me.name, value: me.id.toString() }])
+        setLeadOptions([
+          { label: me.name, value: me.id.toString(), picture: me.picture },
+        ])
       }
     }
   }, [me, me?.teams, setFieldValue, teamId, touched.teamId])
@@ -101,7 +108,21 @@ export default function ProjectLeadSelectField({
       withAsterisk={required}
       error={meta.touched && meta.error}
       variant={variant}
+      itemComponent={UserAssignSelectItem}
       data={leadOptions}
+      icon={
+        <Avatar
+          src={
+            leadOptions.find((option) => option.value === field.value)?.picture
+          }
+          alt="user icon"
+          size="sm"
+          color="blue"
+          radius="xl"
+        >
+          {field.value}
+        </Avatar>
+      }
       allowDeselect
       name={field.name}
       value={field.value}

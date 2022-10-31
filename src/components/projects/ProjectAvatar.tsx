@@ -20,11 +20,11 @@ export default function ProjectAvatar({
       variant="bauhaus"
       square
       colors={[
-        theme.colors.red[2],
-        theme.colors.brand[3],
+        theme.colors.brand[4],
+        theme.colors.yellow[3],
         theme.colors.indigo[5],
-        theme.colors.yellow[6],
-        theme.colors.blue[4],
+        theme.colors.brand[6],
+        theme.colors.blue[5],
       ]}
     />
   )
