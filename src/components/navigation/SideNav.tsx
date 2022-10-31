@@ -116,8 +116,13 @@ function SideNav({ width, close }: SideNavProps) {
   const navData = [
     { link: 'board', label: 'Board', icon: IconChalkboard },
     { link: 'backlog', label: 'Backlog', icon: IconStack2 },
-    { link: 'notifications', label: 'Notifications', icon: IconBellRinging },
-    { link: 'settings', label: 'Settings', icon: IconSettings },
+    {
+      link: 'notifications',
+      label: 'Notifications',
+      icon: IconBellRinging,
+      disabled: true,
+    },
+    { link: 'settings', label: 'Settings', icon: IconSettings, disabled: true },
   ]
 
   const navLinks = navData.map((item) => (
@@ -127,6 +132,7 @@ function SideNav({ width, close }: SideNavProps) {
       label={item.label}
       to={`/projects/${projectId}/${item.link}`}
       icon={<item.icon className={classes.linkIcon} stroke={1.5} />}
+      disabled={item.disabled}
       active={
         location.pathname.match(`/projects/${projectId}/${item.link}`) !== null
       }

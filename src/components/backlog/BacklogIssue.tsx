@@ -4,6 +4,7 @@ import {
   createStyles,
   Group,
   Text,
+  UnstyledButton,
   useMantineTheme,
 } from '@mantine/core'
 import { IconEdit } from '@tabler/icons'
@@ -12,6 +13,7 @@ import { Draggable } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
 import { Issue, IssueStatus } from '../../services/types'
 import IssueStatusDisplay from '../issues/IssueStatusDisplay'
+import IssueStoryPointsDisplay from '../issues/IssueStoryPointsDisplay'
 import IssueTypeIcon from '../issues/IssueTypeIcon'
 
 const useStyles = createStyles((theme) => ({
@@ -65,17 +67,17 @@ export default function BacklogIssue({
   const navigate = useNavigate()
   const ref = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const handleClick = () => {
-      setIssueOpened(true)
-      navigate(`issues/${issue.id}`)
-    }
-    const { current } = ref
-    current?.addEventListener('click', handleClick)
-    return () => {
-      current?.removeEventListener('click', handleClick)
-    }
-  }, [issue.id, navigate, setIssueOpened])
+  const handleClick = () => {
+    setIssueOpened(true)
+    navigate(`issues/${issue.id}`)
+  }
+  // useEffect(() => {
+  //   const { current } = ref
+  //   current?.addEventListener('click', handleClick)
+  //   return () => {
+  //     current?.removeEventListener('click', handleClick)
+  //   }
+  // }, [issue.id, navigate, setIssueOpened])
 
   return (
     <Draggable
@@ -94,25 +96,33 @@ export default function BacklogIssue({
             ...provided.draggableProps.style,
           }}
         >
-          <Group id="clickTarget" className={classes.container}>
-            <Group className={classes.groupLeft}>
-              <IssueTypeIcon issueType={issue.type} />
-              <Text
-                color="dimmed"
-                strikethrough={issue.status === IssueStatus.Done}
-              >
-                {issue.name}
-              </Text>
-              <Text className={classes.noOverflow}>{issue.title}</Text>
+          <UnstyledButton onClick={handleClick} sx={{ width: '100%' }}>
+            <Group id="clickTarget" className={classes.container}>
+              <Group className={classes.groupLeft}>
+                <IssueTypeIcon issueType={issue.type} />
+                <Text
+                  color="dimmed"
+                  strikethrough={issue.status === IssueStatus.Done}
+                >
+                  {issue.name}
+                </Text>
+                <Text className={classes.noOverflow}>{issue.title}</Text>
+              </Group>
+              <Group className={classes.groupRight}>
+                <IssueStoryPointsDisplay storyPoints={issue.storyPoints} />
+                <IssueStatusDisplay issueStatus={issue.status} />
+                <Avatar
+                  src={issue.assignee?.picture}
+                  alt={issue.assignee?.nickname}
+                  size="sm"
+                  color="gray"
+                  radius="xl"
+                >
+                  {issue.assignee?.nickname}
+                </Avatar>
+              </Group>
             </Group>
-            <Group className={classes.groupRight} ref={ref}>
-              <ActionIcon size="sm">
-                <IconEdit stroke={1} />
-              </ActionIcon>
-              <IssueStatusDisplay issueStatus={issue.status} />
-              <Avatar radius="xl" size="sm" />
-            </Group>
-          </Group>
+          </UnstyledButton>
         </div>
       )}
     </Draggable>
