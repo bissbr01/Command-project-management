@@ -26,11 +26,12 @@ const commentsEndpoints = scrumApi.injectEndpoints({
     updateComment: build.mutation<Comment, Partial<Comment>>({
       query: ({ id, ...body }) => ({
         url: `/comments/${id}`,
-        method: 'PUT',
+        method: 'PATCH',
         body,
       }),
       invalidatesTags: (result, error, arg) => [
         { type: 'Comment', id: arg.id },
+        'Comment',
       ],
     }),
     deleteComment: build.mutation<{ success: boolean; id: number }, number>({

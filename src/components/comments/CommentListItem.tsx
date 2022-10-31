@@ -1,25 +1,19 @@
 import {
   Avatar,
-  Button,
   createStyles,
   Group,
-  Loader,
-  Modal,
   Text,
-  Title,
   useMantineTheme,
 } from '@mantine/core'
-import { IconAlertTriangle } from '@tabler/icons'
 import dayjs from 'dayjs'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useDeleteCommentMutation } from '../../services/commentsEndpoints'
 import { Comment } from '../../services/types'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import DotMenu from '../common/DotMenu'
 import LoadingCircle from '../common/LoadingCircle'
 import DeleteModal from '../common/modals/DeleteModal'
-import CommentMenu from './CommentMenu'
+import CommentEditModal from './CommentEditModal'
 
 const useStyles = createStyles((theme) => ({
   comment: {
@@ -29,7 +23,6 @@ const useStyles = createStyles((theme) => ({
 
   body: {
     paddingLeft: 54,
-    // paddingTop: '.25rem',
   },
 
   icon: {
@@ -66,7 +59,9 @@ export default function CommentListItem({ comment }: CommentListItemProps) {
             color={theme.colors.brand[1]}
             radius="xl"
           />
-          <Text size="sm">{comment.author?.nickname}</Text>
+          <Text size="sm" color="dimmed">
+            {comment.author?.nickname}
+          </Text>
           <Text size="xs" color="dimmed">
             {timeCreated()}
           </Text>
@@ -78,11 +73,16 @@ export default function CommentListItem({ comment }: CommentListItemProps) {
           )}
         </Group>
         <div className={classes.body}>
-          <Text size="sm" mr="3rem" pl="1rem">
+          <Text size="sm" mr="3rem">
             {comment.text}
           </Text>
         </div>
       </article>
+      <CommentEditModal
+        comment={comment}
+        opened={editOpened}
+        setOpened={setEditOpened}
+      />
       <DeleteModal
         item={comment}
         deleteMutation={deleteComment}

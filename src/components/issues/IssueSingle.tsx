@@ -73,7 +73,7 @@ const useStyles = createStyles((theme) => ({
 
   scroll: {
     // marginRight: '-10px',
-    height: '100vh',
+    height: '97vh',
   },
 }))
 
@@ -93,7 +93,7 @@ export default function IssueSingle({ issueId, onClose }: IssueSingleProps) {
   return (
     <>
       <ScrollArea offsetScrollbars className={classes.scroll}>
-        <Paper className={classes.container} m="0 0 0 .5rem">
+        <Paper className={classes.container} m="0 0 0 .5rem" p="0 1rem">
           <Group className={classes.header}>
             <IssueTypeForm issue={issue} />
             <Text>Issue: {issue.name}</Text>

@@ -1,8 +1,15 @@
-import { ActionIcon, Avatar, Group, Menu, Text } from '@mantine/core'
+import {
+  ActionIcon,
+  Avatar,
+  Group,
+  Menu,
+  Text,
+  UnstyledButton,
+} from '@mantine/core'
 import { IconDots, IconEdit, IconTrash } from '@tabler/icons'
 import BoringAvatar from 'boring-avatars'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Project } from '../../services/types'
 import TeamGetAvatars from '../people/TeamGetAvatars'
 import ProjectAvatar from './ProjectAvatar'
@@ -19,14 +26,17 @@ export default function ProjectListItem({ project }: ProjectListItemProps) {
   return (
     <tr key={project.id}>
       <td>
-        <Group>
-          <ProjectAvatar project={project} />
-          <Link to={`/projects/${project.id}/board`}>{project.title}</Link>
-        </Group>
+        <Link to={`/projects/${project.id}/board`}>
+          <Group>
+            <ProjectAvatar project={project} />
+            <Text>{project.title}</Text>
+          </Group>
+        </Link>
       </td>
       <td>{project.sprints && <Text>{project.sprints.length - 1}</Text>}</td>
       <td>
         <Group>
+          <Text>{project.team?.name ?? 'Individual Project'}</Text>
           {project.team && (
             <TeamGetAvatars
               numAvatars={project.team?.users?.length}
@@ -35,7 +45,6 @@ export default function ProjectListItem({ project }: ProjectListItemProps) {
               avatarSize="md"
             />
           )}
-          <Text>{project.team?.name ?? 'Individual Project'}</Text>
         </Group>
       </td>
       <td>

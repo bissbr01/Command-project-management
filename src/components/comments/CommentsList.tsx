@@ -10,7 +10,7 @@ const useStyles = createStyles(() => ({
     // display: 'flex',
     // flexDirection: 'column',
     // rowGap: 10,
-    height: '47vh',
+    // height: '47vh',
     // overflowY: 'scroll',
   },
 }))

@@ -47,8 +47,8 @@ const issuesEndpoints = scrumApi.injectEndpoints({
     }),
     getIssueById: build.query<Issue, string>({
       query: (id) => `/issues/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Issue' as const, id }],
-      keepUnusedDataFor: 0,
+      providesTags: (result, error, id) => [{ type: 'Issue', id }],
+      // keepUnusedDataFor: 0,
     }),
     addIssue: build.mutation<
       Issue,
