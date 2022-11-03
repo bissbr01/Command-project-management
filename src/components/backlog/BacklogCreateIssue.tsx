@@ -1,7 +1,13 @@
 import * as Yup from 'yup'
 import { Field, Form, Formik } from 'formik'
 import { showNotification } from '@mantine/notifications'
-import { createStyles, Group, Text, UnstyledButton } from '@mantine/core'
+import {
+  createStyles,
+  Group,
+  MantineSize,
+  Text,
+  UnstyledButton,
+} from '@mantine/core'
 import { IconCheck, IconPlus, IconX } from '@tabler/icons'
 import { useParams } from 'react-router-dom'
 import { FocusEvent } from 'react'
@@ -23,7 +29,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   formGroup: {
-    margin: '0 -12px -12px -12px',
+    // margin: '0 -12px -12px -12px',
   },
 
   createButton: {
@@ -33,6 +39,7 @@ const useStyles = createStyles((theme) => ({
     justifyContent: 'flex-start',
     padding: '0.5rem 1rem 1rem 1rem',
     backgroundColor: theme.colors.gray[1],
+    color: theme.colors.gray[7],
   },
 
   createIcon: {
@@ -42,26 +49,29 @@ const useStyles = createStyles((theme) => ({
 
   inputSection: {
     backgroundColor: theme.white,
-    flex: '1 0 content',
-    marginTop: '-11px',
-    padding: '0 12px 6px 12px',
+    flex: '1 1 content',
+    flexWrap: 'nowrap',
+    padding: '0.5rem 0.5rem',
     border: `2px solid ${theme.colors.blue[4]}`,
   },
 
   save: {
     alignItems: 'center',
     justifyContent: 'center',
+    padding: '1rem',
   },
 }))
 
-interface BacklogCreateIssueProps {
+export interface BacklogCreateIssueProps {
   sprintId: number | null
   status: IssueStatus
+  size?: MantineSize
 }
 
 export default function BacklogCreateIssue({
   sprintId,
   status,
+  size = 'md',
 }: BacklogCreateIssueProps) {
   const { classes, cx } = useStyles()
   const { focused, handleFocused } = useFocused()
@@ -112,6 +122,7 @@ export default function BacklogCreateIssue({
       {({ isSubmitting, handleBlur }) => (
         <Form>
           <Group
+            align="center"
             onFocus={() => handleFocused(true)}
             onBlur={(e: FocusEvent) => {
               handleBlur(e)
@@ -130,25 +141,29 @@ export default function BacklogCreateIssue({
                 onClick={() => handleFocused(true)}
               >
                 <IconPlus className={classes.createIcon} />
-                <Text>Create Issue</Text>
+                <Text size={size}>Create Issue</Text>
               </UnstyledButton>
             )}
             {focused && (
               <Group className={classes.inputSection}>
-                <Field
-                  id="type"
-                  name="type"
-                  value="type"
-                  variant="unstyled"
-                  onFocus={() => handleFocused(true)}
-                  component={IssueTypeSelectField}
-                />
+                {size !== 'sm' && size !== 'xs' && (
+                  <Field
+                    id="type"
+                    name="type"
+                    value="type"
+                    size={size}
+                    variant="unstyled"
+                    onFocus={() => handleFocused(true)}
+                    component={IssueTypeSelectField}
+                  />
+                )}
                 <Field
                   stylesApi={{ root: classes.title }}
                   id="title"
                   name="title"
-                  placeholder="New Issue Title"
+                  placeholder="Enter Title..."
                   variant="unstyled"
+                  size={size}
                   minRows="3"
                   component={TextField}
                 />

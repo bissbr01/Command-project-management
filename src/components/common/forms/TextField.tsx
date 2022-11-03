@@ -1,4 +1,9 @@
-import { InputVariant, TextInput, TextInputStylesNames } from '@mantine/core'
+import {
+  InputVariant,
+  MantineSize,
+  TextInput,
+  TextInputStylesNames,
+} from '@mantine/core'
 import { FieldProps } from 'formik'
 
 export interface TextProps extends FieldProps {
@@ -6,6 +11,7 @@ export interface TextProps extends FieldProps {
   placeholder?: string
   variant?: InputVariant
   required?: boolean
+  size: MantineSize
   stylesApi?: Partial<Record<TextInputStylesNames, string>> | undefined
 }
 
@@ -16,6 +22,7 @@ export default function TextField({
   required = false,
   stylesApi,
   field,
+  size = 'sm',
   form,
 }: TextProps) {
   // workaround to get meta.  Might be fixed in future of formik
@@ -27,6 +34,7 @@ export default function TextField({
       withAsterisk={required}
       error={meta.touched && meta.error}
       variant={variant}
+      size={size}
       classNames={stylesApi}
       {...field}
     />

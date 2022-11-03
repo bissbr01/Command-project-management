@@ -149,8 +149,8 @@ function SideNav({ width, close }: SideNavProps) {
       {projectId && (
         <>
           <Navbar.Section className={classes.header}>
-            <Group>
-              <ProjectAvatar project={project} size={30} />
+            <Group noWrap>
+              <ProjectAvatar project={project} />
               <Title order={3} size="h4">
                 {project.title}
               </Title>

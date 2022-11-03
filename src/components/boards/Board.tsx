@@ -20,6 +20,7 @@ import {
   updateListIssues,
 } from '../../services/util'
 import LoadingCircle from '../common/LoadingCircle'
+import BacklogCreateIssue from '../backlog/BacklogCreateIssue'
 
 const useStyles = createStyles((theme) => ({
   boards: {
@@ -34,12 +35,12 @@ const useStyles = createStyles((theme) => ({
     },
   },
   board: {
-    flex: '1',
-    background: theme.colors.gray[0],
-    // padding: '1em',
+    flex: '0 0 content',
   },
+
   paper: {
     height: '100%',
+    // background: theme.colors.gray[1],
   },
 
   droppable: {
@@ -55,7 +56,7 @@ function Board() {
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
   const { projectId } = useParams()
-  const { data: boardColumnsData, isLoading } = useGetSprintForBoardQuery({
+  const { data: boardColumnsData } = useGetSprintForBoardQuery({
     projectId,
   })
   const [columns, setColumns] = useState<BoardColumns | null>(null)
@@ -141,7 +142,7 @@ function Board() {
     }
   }
 
-  if (isLoading || !columns) return <LoadingCircle />
+  if (!boardColumnsData || !columns) return <LoadingCircle />
 
   return (
     <div className={classes.boards}>
@@ -161,7 +162,7 @@ function Board() {
                     style={{
                       background: snapshot.isDraggingOver
                         ? theme.colors.blue[0]
-                        : theme.colors.gray[0],
+                        : theme.colors.gray[1],
                     }}
                   >
                     {column.issues.map((item, index) => (
@@ -173,6 +174,13 @@ function Board() {
                       />
                     ))}
                     {provided.placeholder}
+                    {column.status !== IssueStatus.Done && (
+                      <BacklogCreateIssue
+                        sprintId={boardColumnsData.sprint.id}
+                        status={column.status}
+                        size="sm"
+                      />
+                    )}
                   </div>
                 )}
               </Droppable>
