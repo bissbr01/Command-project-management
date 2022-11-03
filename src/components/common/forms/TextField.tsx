@@ -5,6 +5,7 @@ import {
   TextInputStylesNames,
 } from '@mantine/core'
 import { FieldProps } from 'formik'
+import { FocusEventHandler } from 'react'
 
 export interface TextProps extends FieldProps {
   label?: string
@@ -13,6 +14,8 @@ export interface TextProps extends FieldProps {
   required?: boolean
   size: MantineSize
   stylesApi?: Partial<Record<TextInputStylesNames, string>> | undefined
+  onFocus?: FocusEventHandler<HTMLInputElement>
+  onBlur?: FocusEventHandler<HTMLInputElement>
 }
 
 export default function TextField({
@@ -21,6 +24,8 @@ export default function TextField({
   variant,
   required = false,
   stylesApi,
+  onFocus,
+  onBlur,
   field,
   size = 'sm',
   form,
@@ -29,6 +34,7 @@ export default function TextField({
   const meta = form.getFieldMeta(field.name)
   return (
     <TextInput
+      {...field}
       label={label}
       placeholder={placeholder}
       withAsterisk={required}
@@ -36,7 +42,8 @@ export default function TextField({
       variant={variant}
       size={size}
       classNames={stylesApi}
-      {...field}
+      onFocus={onFocus}
+      onBlur={onBlur}
     />
   )
 }

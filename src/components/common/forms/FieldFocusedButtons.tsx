@@ -10,14 +10,11 @@ import { IconCheck } from '@tabler/icons'
 
 const useStyles = createStyles(() => ({
   buttons: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
     alignContent: 'flex-start',
-    // paddingRight: '1rem',
-    // paddingTop: '0.5em',
-    // margin: '5px 5px',
+    paddingRight: '.5rem',
     flex: '1 1 content',
-    flexWrap: 'wrap',
+    flexWrap: 'nowrap',
   },
 }))
 

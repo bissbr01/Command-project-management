@@ -35,7 +35,7 @@ const useStyles = createStyles((theme) => ({
   createButton: {
     display: 'flex',
     flexDirection: 'row',
-    flex: '1 0 content',
+    flex: '1 1 content',
     justifyContent: 'flex-start',
     padding: '0.5rem 1rem 1rem 1rem',
     backgroundColor: theme.colors.gray[1],
@@ -43,7 +43,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   createIcon: {
-    fontSize: '10px',
+    fontSize: theme.fontSizes.md,
     padding: '0 10px 0 0',
   },
 
@@ -51,8 +51,12 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: theme.white,
     flex: '1 1 content',
     flexWrap: 'nowrap',
-    padding: '0.5rem 0.5rem',
+    // padding: '0.5rem 0.5rem',
     border: `2px solid ${theme.colors.blue[4]}`,
+    '& > .mantine-TextInput-root': {
+      flex: '1 1 content',
+      paddingLeft: '.5rem',
+    },
   },
 
   save: {
