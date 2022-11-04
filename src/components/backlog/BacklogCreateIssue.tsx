@@ -28,10 +28,6 @@ const useStyles = createStyles((theme) => ({
     flex: '1 0 content',
   },
 
-  formGroup: {
-    // margin: '0 -12px -12px -12px',
-  },
-
   createButton: {
     display: 'flex',
     flexDirection: 'row',
