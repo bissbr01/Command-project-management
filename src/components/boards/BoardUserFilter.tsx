@@ -15,6 +15,11 @@ const useStyles = createStyles((theme) => ({
     background: 'transparent',
     border: 'none',
   },
+
+  button: {
+    borderRadius: theme.radius.xl,
+    padding: 2,
+  },
 }))
 
 interface BoardUserFilterProps {
@@ -44,21 +49,20 @@ export default function BoardUserFilter({
   }
 
   return (
-    <Group>
+    <Group mb="1rem">
       {team.users?.map((user) => (
         <UnstyledButton
           key={user.id}
           onClick={() => updateUsers(user)}
+          className={classes.button}
           sx={{
             background: user.id in users ? theme.colors.blue[5] : 'none',
-            borderRadius: theme.radius.xl,
-            padding: 2,
           }}
         >
           <Avatar
             alt="teammate avatar"
             src={user.picture}
-            size="sm"
+            size="md"
             radius="xl"
             className={classes.avatar}
           >
