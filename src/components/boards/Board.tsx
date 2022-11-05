@@ -9,7 +9,12 @@ import { useParams } from 'react-router-dom'
 import React, { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import BoardItem from './BoardItem'
-import { IssueStatus, BoardColumns } from '../../services/types'
+import {
+  IssueStatus,
+  BoardColumns,
+  UsersById,
+  User,
+} from '../../services/types'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import IssueDrawer from '../issues/IssueDrawer'
 import { useGetSprintForBoardQuery } from '../../services/sprintsEndpoints'
@@ -21,6 +26,8 @@ import {
 } from '../../services/util'
 import LoadingCircle from '../common/LoadingCircle'
 import BacklogCreateIssue from '../backlog/BacklogCreateIssue'
+import BoardUserFilter from './BoardUserFilter'
+import { useGetProjectByIdQuery } from '../../services/projectsEndpoints'
 
 const useStyles = createStyles((theme) => ({
   boards: {
@@ -56,6 +63,7 @@ function Board() {
   const [updateIssue] = useUpdateIssueMutation()
   const [issueOpened, setIssueOpened] = useState(false)
   const { projectId } = useParams()
+  const { data: project } = useGetProjectByIdQuery(projectId as string)
   const { data: boardColumnsData } = useGetSprintForBoardQuery({
     projectId,
   })
@@ -66,6 +74,24 @@ function Board() {
       setColumns(boardColumnsData.boardColumns)
     }
   }, [setColumns, boardColumnsData])
+
+  const handleFilterByUserClick = (users: UsersById) => {
+    if (!columns || !boardColumnsData) return
+    if (Object.keys(users).length === 0) {
+      setColumns(boardColumnsData.boardColumns)
+    } else {
+      const filteredColumns: BoardColumns = {}
+      Object.entries(boardColumnsData.boardColumns).forEach(
+        ([status, column]) => {
+          filteredColumns[status] = {
+            ...column,
+            issues: column.issues.filter((issue) => issue.assigneeId in users),
+          }
+        }
+      )
+      setColumns(filteredColumns)
+    }
+  }
 
   const handleDragEnd = async (
     result: DropResult,
@@ -142,54 +168,65 @@ function Board() {
     }
   }
 
-  if (!boardColumnsData || !columns) return <LoadingCircle />
+  if (!boardColumnsData || !columns || !project) return <LoadingCircle />
 
   return (
-    <div className={classes.boards}>
-      <DragDropContext
-        onDragEnd={(result) => handleDragEnd(result, columns, setColumns)}
-      >
-        {Object.entries(columns).map(([columnId, column]) => (
-          <Paper className={classes.paper} key={columnId}>
-            <Title order={3}>{column.name}</Title>
-            <div>
-              <Droppable droppableId={columnId} key={columnId}>
-                {(provided, snapshot) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className={classes.droppable}
-                    style={{
-                      background: snapshot.isDraggingOver
-                        ? theme.colors.blue[0]
-                        : theme.colors.gray[1],
-                    }}
-                  >
-                    {column.issues.map((item, index) => (
-                      <BoardItem
-                        key={item.id}
-                        item={item}
-                        index={index}
-                        setIssueOpened={setIssueOpened}
-                      />
-                    ))}
-                    {provided.placeholder}
-                    {column.status !== IssueStatus.Done && (
-                      <BacklogCreateIssue
-                        sprintId={boardColumnsData.sprint.id}
-                        status={column.status}
-                        size="sm"
-                      />
-                    )}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          </Paper>
-        ))}
-      </DragDropContext>
-      <IssueDrawer issueOpened={issueOpened} setIssueOpened={setIssueOpened} />
-    </div>
+    <>
+      {project.team && (
+        <BoardUserFilter
+          team={project.team}
+          handleClick={handleFilterByUserClick}
+        />
+      )}
+      <div className={classes.boards}>
+        <DragDropContext
+          onDragEnd={(result) => handleDragEnd(result, columns, setColumns)}
+        >
+          {Object.entries(columns).map(([columnId, column]) => (
+            <Paper className={classes.paper} key={columnId}>
+              <Title order={3}>{column.name}</Title>
+              <div>
+                <Droppable droppableId={columnId} key={columnId}>
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className={classes.droppable}
+                      style={{
+                        background: snapshot.isDraggingOver
+                          ? theme.colors.blue[0]
+                          : theme.colors.gray[1],
+                      }}
+                    >
+                      {column.issues.map((item, index) => (
+                        <BoardItem
+                          key={item.id}
+                          item={item}
+                          index={index}
+                          setIssueOpened={setIssueOpened}
+                        />
+                      ))}
+                      {provided.placeholder}
+                      {column.status !== IssueStatus.Done && (
+                        <BacklogCreateIssue
+                          sprintId={boardColumnsData.sprint.id}
+                          status={column.status}
+                          size="sm"
+                        />
+                      )}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            </Paper>
+          ))}
+        </DragDropContext>
+        <IssueDrawer
+          issueOpened={issueOpened}
+          setIssueOpened={setIssueOpened}
+        />
+      </div>
+    </>
   )
 }
 

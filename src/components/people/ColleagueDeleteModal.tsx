@@ -11,7 +11,7 @@ const useStyles = createStyles((theme) => ({
 }))
 
 interface ColleagueDeleteModalProps {
-  colleagueId: number
+  colleagueId: string
   opened: boolean
   setOpened: React.Dispatch<React.SetStateAction<boolean>>
 }

@@ -6,6 +6,8 @@ import { useGetSprintForBoardQuery } from '../../services/sprintsEndpoints'
 import LoadingCircle from '../common/LoadingCircle'
 import SprintCompletedButton from '../sprints/SprintCompletedButton'
 import SprintCompletedModal from '../sprints/SprintCompletedModal'
+import SprintEditModal from '../sprints/SprintEditModal'
+import SprintStartButton from '../sprints/SprintStartButton'
 import Board from './Board'
 
 const useStyles = createStyles((theme) => ({
@@ -49,7 +51,8 @@ export default function BoardLayout() {
     isLoading,
     isError,
   } = useGetSprintForBoardQuery({ projectId })
-  const [opened, setOpened] = useState(false)
+  const [completedOpened, setCompletedOpened] = useState(false)
+  const [startOpened, setStartOpened] = useState(false)
 
   if (isLoading) return <LoadingCircle />
 
@@ -83,11 +86,25 @@ export default function BoardLayout() {
               {formatEndOn()}
             </Text>
           )}
-          <SprintCompletedButton sprintId={sprint.id} setOpened={setOpened} />
+          {sprint.startOn ? (
+            <SprintCompletedButton
+              sprintId={sprint.id}
+              setOpened={setCompletedOpened}
+            />
+          ) : (
+            <SprintStartButton
+              sprintId={sprint.id}
+              setOpened={setStartOpened}
+            />
+          )}
         </div>
       </div>
       <Board />
-      <SprintCompletedModal opened={opened} setOpened={setOpened} />
+      <SprintCompletedModal
+        opened={completedOpened}
+        setOpened={setCompletedOpened}
+      />
+      <SprintEditModal opened={startOpened} setOpened={setStartOpened} />
     </main>
   )
 }

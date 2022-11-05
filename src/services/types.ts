@@ -14,7 +14,7 @@ export interface BaseModel {
 export interface Comment extends BaseModel {
   id: number
   text: string
-  authorId: number
+  authorId: string
   author?: User
   issueId: number
   issue?: Issue
@@ -45,9 +45,9 @@ export interface Issue extends BaseModel {
   boardOrder?: number
   storyPoints: number
   assignee?: User
-  assigneeId: number
+  assigneeId: string
   author?: User
-  authorId: number
+  authorId: string
   sprint?: Sprint
   sprintId: number | null
   comments?: Comment[]
@@ -80,7 +80,7 @@ export interface Project extends BaseModel {
 }
 
 export interface User extends BaseModel {
-  id: number
+  id: string
   sub: string
   name: string
   nickname: string
@@ -178,3 +178,7 @@ export type ApiMutationTrigger = MutationTrigger<
     'scrumApi'
   >
 >
+
+export interface UsersById {
+  [id: string]: User | null
+}
