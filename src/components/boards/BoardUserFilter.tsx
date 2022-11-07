@@ -44,7 +44,6 @@ export default function BoardUserFilter({
       filteredUsers = { ...users, [user.id]: user }
       setUsers(filteredUsers)
     }
-    console.log('users:', filteredUsers)
     handleClick(filteredUsers)
   }
 
