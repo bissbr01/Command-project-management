@@ -18,7 +18,6 @@ const useStyles = createStyles((theme) => ({
   field: {
     flex: 1,
     paddingRight: '2rem',
-    // flexGrow: 1,
   },
 
   buttons: {
@@ -66,7 +65,6 @@ export default function SingleFieldIssueForm({
   return (
     <Formik
       validateOnBlur={false}
-      // validateOnChange={false}
       initialValues={{
         text: '',
       }}
@@ -129,18 +127,9 @@ export default function SingleFieldIssueForm({
                   aria-label="close"
                   size="sm"
                   color={theme.colors.brand[7]}
-
-                  // variant="default"
                 >
                   <IconX />
                 </ActionIcon>
-                {/* <CloseButton
-                  type="reset"
-                  aria-label="close"
-                  size="sm"
-                  variant="default"
-                  // onClick={() => handleFocus(false)}
-                /> */}
               </Group>
             )}
           </div>

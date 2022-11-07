@@ -31,9 +31,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   usersGroup: {
-    // border: '1px solid gray',
     borderRadius: theme.radius.md,
-    // margin: '1.5rem 0 1.5rem 0',
     padding: '1rem',
   },
 

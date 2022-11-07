@@ -42,19 +42,7 @@ function SideNavContainer() {
   const AFFIX_HEIGHT = 160
   const SIDE_NAV_WIDTH = 250
 
-  if (!projectId)
-    return (
-      <Box />
-      // <Navbar
-      //   width={{ sm: SIDE_NAV_WIDTH }}
-      //   p="md"
-      //   className={classes.container}
-      // >
-      //   <Navbar.Section>
-      //     <Text>Project Menu</Text>
-      //   </Navbar.Section>
-      // </Navbar>
-    )
+  if (!projectId) return <Box />
   if (minScreenLarge) return <SideNav width={SIDE_NAV_WIDTH} close={close} />
 
   return (

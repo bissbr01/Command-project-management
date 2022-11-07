@@ -12,21 +12,11 @@ import SelectField from '../common/forms/SelectField'
 import LoadingCircle from '../common/LoadingCircle'
 import UserAssignSelectItem from '../common/forms/UserSelectItem'
 
-const useStyles = createStyles((theme) => ({
-  form: {
-    // '&:hover, &:active': {
-    //   background: theme.colors.gray[1],
-    //   borderRadius: theme.radius.md,
-    // },
-  },
-}))
-
 interface IssueAssignFormProps {
   issue: Issue
 }
 
 export default function IssueAssignForm({ issue }: IssueAssignFormProps) {
-  const { classes } = useStyles()
   const [update] = useUpdateIssueMutation()
   const { projectId } = useParams()
   const { data: project } = useGetProjectByIdQuery(projectId as string)
@@ -68,13 +58,12 @@ export default function IssueAssignForm({ issue }: IssueAssignFormProps) {
       }}
     >
       {({ isSubmitting }) => (
-        <Form className={classes.form}>
+        <Form>
           <FormikSubmitOnChange />
           <Field
             id="assigneeId"
             name="assigneeId"
             label="Assigned to:"
-            // variant="unstyled"
             placeholder="Assign to Teammate"
             itemComponent={UserAssignSelectItem}
             size="sm"

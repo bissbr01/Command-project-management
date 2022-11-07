@@ -107,7 +107,6 @@ export default function SprintCompleted({
         await updateIssues(issuesForUpdate, updateIssue)
       } else if (sprintSelect === SprintSelect.backlog) {
         // get Backlog Sprint Id and set issues to that sprint.
-        // TODO
         const issuesForUpdate = issuesToCopy.reduce<
           (Partial<Issue> & Pick<Issue, 'id'>)[]
         >(

@@ -27,8 +27,6 @@ if (container) {
               withNormalizeCSS
               withGlobalStyles
               theme={{
-                // headings: { fontFamily: 'Greycliff CF, sans-serif' },
-                // fontFamily: 'Open Sans, sans serif',
                 colorScheme: 'light',
                 fontFamily: 'Mitr, sans-serif',
                 headings: {

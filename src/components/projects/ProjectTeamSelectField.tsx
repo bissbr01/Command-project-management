@@ -11,10 +11,6 @@ import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
-  root: {
-    // width: 140,
-  },
-
   dropdown: {
     '&[data-selected]': {
       backgroundColor: theme.colors.brand[1],
@@ -82,7 +78,7 @@ export default function ProjectTeamSelectField({
       clearable
       allowDeselect
       disabled={disabled}
-      classNames={{ item: classes.dropdown, root: classes.root }}
+      classNames={{ item: classes.dropdown }}
       onChange={(value) => {
         const event = {
           target: {

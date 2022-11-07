@@ -48,7 +48,6 @@ const commentsEndpoints = scrumApi.injectEndpoints({
   overrideExisting: true,
 })
 
-// eslint-disable-next-line import/prefer-default-export
 export const {
   useGetCommentsQuery,
   useGetCommentsByIssueQuery,

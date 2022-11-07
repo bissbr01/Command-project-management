@@ -26,13 +26,10 @@ const useStyles = createStyles((theme) => ({
     flex: 1,
     paddingRight: '2rem',
     paddingBottom: '.5rem',
-    // flexGrow: 1,
   },
 
   buttons: {
-    // justifyContent: 'flex-end',
     paddingRight: '2rem',
-    // paddingTop: '0.5em',
   },
 
   container: {
@@ -61,7 +58,6 @@ export default function AddComment({ issueId }: AddCommentProps) {
   return (
     <Formik
       validateOnBlur={false}
-      // validateOnChange={false}
       initialValues={{
         text: '',
       }}

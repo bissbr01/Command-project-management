@@ -1,9 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { scrumApi } from '../services/scrumApi'
 import { Auth0TokenContainer, Token } from '../services/types'
-import usersEndpoints from '../services/usersEndpoints'
 // eslint-disable-next-line import/no-cycle
 import { AppThunk } from '../store'
 
@@ -32,7 +30,6 @@ export default authSlice.reducer
 export const setLogin =
   (token: Auth0TokenContainer): AppThunk =>
   (dispatch) => {
-    // console.log('setLogin thunk: ', token)
     window.localStorage.setItem('token', JSON.stringify(token.access_token))
     dispatch(setToken({ token: token.access_token }))
   }

@@ -47,7 +47,6 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: theme.white,
     flex: '1 1 content',
     flexWrap: 'nowrap',
-    // padding: '0.5rem 0.5rem',
     border: `2px solid ${theme.colors.blue[4]}`,
     '& > .mantine-TextInput-root': {
       flex: '1 1 content',

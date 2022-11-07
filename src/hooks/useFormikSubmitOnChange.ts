@@ -20,11 +20,6 @@ export function useFormikSubmitOnChange() {
 
   useEffect(() => {
     const valuesEqualLastValues = isEqual(lastValues, formik.values)
-    // const valuesEqualInitialValues = isEqual(
-    //   formik.values,
-    //   formik.initialValues
-    // )
-
     if (!valuesEqualLastValues) {
       updateState(formik.values)
     }

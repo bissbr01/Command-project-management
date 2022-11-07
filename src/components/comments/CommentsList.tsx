@@ -4,23 +4,11 @@ import LoadingCircle from '../common/LoadingCircle'
 import AddComment from './AddComment'
 import CommentListItem from './CommentListItem'
 
-const useStyles = createStyles(() => ({
-  container: {
-    // marginTop: '2rem',
-    // display: 'flex',
-    // flexDirection: 'column',
-    // rowGap: 10,
-    // height: '47vh',
-    // overflowY: 'scroll',
-  },
-}))
-
 interface CommentsListProps {
   issueId: number
 }
 
 export default function CommentsList({ issueId }: CommentsListProps) {
-  const { classes } = useStyles()
   const { data: comments, isLoading } = useGetCommentsByIssueQuery(issueId)
 
   if (isLoading || !comments) return <LoadingCircle />

@@ -7,10 +7,6 @@ import {
 import { FieldProps } from 'formik'
 
 const useStyles = createStyles((theme) => ({
-  root: {
-    // width: 140,
-  },
-
   dropdown: {
     '&[data-selected]': {
       backgroundColor: theme.colors.brand[1],
@@ -28,7 +24,6 @@ export interface MultiSelectFieldProps extends FieldProps {
   variant?: InputVariant
   required?: boolean
   data: SelectItem[]
-  // icon?: JSX.Element
   disabled: boolean
 }
 
@@ -57,7 +52,7 @@ export default function MultiSelectField({
       name={field.name}
       value={field.value}
       disabled={disabled}
-      classNames={{ item: classes.dropdown, root: classes.root }}
+      classNames={{ item: classes.dropdown }}
       onChange={(value) => {
         const event = {
           target: {

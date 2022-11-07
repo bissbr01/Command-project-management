@@ -13,10 +13,6 @@ import UserAssignSelectItem from '../common/forms/UserSelectItem'
 import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
-  root: {
-    // width: 140,
-  },
-
   dropdown: {
     '&[data-selected]': {
       backgroundColor: theme.colors.brand[1],
@@ -127,7 +123,7 @@ export default function ProjectLeadSelectField({
       name={field.name}
       value={field.value}
       disabled={disabled}
-      classNames={{ item: classes.dropdown, root: classes.root }}
+      classNames={{ item: classes.dropdown }}
       onChange={(value) => {
         const event = {
           target: {

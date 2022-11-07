@@ -16,22 +16,6 @@ const useStyles = createStyles((theme) => ({
     marginBottom: '1rem',
   },
 
-  form: {},
-
-  inputStyles: {
-    // padding: 10,
-    // '&:hover': {
-    //   backgroundColor: theme.colors.gray[1],
-    // },
-    // '&:focus': {
-    //   border: `2px solid ${theme.colors.brand[1]}`,
-    //   borderRadius: 5,
-    //   '&:hover': {
-    //     backgroundColor: theme.white,
-    //   },
-    // },
-  },
-
   save: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -80,10 +64,8 @@ export default function IssueStoryPoints({ issue }: IssueStoryPointsProps) {
       <Form className={classes.container}>
         <FormikSubmitOnChange />
         <Field
-          stylesApi={{ input: cx(classes.inputStyles) }}
           id="storyPoints"
           name="storyPoints"
-          // variant="unstyled"
           label="Story Points"
           formatter={(value: number) => `${value} points`}
           component={NumberField}

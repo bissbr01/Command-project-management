@@ -16,7 +16,6 @@ const useStyles = createStyles((theme) => ({
   },
 
   inputStyles: {
-    // padding: 10,
     '&:hover': {
       backgroundColor: theme.colors.gray[1],
     },

@@ -86,7 +86,6 @@ export default function IssueTypeSelectField({
         }
         field.onChange(event)
       }}
-      // {...field}
     />
   )
 }

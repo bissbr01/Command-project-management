@@ -15,10 +15,6 @@ import IssueStoryPointsDisplay from '../issues/IssueStoryPointsDisplay'
 import IssueTypeIcon from '../issues/IssueTypeIcon'
 
 const useStyles = createStyles((theme) => ({
-  container: {
-    // backgroundColor: theme.white,
-  },
-
   groupLeft: {
     flex: '0 1 640px',
     minWidth: 0,
@@ -87,7 +83,7 @@ export default function BacklogIssue({
           }}
         >
           <UnstyledButton onClick={handleClick} sx={{ width: '100%' }}>
-            <Group id="clickTarget" className={classes.container}>
+            <Group id="clickTarget">
               <Group className={classes.groupLeft}>
                 <IssueTypeIcon issueType={issue.type} />
                 <Text

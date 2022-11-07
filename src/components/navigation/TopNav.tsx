@@ -22,7 +22,6 @@ const useStyles = createStyles((theme) => ({
   header: {
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
-    // boxShadow,
   },
 
   inner: {

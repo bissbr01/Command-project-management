@@ -72,7 +72,6 @@ const useStyles = createStyles((theme) => ({
   },
 
   scroll: {
-    // marginRight: '-10px',
     height: '97vh',
   },
 }))

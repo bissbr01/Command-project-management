@@ -13,7 +13,6 @@ const useStyles = createStyles((theme) => ({
     color: theme.colors.brand[4],
     position: 'absolute',
     top: '50%',
-    // margin: '0 auto',
     left: '50%',
     transform: 'translate(-50%, -50%)',
   },
