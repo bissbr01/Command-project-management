@@ -22,7 +22,9 @@ const useStyles = createStyles((theme) => ({
   },
 
   body: {
-    paddingLeft: 54,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '1rem',
   },
 
   icon: {
@@ -54,12 +56,7 @@ export default function CommentListItem({ comment }: CommentListItemProps) {
     <>
       <article className={classes.comment}>
         <Group>
-          <Avatar
-            src={comment.author?.picture}
-            color={theme.colors.brand[1]}
-            radius="xl"
-          />
-          <Text size="sm" color="dimmed">
+          <Text size="sm" pl="3.5rem" color="dimmed">
             {comment.author?.nickname}
           </Text>
           <Text size="xs" color="dimmed">
@@ -73,9 +70,12 @@ export default function CommentListItem({ comment }: CommentListItemProps) {
           )}
         </Group>
         <div className={classes.body}>
-          <Text size="sm" mr="3rem">
-            {comment.text}
-          </Text>
+          <Avatar
+            src={comment.author?.picture}
+            color={theme.colors.brand[1]}
+            radius="xl"
+          />
+          <Text size="sm">{comment.text}</Text>
         </div>
       </article>
       <CommentEditModal

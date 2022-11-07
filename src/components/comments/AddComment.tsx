@@ -25,6 +25,7 @@ const useStyles = createStyles((theme) => ({
   field: {
     flex: 1,
     paddingRight: '2rem',
+    paddingBottom: '.5rem',
     // flexGrow: 1,
   },
 

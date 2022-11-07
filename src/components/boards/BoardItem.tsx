@@ -31,6 +31,10 @@ const useStyles = createStyles((theme) => ({
     fontSize: '.8em',
     paddingTop: '.5em',
   },
+
+  alignRight: {
+    margin: '0 0 0 auto',
+  },
 }))
 
 interface BoardItemProps {
@@ -71,30 +75,34 @@ function BoardItem({
           }}
         >
           <UnstyledButton onClick={handleClick} sx={{ width: '100%' }}>
-            <Text pb="md">{issue.title}</Text>
+            <Text size="md" pb="sm">
+              {issue.title}
+            </Text>
             <Group className={classes.issueStatus}>
-              <ThemeIcon size="sm" variant="light">
-                <IssueTypeIcon issueType={issue.type} />
-              </ThemeIcon>
-              <Text>{issue.name}</Text>
+              <IssueTypeIcon size="xs" issueType={issue.type} />
+              <Text size="xs">{issue.name}</Text>
               {issue.comments && issue.comments.length !== 0 && (
                 <Group>
-                  <IconMessageCircle2 size={16} />
-                  <Text sx={{ marginLeft: -13 }}>{issue.comments.length}</Text>
+                  <IconMessageCircle2 size={14} />
+                  <Text size="xs" sx={{ marginLeft: -13 }}>
+                    {issue.comments.length}
+                  </Text>
                 </Group>
               )}
-              <IssueStoryPointsDisplay storyPoints={issue.storyPoints} />
-              {issue.assignee && (
-                <Avatar
-                  src={issue.assignee.picture}
-                  alt={issue.assignee.nickname}
-                  size="sm"
-                  color="blue"
-                  radius="xl"
-                >
-                  {issue.assignee.nickname}
-                </Avatar>
-              )}
+              <Group className={classes.alignRight}>
+                <IssueStoryPointsDisplay storyPoints={issue.storyPoints} />
+                {issue.assignee && (
+                  <Avatar
+                    src={issue.assignee.picture}
+                    alt={issue.assignee.nickname}
+                    size="sm"
+                    color="blue"
+                    radius="xl"
+                  >
+                    {issue.assignee.nickname}
+                  </Avatar>
+                )}
+              </Group>
             </Group>
           </UnstyledButton>
         </div>

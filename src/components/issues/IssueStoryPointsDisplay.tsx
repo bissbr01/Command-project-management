@@ -17,7 +17,7 @@ export default function IssueStoryPointsDisplay({
 
   if (storyPoints <= 0) return <div />
   return (
-    <Badge color="gray" className={classes.rightAlign}>
+    <Badge size="xs" color="gray" className={classes.rightAlign}>
       {storyPoints}
     </Badge>
   )

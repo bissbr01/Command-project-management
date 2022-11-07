@@ -1,4 +1,4 @@
-import { createStyles, ThemeIcon } from '@mantine/core'
+import { createStyles, MantineSize, ThemeIcon } from '@mantine/core'
 import { IconBookmark, IconBug, IconCheckbox } from '@tabler/icons'
 import { assertUnreachable, IssueType } from '../../services/types'
 
@@ -16,10 +16,12 @@ const useStyles = createStyles((theme) => ({
 
 export interface IssueTypeIconProps {
   issueType: IssueType
+  size?: MantineSize
 }
 
 export default function IssueTypeIcon({
   issueType,
+  size = 'sm',
 }: IssueTypeIconProps): JSX.Element {
   const { classes } = useStyles()
 
@@ -27,19 +29,19 @@ export default function IssueTypeIcon({
     switch (type) {
       case IssueType.Bug:
         return (
-          <ThemeIcon variant="filled" size="sm" className={classes.bug}>
+          <ThemeIcon variant="filled" size={size} className={classes.bug}>
             <IconBug />
           </ThemeIcon>
         )
       case IssueType.Task:
         return (
-          <ThemeIcon variant="filled" size="sm" className={classes.task}>
+          <ThemeIcon variant="filled" size={size} className={classes.task}>
             <IconCheckbox />
           </ThemeIcon>
         )
       case IssueType.UserStory:
         return (
-          <ThemeIcon variant="filled" size="sm" className={classes.userStory}>
+          <ThemeIcon variant="filled" size={size} className={classes.userStory}>
             <IconBookmark />
           </ThemeIcon>
         )
