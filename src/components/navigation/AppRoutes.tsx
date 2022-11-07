@@ -13,8 +13,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { RootState } from '../../store'
 import BoardLayout from '../boards/BoardLayout'
 import NotFound from '../common/NotFound'
-import Login from '../login/Login'
-import Register from '../login/Register'
 import Backlog from '../backlog/Backlog'
 import ProjectList from '../projects/ProjectList'
 import CheckAuth from './CheckAuth'
@@ -65,8 +63,6 @@ export default function AppRoutes() {
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
       </Routes>
 
       {/* {state?.backgroundLocation && (
