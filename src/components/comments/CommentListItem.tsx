@@ -46,7 +46,7 @@ export default function CommentListItem({ comment }: CommentListItemProps) {
   const { data: me } = useGetUserByTokenQuery()
 
   const timeCreated = () => {
-    const date = dayjs(comment.createdAt).format('h:ma MMM D, YYYY')
+    const date = dayjs(comment.createdAt).format('h:mm MMM D, YYYY')
     return date
   }
 
