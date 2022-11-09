@@ -1,4 +1,3 @@
-import { ClassNames } from '@emotion/react'
 import { Checkbox, createStyles } from '@mantine/core'
 import { ErrorMessage, FieldProps } from 'formik'
 
