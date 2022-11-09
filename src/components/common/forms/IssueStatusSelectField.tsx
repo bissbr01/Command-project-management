@@ -1,8 +1,6 @@
 import { createStyles, InputVariant, Select, SelectItem } from '@mantine/core'
 import { FieldProps } from 'formik'
-import { IssueStatus, IssueType } from '../../../services/types'
-import IssueTypeSelectItem from './IssueTypeSelectItem'
-import IssueTypeIcon from '../../issues/IssueTypeIcon'
+import { IssueStatus } from '../../../services/types'
 import IssueStatusSelectItem from './IssueStatusSelectItem'
 import IssueStatusDisplay from '../../issues/IssueStatusDisplay'
 
@@ -30,6 +28,9 @@ const useStyles = createStyles((theme) => ({
     '&[data-selected]': {
       backgroundColor: theme.colors.gray[2],
       color: theme.black,
+      '&:hover': {
+        backgroundColor: theme.colors.gray[2],
+      },
     },
   },
 }))
