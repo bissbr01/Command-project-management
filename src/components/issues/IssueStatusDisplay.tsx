@@ -16,11 +16,11 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export interface IssueStatusProps {
-  issueStatus: IssueStatus
+  status: IssueStatus
 }
 
 export default function IssueStatusDisplay({
-  issueStatus,
+  status: issueStatus,
 }: IssueStatusProps): JSX.Element {
   const { classes } = useStyles()
 

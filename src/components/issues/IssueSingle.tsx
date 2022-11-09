@@ -21,6 +21,7 @@ import DotMenu from '../common/DotMenu'
 import DeleteModal from '../common/modals/DeleteModal'
 import IssueAssignForm from './IssueAssignForm'
 import LoadingCircle from '../common/LoadingCircle'
+import IssueStatusForm from './IssueStatusForm'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -93,11 +94,12 @@ export default function IssueSingle({ issueId, onClose }: IssueSingleProps) {
     <>
       <ScrollArea offsetScrollbars className={classes.scroll}>
         <Paper className={classes.container} m="0 0 0 .5rem" p="0 1rem">
-          <Group className={classes.header}>
+          <Group className={classes.header} noWrap>
+            <IssueStatusForm issue={issue} />
             <IssueTypeForm issue={issue} />
-            <Text>Issue: {issue.name}</Text>
-            <DotMenu setDeleteOpened={setDeleteOpened} />
-            <CloseButton onClick={onClose} />
+            <Text>{issue.name}</Text>
+            <DotMenu setDeleteOpened={setDeleteOpened} setClosed={onClose} />
+            {/* <CloseButton onClick={onClose} /> */}
           </Group>
           <IssueTitle issue={issue} />
           <IssueDescription issue={issue} />

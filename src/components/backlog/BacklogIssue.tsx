@@ -96,7 +96,7 @@ export default function BacklogIssue({
               </Group>
               <Group className={classes.groupRight}>
                 <IssueStoryPointsDisplay storyPoints={issue.storyPoints} />
-                <IssueStatusDisplay issueStatus={issue.status} />
+                <IssueStatusDisplay status={issue.status} />
                 <Avatar
                   src={issue.assignee?.picture}
                   alt={issue.assignee?.nickname}
