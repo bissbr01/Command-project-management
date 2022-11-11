@@ -15,9 +15,16 @@ import IssueStoryPointsDisplay from '../issues/IssueStoryPointsDisplay'
 import IssueTypeIcon from '../issues/IssueTypeIcon'
 
 const useStyles = createStyles((theme) => ({
+  container: {
+    [`@media (min-width: ${theme.breakpoints.md}px)`]: {
+      flexWrap: 'nowrap',
+    },
+  },
+
   groupLeft: {
-    flex: '0 1 640px',
+    flex: '1 1 content',
     minWidth: 0,
+    [`@media (min-width: ${theme.breakpoints.sm}px)`]: {},
   },
   groupRight: {
     justifyContent: 'right',
@@ -25,8 +32,21 @@ const useStyles = createStyles((theme) => ({
   },
 
   noOverflow: {
+    maxWidth: '300px',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+
     [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
-      maxWidth: '500px',
+      maxWidth: '425px',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      minWidth: 0,
+    },
+
+    [`@media (min-width: ${theme.breakpoints.md}px)`]: {
+      maxWidth: '800px',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
@@ -83,7 +103,7 @@ export default function BacklogIssue({
           }}
         >
           <UnstyledButton onClick={handleClick} sx={{ width: '100%' }}>
-            <Group id="clickTarget">
+            <Group id="clickTarget" className={classes.container}>
               <Group className={classes.groupLeft}>
                 <IssueTypeIcon issueType={issue.type} />
                 <Text
