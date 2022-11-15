@@ -1,19 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import {
-  ActionIcon,
-  Avatar,
-  Button,
-  CloseButton,
-  createStyles,
-  Group,
-  Loader,
-  Stack,
-  useMantineTheme,
-} from '@mantine/core'
+import { Avatar, createStyles, Group, useMantineTheme } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
-import { FocusEvent, SyntheticEvent, useState } from 'react'
+import { FocusEvent } from 'react'
 import * as Yup from 'yup'
 import { useFocused } from '../../hooks/useFocused'
 import { useAddCommentMutation } from '../../services/commentsEndpoints'
