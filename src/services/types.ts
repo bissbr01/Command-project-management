@@ -79,6 +79,27 @@ export interface Project extends BaseModel {
   lead?: User
 }
 
+export enum NotificationType {
+  ColleagueRequest = 'colleagueRequest',
+  IssueAssigned = 'issueAssigned',
+}
+export enum NotificationStatus {
+  Alert = 'ALERT',
+  Read = 'READ',
+  Archive = 'ARCHIVE',
+}
+
+export interface Notification {
+  id: number
+  userId: string
+  user?: User
+  type: NotificationType
+  message: string
+  status: NotificationStatus
+  createdAt: string
+  updatedAt: string
+}
+
 export interface User extends BaseModel {
   id: string
   sub: string
@@ -97,6 +118,7 @@ export interface User extends BaseModel {
   assignedIssues?: Issue[]
   teams?: Team[]
   friends?: User[]
+  notifications?: Notification[]
 }
 
 export interface Team extends BaseModel {
