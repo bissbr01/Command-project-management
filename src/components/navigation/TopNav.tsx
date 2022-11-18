@@ -14,6 +14,7 @@ import { Link, Navigate, useLocation } from 'react-router-dom'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import LoadingCircle from '../common/LoadingCircle'
 import Logo from '../common/Logo'
+import NotificationMenu from '../notifications/NotificationMenu'
 import NavSearch from './NavSearch'
 import NavUserAvatar from './NavUserAvatar'
 import UserButton from './UserButton'
@@ -119,6 +120,9 @@ function TopNav(): JSX.Element {
           <Group ml={50} spacing={5} className={classes.links}>
             {navLinks}
           </Group>
+          <Box className={classes.link}>
+            <NotificationMenu />
+          </Box>
           <Box className={classes.link}>
             <NavUserAvatar user={me} />
           </Box>

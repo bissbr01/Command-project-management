@@ -127,9 +127,8 @@ export interface Team extends BaseModel {
   users?: User[]
 }
 
-export interface Auth0TokenContainer {
+export interface AccessToken {
   access_token: string
-  id_token: string
 }
 
 export interface Token {

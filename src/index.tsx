@@ -20,6 +20,7 @@ if (container) {
         redirectUri={window.location.origin}
         audience="https://scrum-management-backend.onrender.com"
         scope="read:current_user update:current_user_metadata"
+        useRefreshTokens
       >
         <Provider store={store}>
           <Router>

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Auth0TokenContainer, Token } from '../services/types'
+import { AccessToken, Token } from '../services/types'
 // eslint-disable-next-line import/no-cycle
 import { AppThunk } from '../store'
 
@@ -28,7 +28,7 @@ export const { setToken, removeToken } = authSlice.actions
 export default authSlice.reducer
 
 export const setLogin =
-  (token: Auth0TokenContainer): AppThunk =>
+  (token: AccessToken): AppThunk =>
   (dispatch) => {
     window.localStorage.setItem('token', JSON.stringify(token.access_token))
     dispatch(setToken({ token: token.access_token }))

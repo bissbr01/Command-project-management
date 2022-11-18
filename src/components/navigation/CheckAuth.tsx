@@ -34,18 +34,22 @@ export default function CheckAuth({ setIsUser }: CheckAuthProps) {
       if (!isLoading) {
         const getToken = async () => {
           if (!isAuthenticated) {
-            await loginWithRedirect()
+            await loginWithRedirect({
+              authorizationParams: {
+                redirect_uri: window.location.origin,
+              },
+            })
           }
 
           if (!token) {
             const accessToken = await getAccessTokenSilently()
             const idToken = await getIdTokenClaims()
-            // set access token as bearer in backend api requests:
+            // set access token as bearer in api requests:
             if (idToken) {
               dispatch(
                 setLogin({
                   // eslint-disable-next-line no-underscore-dangle
-                  id_token: idToken.__raw,
+                  // id_token: idToken.__raw,
                   access_token: accessToken,
                 })
               )

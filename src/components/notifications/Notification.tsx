@@ -1,17 +1,24 @@
-import { Notification, NotificationType } from "../../services/types"
+import {
+  assertUnreachable,
+  Notification as NotificationInterface,
+  NotificationType,
+} from '../../services/types'
+import ColleagueRequest from './ColleagueRequest'
 
 interface NotificationProps {
-  notification: Notification
+  notification: NotificationInterface
 }
 
-export default function Notification({notification}: NotificationProps) {
-  const displayByType = (notification: Notification) => {
+export default function Notification({ notification }: NotificationProps) {
+  const displayByType = () => {
     switch (notification.type) {
       case NotificationType.ColleagueRequest:
         return <ColleagueRequest notification={notification} />
+      case NotificationType.IssueAssigned:
+        return <div />
+      default:
+        return assertUnreachable(notification.type)
     }
-  } 
-  return (
-    
-  )
-} 
+  }
+  return displayByType()
+}
