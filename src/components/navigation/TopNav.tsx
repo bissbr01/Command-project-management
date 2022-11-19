@@ -110,6 +110,9 @@ function TopNav(): JSX.Element {
                 title="Navigation"
               >
                 <Box>{navLinks.map((item) => item)}</Box>
+                <Box className={classes.link}>
+                  <NotificationMenu />
+                </Box>
               </Modal>
             </>
           )}
@@ -119,10 +122,10 @@ function TopNav(): JSX.Element {
         <Group>
           <Group ml={50} spacing={5} className={classes.links}>
             {navLinks}
+            <Box className={classes.link}>
+              <NotificationMenu />
+            </Box>
           </Group>
-          <Box className={classes.link}>
-            <NotificationMenu />
-          </Box>
           <Box className={classes.link}>
             <NavUserAvatar user={me} />
           </Box>

@@ -14,6 +14,8 @@ export default function Notification({ notification }: NotificationProps) {
     switch (notification.type) {
       case NotificationType.ColleagueRequest:
         return <ColleagueRequest notification={notification} />
+      case NotificationType.ColleagueConfirmed:
+        return <div />
       case NotificationType.IssueAssigned:
         return <div />
       default:

@@ -3,7 +3,11 @@ import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { useAddColleagueMutation } from '../../services/usersEndpoints'
+import { NotificationType } from '../../services/types'
+import {
+  useAddColleagueMutation,
+  useAddNotificationMutation,
+} from '../../services/usersEndpoints'
 import TextField from '../common/forms/TextField'
 
 const useStyles = createStyles((theme) => ({
@@ -43,7 +47,7 @@ export default function ColleagueAddModal({
   opened,
   setOpened,
 }: ColleagueAddModalProps) {
-  const [addColleague] = useAddColleagueMutation()
+  const [addNotification] = useAddNotificationMutation()
   const { classes, cx } = useStyles()
 
   const ColleagueAddModalScheme = Yup.object().shape({
@@ -66,8 +70,9 @@ export default function ColleagueAddModal({
         onSubmit={async ({ email }) => {
           try {
             setOpened(false)
-            await addColleague({
+            await addNotification({
               email,
+              type: NotificationType.ColleagueRequest,
             }).unwrap()
             showNotification({
               title: 'Success',

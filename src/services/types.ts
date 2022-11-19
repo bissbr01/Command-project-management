@@ -81,6 +81,7 @@ export interface Project extends BaseModel {
 
 export enum NotificationType {
   ColleagueRequest = 'colleagueRequest',
+  ColleagueConfirmed = 'colleagueConfirmed',
   IssueAssigned = 'issueAssigned',
 }
 export enum NotificationStatus {

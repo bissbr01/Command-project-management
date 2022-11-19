@@ -1,5 +1,5 @@
 import { scrumApi } from './scrumApi'
-import { Token, User } from './types'
+import { Notification, NotificationType, Token, User } from './types'
 
 const usersEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
@@ -31,6 +31,16 @@ const usersEndpoints = scrumApi.injectEndpoints({
       }),
       invalidatesTags: ['User'],
     }),
+    addNotification: build.mutation<
+      { result: Notification },
+      { email: string; type: NotificationType }
+    >({
+      query: (body) => ({
+        url: '/users/me/notifications',
+        method: 'POST',
+        body,
+      }),
+    }),
     addColleague: build.mutation<{ result: User }, { email: string }>({
       query: (body) => ({
         url: '/users/me/colleagues',
@@ -55,6 +65,7 @@ export const {
   useGetUsersQuery,
   useGetUserByTokenQuery,
   useAddUserMutation,
+  useAddNotificationMutation,
   useAddColleagueMutation,
   useUpdateUserMutation,
   useRemoveColleagueMutation,
