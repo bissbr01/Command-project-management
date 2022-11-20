@@ -12,7 +12,7 @@ import { IconBellRinging } from '@tabler/icons'
 import LoadingCircle from '../common/LoadingCircle'
 import Notification from './Notification'
 import noMoreNotifications from '../../no-more-notifications.png'
-import { useGetNotificationsQuery } from '../../services/notifications'
+import { useGetNotificationsQuery } from '../../services/notificationsEndpoints'
 
 const useStyles = createStyles((theme) => ({
   dropdown: {
@@ -38,7 +38,7 @@ export default function NotificationMenu() {
       <Menu.Target>
         <span>
           <Indicator disabled={notifications.length === 0}>
-            <IconBellRinging />
+            <IconBellRinging size={20} />
           </Indicator>
         </span>
       </Menu.Target>

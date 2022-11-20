@@ -7,15 +7,17 @@ import {
   Text,
   useMantineTheme,
 } from '@mantine/core'
-import { IconCheck } from '@tabler/icons'
+import { showNotification } from '@mantine/notifications'
+import { IconCheck, IconX } from '@tabler/icons'
 import dayjs from 'dayjs'
-import { useUpdateNotificationMutation } from '../../services/notifications'
+import { useUpdateNotificationMutation } from '../../services/notificationsEndpoints'
 import {
   assertUnreachable,
   Notification as NotificationInterface,
   NotificationStatus,
   NotificationType,
 } from '../../services/types'
+import { useAddColleagueMutation } from '../../services/usersEndpoints'
 import ColleagueRequest from './ColleagueRequest'
 
 const useStyles = createStyles(() => ({
@@ -36,8 +38,33 @@ export default function Notification({ notification }: NotificationProps) {
   const { classes } = useStyles()
   const theme = useMantineTheme()
   const [updateNotification] = useUpdateNotificationMutation()
+  const [addColleague] = useAddColleagueMutation()
 
-  const handleAccept = () => {}
+  const handleAccept = async () => {
+    if (!notification.colleague) return
+    try {
+      await addColleague({ email: notification.colleague.email }).unwrap()
+      await updateNotification({
+        id: notification.id,
+        status: NotificationStatus.Archive,
+      }).unwrap()
+      showNotification({
+        title: 'Success',
+        message: 'Colleague Added',
+        autoClose: 4000,
+        color: 'green',
+        icon: <IconCheck />,
+      })
+    } catch (e: unknown) {
+      showNotification({
+        title: 'Error',
+        message: 'We were unable to add this colleague.  Sorry.',
+        autoClose: 4000,
+        color: 'red',
+        icon: <IconX />,
+      })
+    }
+  }
   const handleDismiss = async () => {
     await updateNotification({
       id: notification.id,
@@ -73,18 +100,20 @@ export default function Notification({ notification }: NotificationProps) {
       </Text>
       {displayByType()}
       <Group className={classes.buttons}>
-        <ActionIcon
-          id="save"
-          type="button"
-          aria-label="save"
-          // disabled={isSubmitting}
-          size="sm"
-          variant="filled"
-          color={theme.colors.brand[1]}
-          onClick={handleAccept}
-        >
-          <IconCheck />
-        </ActionIcon>
+        {notification.type === NotificationType.ColleagueRequest && (
+          <ActionIcon
+            id="save"
+            type="button"
+            aria-label="save"
+            // disabled={isSubmitting}
+            size="sm"
+            variant="filled"
+            color={theme.colors.brand[1]}
+            onClick={handleAccept}
+          >
+            <IconCheck />
+          </ActionIcon>
+        )}
         <CloseButton
           id="reset"
           type="button"

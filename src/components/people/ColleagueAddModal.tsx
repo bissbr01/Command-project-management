@@ -3,11 +3,8 @@ import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
+import { useAddNotificationMutation } from '../../services/notificationsEndpoints'
 import { NotificationType } from '../../services/types'
-import {
-  useAddColleagueMutation,
-  useAddNotificationMutation,
-} from '../../services/usersEndpoints'
 import TextField from '../common/forms/TextField'
 
 const useStyles = createStyles((theme) => ({

@@ -1,5 +1,5 @@
 import { scrumApi } from './scrumApi'
-import { Notification } from './types'
+import { Notification, NotificationType } from './types'
 
 const notificationsEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
@@ -24,7 +24,7 @@ const notificationsEndpoints = scrumApi.injectEndpoints({
     }),
     addNotification: build.mutation<
       Notification,
-      Pick<Notification, 'type' | 'message' | 'userId' | 'colleagueId'>
+      { type: NotificationType; email: string }
     >({
       query: (body) => ({
         url: '/notifications',
