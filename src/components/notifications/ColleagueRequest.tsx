@@ -1,6 +1,4 @@
-import { Avatar, Button, Group, Stack, Text, Title } from '@mantine/core'
-import { IconClockHour4, IconUserPlus } from '@tabler/icons'
-import dayjs from 'dayjs'
+import { Stack, Text } from '@mantine/core'
 import { Notification } from '../../services/types'
 
 interface ColleagueRequestProps {
@@ -10,20 +8,13 @@ interface ColleagueRequestProps {
 export default function ColleagueRequest({
   notification,
 }: ColleagueRequestProps) {
-  const handleAccept = () => {}
-
   return (
-    <Group>
-      <IconUserPlus />
-      <Text color="dimmed">
-        <IconClockHour4 />
-        {dayjs(notification.createdAt).format('h:mm MMM D, YYYY')}
+    <Stack>
+      <Text>Colleage Request</Text>
+      <Text>
+        {notification.colleague?.nickname} has requested you as a colleague on
+        Command Project Mangement
       </Text>
-      <Stack>
-        <Text>Colleage Request</Text>
-        <Text>{notification.message}</Text>
-      </Stack>
-      <Button onClick={handleAccept}>Accept</Button>
-    </Group>
+    </Stack>
   )
 }

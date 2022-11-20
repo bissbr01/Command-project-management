@@ -94,6 +94,8 @@ export interface Notification {
   id: number
   userId: string
   user?: User
+  colleagueId: string
+  colleague?: User
   type: NotificationType
   message: string
   status: NotificationStatus

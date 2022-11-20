@@ -19,6 +19,14 @@ export const scrumApi = createApi({
       return headers
     },
   }),
-  tagTypes: ['Comment', 'Issue', 'Sprint', 'Project', 'User', 'Team'],
+  tagTypes: [
+    'Comment',
+    'Issue',
+    'Sprint',
+    'Project',
+    'User',
+    'Team',
+    'Notification',
+  ],
   endpoints: () => ({}),
 })

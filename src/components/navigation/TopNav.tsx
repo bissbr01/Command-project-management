@@ -122,10 +122,10 @@ function TopNav(): JSX.Element {
         <Group>
           <Group ml={50} spacing={5} className={classes.links}>
             {navLinks}
-            <Box className={classes.link}>
-              <NotificationMenu />
-            </Box>
           </Group>
+          <Box className={classes.link}>
+            <NotificationMenu />
+          </Box>
           <Box className={classes.link}>
             <NavUserAvatar user={me} />
           </Box>

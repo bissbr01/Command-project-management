@@ -1,34 +1,55 @@
-import { Box, Image, Indicator, Menu, Stack, Text, Title } from '@mantine/core'
+import {
+  Box,
+  createStyles,
+  Image,
+  Indicator,
+  Menu,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core'
 import { IconBellRinging } from '@tabler/icons'
-import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import LoadingCircle from '../common/LoadingCircle'
 import Notification from './Notification'
 import noMoreNotifications from '../../no-more-notifications.png'
+import { useGetNotificationsQuery } from '../../services/notifications'
+
+const useStyles = createStyles((theme) => ({
+  dropdown: {
+    midth: '100%',
+    [`@media (min-width: 450px)`]: {
+      width: 450,
+    },
+  },
+}))
 
 export default function NotificationMenu() {
-  const { data: me } = useGetUserByTokenQuery()
+  const { data: notifications } = useGetNotificationsQuery()
+  const { classes } = useStyles()
 
-  if (!me) return <LoadingCircle />
+  if (!notifications) return <LoadingCircle />
 
   return (
-    <Menu shadow="md" width={350} position="bottom-end">
+    <Menu
+      shadow="md"
+      position="bottom-end"
+      classNames={{ dropdown: classes.dropdown }}
+    >
       <Menu.Target>
         <span>
-          <Indicator
-            disabled={!me.notifications || me.notifications.length === 0}
-          >
+          <Indicator disabled={notifications.length === 0}>
             <IconBellRinging />
           </Indicator>
         </span>
       </Menu.Target>
 
-      <Menu.Dropdown>
-        <Title m="md" align="left" order={2} size="h4">
+      <Menu.Dropdown p="md">
+        <Title mb="md" align="left" order={2} size="h4">
           Notifications
         </Title>
-        {me.notifications && me.notifications.length > 0 ? (
-          me.notifications.map((notification) => (
-            <Notification notification={notification} />
+        {notifications.length > 0 ? (
+          notifications.map((notification) => (
+            <Notification key={notification.id} notification={notification} />
           ))
         ) : (
           <Box p="xl">

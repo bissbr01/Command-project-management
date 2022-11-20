@@ -31,13 +31,15 @@ function Logo() {
         <span style={{ width: 50, height: 'auto' }}>
           <Image src={commandLogoOnly} />
         </span>
-        <Title order={1} size="h2" color={theme.colors.brand[7]}>
-          Command
-        </Title>
         {minMediumScreen && (
-          <Text color="dimmed" size="sm">
-            Project Management
-          </Text>
+          <>
+            <Title order={1} size="h2" color={theme.colors.brand[7]}>
+              Command
+            </Title>
+            <Text color="dimmed" size="sm">
+              Project Management
+            </Text>
+          </>
         )}
       </Group>
     </Link>
