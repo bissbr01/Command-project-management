@@ -9,12 +9,12 @@ export default function ColleagueRequest({
   notification,
 }: ColleagueRequestProps) {
   return (
-    <Stack>
+    <>
       <Text>Colleage Request</Text>
       <Text>
         {notification.colleague?.nickname} has requested you as a colleague on
         Command Project Mangement
       </Text>
-    </Stack>
+    </>
   )
 }

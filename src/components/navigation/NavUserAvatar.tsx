@@ -31,9 +31,6 @@ export default function NavUserAvatar({ user }: NavUserAvatarProps) {
         </Avatar>
       </Menu.Target>
       <Menu.Dropdown>
-        <Menu.Item icon={<IconBellRinging size={14} />}>
-          Notifications
-        </Menu.Item>
         <Menu.Item icon={<IconLogout size={14} />} onClick={handleLogout}>
           Logout
         </Menu.Item>

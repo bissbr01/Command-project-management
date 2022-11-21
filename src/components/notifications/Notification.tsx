@@ -4,7 +4,6 @@ import {
   CloseButton,
   createStyles,
   Group,
-  Text,
   useMantineTheme,
 } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
@@ -18,7 +17,9 @@ import {
   NotificationType,
 } from '../../services/types'
 import { useAddColleagueMutation } from '../../services/usersEndpoints'
+import ColleagueConfirmed from './ColleagueConfirmed'
 import ColleagueRequest from './ColleagueRequest'
+import IssueAssigned from './IssueAssigned'
 
 const useStyles = createStyles(() => ({
   buttons: {
@@ -77,9 +78,9 @@ export default function Notification({ notification }: NotificationProps) {
       case NotificationType.ColleagueRequest:
         return <ColleagueRequest notification={notification} />
       case NotificationType.ColleagueConfirmed:
-        return <div />
+        return <ColleagueConfirmed notification={notification} />
       case NotificationType.IssueAssigned:
-        return <div />
+        return <IssueAssigned notification={notification} />
       default:
         return assertUnreachable(notification.type)
     }
@@ -95,9 +96,6 @@ export default function Notification({ notification }: NotificationProps) {
       >
         {notification.colleague?.name}
       </Avatar>
-      <Text color="dimmed">
-        {dayjs(notification.createdAt).format('h:mm MMM D, YYYY')}
-      </Text>
       {displayByType()}
       <Group className={classes.buttons}>
         {notification.type === NotificationType.ColleagueRequest && (

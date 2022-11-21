@@ -6,11 +6,12 @@ import { useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import { useGetProjectByIdQuery } from '../../services/projectsEndpoints'
-import { Issue } from '../../services/types'
+import { Issue, NotificationType } from '../../services/types'
 import FormikSubmitOnChange from '../common/forms/FormikSubmitOnChange'
 import SelectField from '../common/forms/SelectField'
 import LoadingCircle from '../common/LoadingCircle'
 import UserAssignSelectItem from '../common/forms/UserSelectItem'
+import { useAddNotificationMutation } from '../../services/notificationsEndpoints'
 
 interface IssueAssignFormProps {
   issue: Issue
@@ -20,6 +21,7 @@ export default function IssueAssignForm({ issue }: IssueAssignFormProps) {
   const [update] = useUpdateIssueMutation()
   const { projectId } = useParams()
   const { data: project } = useGetProjectByIdQuery(projectId as string)
+  const [addNotification] = useAddNotificationMutation()
 
   const IssueAssignFormSchema = Yup.object().shape({
     assigneeId: Yup.string().nullable(),
@@ -38,6 +40,11 @@ export default function IssueAssignForm({ issue }: IssueAssignFormProps) {
           await update({
             id: issue.id,
             assigneeId: assigneeId,
+          }).unwrap()
+          await addNotification({
+            email: project.team?.users?.filter(({ id }) => id === assigneeId)[0]
+              .email as string,
+            type: NotificationType.IssueAssigned,
           }).unwrap()
           showNotification({
             title: 'Success',
