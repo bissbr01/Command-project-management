@@ -1,4 +1,13 @@
-import { Box, createStyles, Group, Loader, Table, Title } from '@mantine/core'
+import {
+  Box,
+  createStyles,
+  Group,
+  Loader,
+  Table,
+  Title,
+  useMantineTheme,
+} from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { useState } from 'react'
 import { useGetProjectsQuery } from '../../services/projectsEndpoints'
 import LoadingCircle from '../common/LoadingCircle'
@@ -16,6 +25,8 @@ export default function ProjectList() {
   const { data: projects } = useGetProjectsQuery()
   const [createOpened, setCreateOpened] = useState(false)
   const { classes } = useStyles()
+  const theme = useMantineTheme()
+  const minScreenSmall = useMediaQuery(`(min-width: ${theme.breakpoints.sm}px)`)
 
   if (!projects) return <LoadingCircle />
 
@@ -31,9 +42,9 @@ export default function ProjectList() {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Sprints</th>
+            {minScreenSmall && <th>Sprints</th>}
             <th>Team</th>
-            <th>Lead</th>
+            {minScreenSmall && <th>Lead</th>}
             <th> </th>
           </tr>
         </thead>

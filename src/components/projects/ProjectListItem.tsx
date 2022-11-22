@@ -5,7 +5,9 @@ import {
   Menu,
   Text,
   UnstyledButton,
+  useMantineTheme,
 } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { IconDots, IconEdit, IconTrash } from '@tabler/icons'
 import BoringAvatar from 'boring-avatars'
 import { useEffect, useRef, useState } from 'react'
@@ -22,6 +24,8 @@ interface ProjectListItemProps {
 export default function ProjectListItem({ project }: ProjectListItemProps) {
   const [editOpened, setEditOpened] = useState(false)
   const [deleteOpened, setDeleteOpened] = useState(false)
+  const theme = useMantineTheme()
+  const minScreenSmall = useMediaQuery(`(min-width: ${theme.breakpoints.sm}px)`)
 
   return (
     <tr key={project.id}>
@@ -33,7 +37,9 @@ export default function ProjectListItem({ project }: ProjectListItemProps) {
           </Group>
         </Link>
       </td>
-      <td>{project.sprints && <Text>{project.sprints.length - 1}</Text>}</td>
+      {minScreenSmall && (
+        <td>{project.sprints && <Text>{project.sprints.length - 1}</Text>}</td>
+      )}
       <td>
         <Group>
           <Text>{project.team?.name ?? 'Individual Project'}</Text>
@@ -47,20 +53,22 @@ export default function ProjectListItem({ project }: ProjectListItemProps) {
           )}
         </Group>
       </td>
-      <td>
-        <Group>
-          <Avatar
-            src={project.lead?.picture}
-            alt={project.lead?.nickname}
-            size="md"
-            color="blue"
-            radius="xl"
-          >
+      {minScreenSmall && (
+        <td>
+          <Group>
+            <Avatar
+              src={project.lead?.picture}
+              alt={project.lead?.nickname}
+              size="md"
+              color="blue"
+              radius="xl"
+            >
+              <Text>{project.lead?.nickname}</Text>
+            </Avatar>
             <Text>{project.lead?.nickname}</Text>
-          </Avatar>
-          <Text>{project.lead?.nickname}</Text>
-        </Group>
-      </td>
+          </Group>
+        </td>
+      )}
       <td>
         <Menu>
           <Menu.Target>

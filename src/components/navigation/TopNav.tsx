@@ -7,17 +7,14 @@ import {
   Modal,
   Box,
   NavLink,
-  Loader,
 } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
-import { Link, Navigate, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
 import LoadingCircle from '../common/LoadingCircle'
 import Logo from '../common/Logo'
 import NotificationMenu from '../notifications/NotificationMenu'
-import NavSearch from './NavSearch'
 import NavUserAvatar from './NavUserAvatar'
-import UserButton from './UserButton'
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -110,9 +107,6 @@ function TopNav(): JSX.Element {
                 title="Navigation"
               >
                 <Box>{navLinks.map((item) => item)}</Box>
-                <Box className={classes.link}>
-                  <NotificationMenu />
-                </Box>
               </Modal>
             </>
           )}
