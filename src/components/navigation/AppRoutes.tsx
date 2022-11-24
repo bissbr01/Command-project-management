@@ -1,15 +1,8 @@
-import { useEffect, useState } from 'react'
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom'
-import { Loader } from '@mantine/core'
+import { useState } from 'react'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import App from '../../App'
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
+import { useAppSelector } from '../../hooks/hooks'
 import { RootState } from '../../store'
 import BoardLayout from '../boards/BoardLayout'
 import NotFound from '../common/NotFound'
@@ -20,8 +13,6 @@ import PeopleLayout from '../people/PeopleLayout'
 import LoadingCircle from '../common/LoadingCircle'
 
 export default function AppRoutes() {
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
   const tokenSelector = (state: RootState) => state.auth.token
   const token = useAppSelector(tokenSelector)
   const location = useLocation()
@@ -36,40 +27,32 @@ export default function AppRoutes() {
   if (isLoading) return <LoadingCircle />
 
   return (
-    <>
-      <Routes location={state?.backgroundLocation || location}>
-        <Route
-          path="/"
-          element={
-            token && isAuthenticated && isUser ? (
-              <App />
-            ) : (
-              <CheckAuth setIsUser={setIsUser} />
-            )
-          }
-        >
-          <Route index element={<ProjectList />} />
-          <Route path="people" element={<PeopleLayout />} />
-          <Route path="projects" element={<ProjectList />} />
-          <Route path="projects/:projectId">
-            <Route path="board" element={<BoardLayout />}>
-              <Route path="issues/:id" element={<BoardLayout />} />
-              <Route path="sprint/:sprintId" element={<BoardLayout />} />
-            </Route>
-            <Route path="backlog" element={<Backlog />}>
-              <Route path="issues/:id" element={<BoardLayout />} />
-              <Route path="sprint/:sprintId" element={<Backlog />} />
-            </Route>
+    <Routes location={state?.backgroundLocation || location}>
+      <Route
+        path="/"
+        element={
+          token && isAuthenticated && isUser ? (
+            <App />
+          ) : (
+            <CheckAuth setIsUser={setIsUser} />
+          )
+        }
+      >
+        <Route index element={<ProjectList />} />
+        <Route path="people" element={<PeopleLayout />} />
+        <Route path="projects" element={<ProjectList />} />
+        <Route path="projects/:projectId">
+          <Route path="board" element={<BoardLayout />}>
+            <Route path="issues/:id" element={<BoardLayout />} />
+            <Route path="sprint/:sprintId" element={<BoardLayout />} />
+          </Route>
+          <Route path="backlog" element={<Backlog />}>
+            <Route path="issues/:id" element={<BoardLayout />} />
+            <Route path="sprint/:sprintId" element={<Backlog />} />
           </Route>
         </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-
-      {/* {state?.backgroundLocation && (
-        <Routes>
-          <Route path="/img/:id" element={<IssueSingle />} />
-        </Routes>
-      )} */}
-    </>
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   )
 }
