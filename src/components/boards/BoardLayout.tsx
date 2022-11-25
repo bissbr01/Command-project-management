@@ -1,4 +1,4 @@
-import { createStyles, Loader, Text, Title } from '@mantine/core'
+import { createStyles, Text, Title } from '@mantine/core'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'

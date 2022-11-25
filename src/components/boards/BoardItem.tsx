@@ -3,7 +3,6 @@ import {
   createStyles,
   Group,
   Text,
-  ThemeIcon,
   UnstyledButton,
   useMantineTheme,
 } from '@mantine/core'

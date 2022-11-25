@@ -1,27 +1,11 @@
-import {
-  createStyles,
-  Title,
-  Modal,
-  Button,
-  Text,
-  Group,
-  Loader,
-} from '@mantine/core'
+import { createStyles, Title, Modal, Button, Text, Group } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { useUpdateCommentMutation } from '../../services/commentsEndpoints'
-import {
-  useAddTeamMutation,
-  useGetTeamByIdQuery,
-  useUpdateTeamMutation,
-} from '../../services/teamsEndpoints'
 import { Comment } from '../../services/types'
-import { useGetUserByTokenQuery } from '../../services/usersEndpoints'
-import MultiSelectField from '../common/forms/MultiSelectField'
 import TextField from '../common/forms/TextField'
-import LoadingCircle from '../common/LoadingCircle'
 
 const useStyles = createStyles((theme) => ({
   container: {

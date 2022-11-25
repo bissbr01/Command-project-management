@@ -1,20 +1,9 @@
-import {
-  createStyles,
-  Loader,
-  Paper,
-  Title,
-  useMantineTheme,
-} from '@mantine/core'
+import { createStyles, Paper, Title, useMantineTheme } from '@mantine/core'
 import { useParams } from 'react-router-dom'
 import React, { SetStateAction, useEffect, useState } from 'react'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import BoardItem from './BoardItem'
-import {
-  IssueStatus,
-  BoardColumns,
-  UsersById,
-  User,
-} from '../../services/types'
+import { IssueStatus, BoardColumns, UsersById } from '../../services/types'
 import { useUpdateIssueMutation } from '../../services/issuesEndpoints'
 import IssueDrawer from '../issues/IssueDrawer'
 import { useGetSprintForBoardQuery } from '../../services/sprintsEndpoints'
