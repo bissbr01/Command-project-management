@@ -1,4 +1,4 @@
-import { createStyles, Loader, ScrollArea, Title } from '@mantine/core'
+import { Title } from '@mantine/core'
 import { useGetCommentsByIssueQuery } from '../../services/commentsEndpoints'
 import LoadingCircle from '../common/LoadingCircle'
 import AddComment from './AddComment'
