@@ -16,7 +16,7 @@ export default function CheckAuth({ setIsUser }: CheckAuthProps) {
   const dispatch = useAppDispatch()
   const tokenSelector = (state: RootState) => state.auth.token
   const token = useAppSelector(tokenSelector)
-  const [addUser] = useAddUserMutation()
+  const [findOrAddUser] = useAddUserMutation()
 
   const {
     loginWithRedirect,
@@ -50,9 +50,7 @@ export default function CheckAuth({ setIsUser }: CheckAuthProps) {
             })
           )
           if (idToken) {
-            // find or create user from auth0 in local database
-            // eslint-disable-next-line no-underscore-dangle
-            await addUser({ token: idToken.__raw }).unwrap()
+            await findOrAddUser({ idToken }).unwrap()
             setIsUser(true)
             navigate('/projects')
           }
@@ -71,7 +69,7 @@ export default function CheckAuth({ setIsUser }: CheckAuthProps) {
     token,
     isLoading,
     loginWithRedirect,
-    addUser,
+    findOrAddUser,
     setIsUser,
   ])
   if (isLoading) return <LoadingCircle />

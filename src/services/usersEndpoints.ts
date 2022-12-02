@@ -1,5 +1,6 @@
+import { IdToken } from '@auth0/auth0-react'
 import { scrumApi } from './scrumApi'
-import { Notification, NotificationType, Token, User } from './types'
+import { Notification, NotificationType, User } from './types'
 
 const usersEndpoints = scrumApi.injectEndpoints({
   endpoints: (build) => ({
@@ -15,7 +16,10 @@ const usersEndpoints = scrumApi.injectEndpoints({
         { type: 'Team', id: 'LIST' },
       ],
     }),
-    addUser: build.mutation<{ user: User; created: boolean }, Token>({
+    addUser: build.mutation<
+      { user: User; created: boolean },
+      { idToken: IdToken }
+    >({
       query: (body) => ({
         url: '/users',
         method: 'POST',
