@@ -17,7 +17,7 @@ export default function CheckAuth({ setIsUser }: CheckAuthProps) {
   const dispatch = useAppDispatch()
   const tokenSelector = (state: RootState) => state.auth.token
   const token = useAppSelector(tokenSelector)
-  const [addUser, { isLoading: userLoading }] = useAddUserMutation()
+  const [findOrAddUser] = useAddUserMutation()
 
   const {
     loginWithRedirect,
@@ -31,34 +31,29 @@ export default function CheckAuth({ setIsUser }: CheckAuthProps) {
   useEffect(() => {
     // check if access token available in Redux store. if not, set token
     try {
-      if (!isLoading) {
-        const getToken = async () => {
-          if (!isAuthenticated) {
-            await loginWithRedirect({
-              authorizationParams: {
-                redirect_uri: window.location.origin,
-              },
-            })
-          }
+      if (isLoading) return
 
-          if (!token) {
-            const accessToken = await getAccessTokenSilently()
-            const idToken = await getIdTokenClaims()
-            // set access token as bearer in api requests:
-            if (idToken) {
-              dispatch(
-                setLogin({
-                  // eslint-disable-next-line no-underscore-dangle
-                  // id_token: idToken.__raw,
-                  access_token: accessToken,
-                })
-              )
-              // find or create user from auth0 in local database
-              // eslint-disable-next-line no-underscore-dangle
-              await addUser({ token: idToken.__raw }).unwrap()
-              setIsUser(true)
-              navigate('/projects')
-            }
+      const getToken = async () => {
+        if (!isAuthenticated) {
+          await loginWithRedirect({
+            authorizationParams: {
+              redirect_uri: window.location.origin,
+            },
+          })
+        }
+        if (!token) {
+          const accessToken = await getAccessTokenSilently()
+          const idToken = await getIdTokenClaims()
+          // set access token as bearer in api requests:
+          dispatch(
+            setLogin({
+              access_token: accessToken,
+            })
+          )
+          if (idToken) {
+            await findOrAddUser({ idToken }).unwrap()
+            setIsUser(true)
+            navigate('/projects')
           }
         }
         getToken()
@@ -75,10 +70,10 @@ export default function CheckAuth({ setIsUser }: CheckAuthProps) {
     token,
     isLoading,
     loginWithRedirect,
-    addUser,
+    findOrAddUser,
     setIsUser,
   ])
-  if (isLoading || userLoading) return <LoadingCircle />
+  if (isLoading) return <LoadingCircle />
   if (error) return <div>{error.message}</div>
   return <LoadingCircle />
 }
