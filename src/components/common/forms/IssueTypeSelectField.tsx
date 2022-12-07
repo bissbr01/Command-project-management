@@ -44,9 +44,7 @@ export interface IssueTypeSelectFieldProps extends FieldProps {
   variant?: InputVariant
   required?: boolean
   data: SelectItem[]
-  icon: JSX.Element
   disabled: boolean
-  updateOnChange: boolean
 }
 
 export default function IssueTypeSelectField({
