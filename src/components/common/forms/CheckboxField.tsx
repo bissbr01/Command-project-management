@@ -1,10 +1,10 @@
-import { Checkbox, createStyles } from '@mantine/core'
+import { Checkbox, createStyles, MantineSize } from '@mantine/core'
 import { ErrorMessage, FieldProps } from 'formik'
 
 export interface CheckBoxProps extends FieldProps {
-  id?: string
+  id: string
   label?: string
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  size?: MantineSize
 }
 
 const useStyles = createStyles((theme) => ({
@@ -18,8 +18,8 @@ const useStyles = createStyles((theme) => ({
 export default function CheckBoxField({
   field,
   id,
-  label,
-  size,
+  label = '',
+  size = 'md',
 }: CheckBoxProps) {
   // workaround to get meta.  Might be fixed in future of formik
   // const meta = form.getFieldMeta(field.name)
