@@ -56,8 +56,8 @@ export default function CheckAuth({ setIsUser }: CheckAuthProps) {
             navigate('/projects')
           }
         }
-        getToken()
       }
+      getToken()
     } catch (e) {
       console.log(e)
     }
