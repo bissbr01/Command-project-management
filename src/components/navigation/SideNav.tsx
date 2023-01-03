@@ -116,12 +116,6 @@ function SideNav({ width, close }: SideNavProps) {
   const navData = [
     { link: 'board', label: 'Board', icon: IconChalkboard },
     { link: 'backlog', label: 'Backlog', icon: IconStack2 },
-    {
-      link: 'notifications',
-      label: 'Notifications',
-      icon: IconBellRinging,
-      disabled: true,
-    },
     { link: 'settings', label: 'Settings', icon: IconSettings, disabled: true },
   ]
 
