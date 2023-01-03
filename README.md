@@ -27,3 +27,6 @@ Since multiple users can belong to multiple projects which each have a team with
 1. User navigates to home url.
 2. Frontend redirects to Auth0 to handle OAuth federated login or direct login.
 3. If first login, a new user account is created in backend postgresdb
+4. Auth0 returns an access token and id token (both Json Web Tokens) to the frontend
+5. The frontend calls the backend via http API with the provided access token for authorization
+6. The backend looks up the access token's user can provides access to the requested resources if the user has the required authorization level.
