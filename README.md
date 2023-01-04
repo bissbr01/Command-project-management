@@ -22,7 +22,7 @@ A relational database seemed like a strong option when I was architecting this p
 ![image](https://user-images.githubusercontent.com/13155120/210289702-daf7ff20-fb36-4141-82f8-f1413ff6e802.png)
 Since multiple users can belong to multiple projects which each have a team with numerous comments, issues, and notifications, this results in slow queries for the expensive larger calls.  In the future, I'd like to explore read replicas of the database, sharding, and/or a Redis cache to speed up slow queries.
 
-### Login
+## Login
 ![image](https://user-images.githubusercontent.com/13155120/210639632-4b01b043-34d9-43d1-8df1-25b359ba752e.png)
 1. User navigates to home url.
 2. Frontend redirects to Auth0 to handle OAuth federated login or direct login.
