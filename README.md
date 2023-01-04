@@ -14,7 +14,7 @@ You can view the backend repository here:
 ## Architecture
 Command Project Managment consists of a decoupled frontend and backend, with several other 3rd party api's also being called.  
 
-![File_000 (2)](https://user-images.githubusercontent.com/13155120/210289485-bf8a9a7f-1845-4ac9-a83a-33a496521fa1.png)
+![image](https://user-images.githubusercontent.com/13155120/210639710-2baf82f2-fed0-4692-a16d-d4dd9fded94b.png)
 
 The frontend is hosted by Render, who serves the static single page app via a global content delivery network.  The frontend calls Auth0 to securely handle login and OAuth SSO.  The Backend persists state information to an AWS RDS database and calls Sendgrid's email api for email notifications on colleague requests and Dicebear's avatar api for default avatar placeholders.  
 
@@ -23,7 +23,7 @@ A relational database seemed like a strong option when I was architecting this p
 Since multiple users can belong to multiple projects which each have a team with numerous comments, issues, and notifications, this results in slow queries for the expensive larger calls.  In the future, I'd like to explore read replicas of the database, sharding, and/or a Redis cache to speed up slow queries.
 
 ### Login
-![File_000](https://user-images.githubusercontent.com/13155120/210289121-24e4c1b3-b804-4a08-b412-731db11062a4.png)
+![image](https://user-images.githubusercontent.com/13155120/210639632-4b01b043-34d9-43d1-8df1-25b359ba752e.png)
 1. User navigates to home url.
 2. Frontend redirects to Auth0 to handle OAuth federated login or direct login.
 3. If first login, a new user account is created in backend postgresdb
