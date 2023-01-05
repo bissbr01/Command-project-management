@@ -3,7 +3,8 @@ A Scrum project management solution for teams
 
 <img width="1280" alt="image" src="https://user-images.githubusercontent.com/13155120/210288388-6e44b0d6-2875-4d3b-877f-9bcf496ad970.png">
 You can see the app in production here:
-<https://scrum-management-frontend.onrender.com/>
+https://scrum-management-frontend.onrender.com/<https://scrum-management-frontend.onrender.com/>  
+
 
 To see the app running with mock data, login with:
 email: RobertClarke@test.com
