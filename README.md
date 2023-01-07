@@ -32,3 +32,12 @@ Since multiple users can belong to multiple projects which each have a team with
 4. Auth0 returns an access token and id token (both Json Web Tokens) to the frontend
 5. The frontend calls the backend via http API with the provided access token for authorization
 6. The backend looks up the access token's user can provides access to the requested resources if the user has the required authorization level.
+
+## How to use
+This SPA frontend is built on top of the [Create React App](https://create-react-app.dev/) framework.
+Fork the repo and install dependecies with `npm install`.
+
+To start the development server, use: `npm start`.
+
+Note: For the app to function, you will also need to fork and run the backend API [found here](https://github.com/bissbr01/Command-backend).
+
