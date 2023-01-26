@@ -7,8 +7,9 @@ https://scrum-management-frontend.onrender.com/<https://scrum-management-fronten
 
 
 To see the app running with mock data, login with:
-email: RobertClarke@test.com
-pass: dbz28wg6Z5GJ8cE
+
+    email: RobertClarke@test.com
+    pass: dbz28wg6Z5GJ8cE
 
 You can view the backend repository here:
 <https://github.com/bissbr01/scrum-management-backend>
