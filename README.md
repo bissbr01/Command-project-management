@@ -2,9 +2,11 @@
 A Scrum project management solution for teams
 
 <img width="1280" alt="image" src="https://user-images.githubusercontent.com/13155120/210288388-6e44b0d6-2875-4d3b-877f-9bcf496ad970.png">
-You can see the app in production here:
+You can see the demo here:
+
 https://scrum-management-frontend.onrender.com/<https://scrum-management-frontend.onrender.com/>  
 
+*Note: The host is a free instance and takes 30 seconds to start for the first render and then should work normally.
 
 To see the app running with mock data, login with:
 
